@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 //import 'package:kakao_map_plugin_example/src/home_screen.dart';
 import 'package:kakao_map_plugin_example/src/map_1_default_screen.dart';
+import 'package:kakao_map_plugin_example/src/screen/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,7 +34,9 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: Map1DefaultScreen(),
+      home: Scaffold(
+        body: HomeScreen(),
+      ),
     );
   }
 }
