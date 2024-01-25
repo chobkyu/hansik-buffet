@@ -33,9 +33,14 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: HomeScreen(),
+    return GestureDetector(
+      onTap: () {
+        FocusManager.instance.primaryFocus?.unfocus(); // 키보드 닫기 이벤트
+      },
+      child: const MaterialApp(
+        home: Scaffold(
+          body: HomeScreen(),
+        ),
       ),
     );
   }
