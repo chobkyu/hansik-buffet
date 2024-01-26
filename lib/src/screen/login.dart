@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_map_plugin_example/src/screen/home_screen.dart';
-import 'package:kakao_map_plugin_example/src/service/login.dart';
+import 'package:kakao_map_plugin_example/src/service/login_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 
 class LoginScreen extends StatefulWidget {
