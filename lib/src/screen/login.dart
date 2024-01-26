@@ -1,4 +1,9 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:kakao_map_plugin_example/src/screen/home_screen.dart';
+import 'package:kakao_map_plugin_example/src/service/login.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -11,6 +16,9 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   bool isSignUpScreen = true;
   final _formKey = GlobalKey<FormState>();
+  static const storage = FlutterSecureStorage();
+
+  Login login = Login();
 
   String userName = '';
   String userNickName = '';
@@ -22,6 +30,45 @@ class _LoginScreenState extends State<LoginScreen> {
         _formKey.currentState!.validate(); //폼필드 안 validator를 작동시킬 수 있음
     if (isValid) {
       _formKey.currentState!.save();
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    try {
+      test();
+      print('object');
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  void test() async {
+    print(await storage.read(key: 'token'));
+    String? token = await storage.read(key: 'token');
+
+    if (token != null) {
+      if (!mounted) return;
+      // Navigator.push(
+      //   context,
+      //   PageRouteBuilder(
+      //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      //       var begin = const Offset(0.0, 1.0);
+      //       var end = Offset.zero;
+      //       var curve = Curves.ease;
+      //       var tween =
+      //           Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+      //       return SlideTransition(
+      //         position: animation.drive(tween),
+      //         child: child,
+      //       );
+      //     },
+      //     pageBuilder: (context, animation, secondaryAnimation) =>
+      //         const HomeScreen(),
+      //   ),
+      // );
+      Navigator.of(context).pop();
     }
   }
 
@@ -334,9 +381,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 key: const ValueKey(5),
                                 keyboardType: TextInputType.emailAddress,
                                 validator: (value) {
-                                  if (value!.isEmpty || !value.contains('@')) {
-                                    return 'Please enter a valid email address';
-                                  }
+                                  // if (value!.isEmpty || value.contains('@')) {
+                                  //   return 'Please enter a valid email address';
+                                  // }
                                   return null;
                                 },
                                 onSaved: (value) {
@@ -382,9 +429,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               TextFormField(
                                 key: const ValueKey(6),
                                 validator: (value) {
-                                  if (value!.isEmpty || value.length < 6) {
-                                    return 'Please enter at least 6 characters long.';
-                                  }
+                                  // if (value!.isEmpty || value.length < 4) {
+                                  //   return 'Please enter at least 6 characters long.';
+                                  // }
                                   return null;
                                 },
                                 onSaved: (value) {
@@ -447,7 +494,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: GestureDetector(
                   onTap: () async {
                     if (isSignUpScreen) {
-                      _tryValidation();
+                      //_tryValidation();
                       try {
                         // final newUser =await _authentication.createUserWithEmailAndPassword(
                         //   email: userEmail,
@@ -475,15 +522,21 @@ class _LoginScreenState extends State<LoginScreen> {
                     }
 
                     if (!isSignUpScreen) {
-                      _tryValidation();
+                      //_tryValidation();
 
                       try {
-                        // final newUser = await _authentication.signInWithEmailAndPassword(
-                        //     email: userEmail,
-                        //     password: userPassword
-                        // );
-                        // print(newUser.user);
+                        final user = await login.getToken(userId, userPassword);
+                        print(user);
+                        String token = user.token;
+                        print(user.token);
+                        //https://velog.io/@jakob1/Flutter%EB%A1%9C-%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0
+                        await storage.write(key: 'token', value: token);
 
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return const HomeScreen();
+                        }));
+                        //Navigator.of(context).pop();
                         // if(newUser.user != null){
                         //   Navigator.push(
                         //       context,
