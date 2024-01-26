@@ -13,8 +13,17 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
 
   String userName = '';
-  String userEmail = '';
+  String userNickName = '';
   String userPassword = '';
+  String userId = '';
+
+  void _tryValidation() {
+    final isValid =
+        _formKey.currentState!.validate(); //폼필드 안 validator를 작동시킬 수 있음
+    if (isValid) {
+      _formKey.currentState!.save();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,11 +43,11 @@ class _LoginScreenState extends State<LoginScreen> {
               duration: const Duration(milliseconds: 500),
               curve: Curves.easeIn,
               padding: const EdgeInsets.all(20),
-              height: isSignUpScreen ? 280.0 : 250.0,
+              height: isSignUpScreen ? 350.0 : 250.0,
               width: MediaQuery.of(context).size.width - 40,
               margin: const EdgeInsets.symmetric(horizontal: 20),
               decoration: BoxDecoration(
-                  color: Colors.blue[300],
+                  color: Colors.amber[700],
                   borderRadius: BorderRadius.circular(15)),
               child: SingleChildScrollView(
                 padding: const EdgeInsets.only(bottom: 25),
@@ -62,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   fontWeight: FontWeight.bold,
                                   color: !isSignUpScreen
                                       ? Colors.white
-                                      : Colors.grey,
+                                      : Colors.white54,
                                 ),
                               ),
                               if (!isSignUpScreen)
@@ -72,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   width: 55,
                                   color: !isSignUpScreen
                                       ? Colors.white
-                                      : Colors.grey,
+                                      : Colors.white54,
                                 ),
                             ],
                           ),
@@ -92,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   fontWeight: FontWeight.bold,
                                   color: isSignUpScreen
                                       ? Colors.white
-                                      : Colors.grey,
+                                      : Colors.white54,
                                 ),
                               ),
                               if (isSignUpScreen)
@@ -102,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   width: 55,
                                   color: isSignUpScreen
                                       ? Colors.white
-                                      : Colors.grey,
+                                      : Colors.white54,
                                 ),
                             ],
                           ),
@@ -157,7 +166,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     hintText: 'UserName',
                                     hintStyle: TextStyle(
                                       fontSize: 14,
-                                      color: Colors.grey,
+                                      color: Colors.white54,
                                     ),
                                     contentPadding: EdgeInsets.all(10)),
                               ),
@@ -169,10 +178,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                 keyboardType: TextInputType.emailAddress,
                                 key: const ValueKey(2),
                                 onSaved: (value) {
-                                  userEmail = value!;
+                                  userId = value!;
                                 },
                                 onChanged: (value) {
-                                  userEmail = value;
+                                  userId = value;
                                 },
                                 validator: (value) {
                                   if (value!.isEmpty || !value.contains('@')) {
@@ -183,7 +192,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 style: const TextStyle(color: Colors.white),
                                 decoration: const InputDecoration(
                                   prefixIcon: Icon(
-                                    Icons.email,
+                                    Icons.insert_drive_file_outlined,
                                     color: Colors.white,
                                   ),
                                   enabledBorder: OutlineInputBorder(
@@ -202,10 +211,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                       Radius.circular(35),
                                     ),
                                   ),
-                                  hintText: 'Email',
+                                  hintText: 'User ID',
                                   hintStyle: TextStyle(
                                     fontSize: 14,
-                                    color: Colors.grey,
+                                    color: Colors.white54,
                                   ),
                                   contentPadding: EdgeInsets.all(10),
                                 ),
@@ -251,10 +260,65 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                   hintText: 'Password',
                                   hintStyle: TextStyle(
-                                      fontSize: 14, color: Colors.grey),
+                                      fontSize: 14, color: Colors.white54),
                                   contentPadding: EdgeInsets.all(10),
                                 ),
                               ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              //텍스트 필드
+                              TextFormField(
+                                key: const ValueKey(4),
+                                validator: (value) {
+                                  if (value!.isEmpty || value.length < 6) {
+                                    return 'Please enter at least 6 characters long.';
+                                  }
+                                  return null;
+                                },
+                                onSaved: (value) {
+                                  userNickName = value!;
+                                },
+                                onChanged: (value) {
+                                  userNickName = value;
+                                },
+                                obscureText: true,
+                                style: const TextStyle(color: Colors.white),
+                                decoration: const InputDecoration(
+                                  prefixIcon: Icon(
+                                    Icons.supervised_user_circle_outlined,
+                                    color: Colors.white,
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.white),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(35),
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white,
+                                    ),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(35),
+                                    ),
+                                  ),
+                                  hintText: 'User NickName',
+                                  hintStyle: TextStyle(
+                                      fontSize: 14, color: Colors.white54),
+                                  contentPadding: EdgeInsets.all(10),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 9,
+                              ),
+                              const Text(
+                                '사업자로 회원 가입하기',
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              )
                             ],
                           ),
                         ),
@@ -267,7 +331,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Column(
                             children: [
                               TextFormField(
-                                key: const ValueKey(4),
+                                key: const ValueKey(5),
                                 keyboardType: TextInputType.emailAddress,
                                 validator: (value) {
                                   if (value!.isEmpty || !value.contains('@')) {
@@ -276,11 +340,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                   return null;
                                 },
                                 onSaved: (value) {
-                                  userEmail:
+                                  userId:
                                   value!;
                                 },
                                 onChanged: (value) {
-                                  userEmail = value;
+                                  userId = value;
                                 },
                                 style: const TextStyle(
                                   color: Colors.white,
@@ -307,7 +371,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   hintText: 'User Email',
                                   hintStyle: TextStyle(
                                     fontSize: 14,
-                                    color: Colors.grey,
+                                    color: Colors.white54,
                                   ),
                                   contentPadding: EdgeInsets.all(10),
                                 ),
@@ -316,7 +380,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 height: 8,
                               ),
                               TextFormField(
-                                key: const ValueKey(5),
+                                key: const ValueKey(6),
                                 validator: (value) {
                                   if (value!.isEmpty || value.length < 6) {
                                     return 'Please enter at least 6 characters long.';
@@ -352,7 +416,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                   hintText: 'Password',
                                   hintStyle: TextStyle(
-                                      fontSize: 14, color: Colors.grey),
+                                      fontSize: 14, color: Colors.white54),
                                   contentPadding: EdgeInsets.all(10),
                                 ),
                               ),
@@ -365,6 +429,128 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ),
+          AnimatedPositioned(
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeIn,
+            top: isSignUpScreen ? 498 : 390,
+            right: 0,
+            left: 0,
+            child: Center(
+              child: Container(
+                padding: const EdgeInsets.all(15),
+                height: 80,
+                width: 80,
+                decoration: BoxDecoration(
+                  color: Colors.amber[900],
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                child: GestureDetector(
+                  onTap: () async {
+                    if (isSignUpScreen) {
+                      _tryValidation();
+                      try {
+                        // final newUser =await _authentication.createUserWithEmailAndPassword(
+                        //   email: userEmail,
+                        //   password: userPassword,
+                        // );
+
+                        // if(newUser.user != null){
+                        //   Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(builder: (context){
+                        //       return HomeScreen();
+                        //     })
+                        //   );
+                        // }
+                      } catch (err) {
+                        print(err);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content:
+                                Text('Please check your email and password'),
+                            backgroundColor: Colors.black,
+                          ),
+                        );
+                      }
+                    }
+
+                    if (!isSignUpScreen) {
+                      _tryValidation();
+
+                      try {
+                        // final newUser = await _authentication.signInWithEmailAndPassword(
+                        //     email: userEmail,
+                        //     password: userPassword
+                        // );
+                        // print(newUser.user);
+
+                        // if(newUser.user != null){
+                        //   Navigator.push(
+                        //       context,
+                        //       MaterialPageRoute(builder: (context){
+                        //         return HomeScreen();
+                        //       })
+                        //   );
+                        //Navigator.of(context).pop();
+                        //}
+                      } catch (err) {
+                        print(err);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content:
+                                Text('Please check your email and password'),
+                            backgroundColor: Colors.black,
+                          ),
+                        );
+                      }
+                    }
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [
+                          Color.fromARGB(255, 233, 132, 0),
+                          Color.fromARGB(255, 233, 184, 62),
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: const Icon(
+                      Icons.arrow_forward,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          //button
+          Positioned(
+            top: MediaQuery.of(context).size.height - 240,
+            right: 0,
+            left: 0,
+            child: Column(
+              children: [
+                Text(
+                  isSignUpScreen ? 'or Signup with' : 'or Signin with',
+                  style: const TextStyle(color: Colors.white),
+                ),
+                TextButton.icon(
+                  onPressed: () {},
+                  style: TextButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      minimumSize: const Size(155, 40),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                      backgroundColor: Colors.amber[900]),
+                  icon: const Icon(Icons.add),
+                  label: const Text('Google'),
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );
