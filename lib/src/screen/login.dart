@@ -1,4 +1,7 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
+import 'package:kakao_map_plugin_example/src/service/login.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -11,6 +14,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   bool isSignUpScreen = true;
   final _formKey = GlobalKey<FormState>();
+  Login login = Login();
 
   String userName = '';
   String userNickName = '';
@@ -334,9 +338,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 key: const ValueKey(5),
                                 keyboardType: TextInputType.emailAddress,
                                 validator: (value) {
-                                  if (value!.isEmpty || !value.contains('@')) {
-                                    return 'Please enter a valid email address';
-                                  }
+                                  // if (value!.isEmpty || value.contains('@')) {
+                                  //   return 'Please enter a valid email address';
+                                  // }
                                   return null;
                                 },
                                 onSaved: (value) {
@@ -382,9 +386,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               TextFormField(
                                 key: const ValueKey(6),
                                 validator: (value) {
-                                  if (value!.isEmpty || value.length < 6) {
-                                    return 'Please enter at least 6 characters long.';
-                                  }
+                                  // if (value!.isEmpty || value.length < 4) {
+                                  //   return 'Please enter at least 6 characters long.';
+                                  // }
                                   return null;
                                 },
                                 onSaved: (value) {
@@ -447,7 +451,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: GestureDetector(
                   onTap: () async {
                     if (isSignUpScreen) {
-                      _tryValidation();
+                      //_tryValidation();
                       try {
                         // final newUser =await _authentication.createUserWithEmailAndPassword(
                         //   email: userEmail,
@@ -475,7 +479,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     }
 
                     if (!isSignUpScreen) {
-                      _tryValidation();
+                      //_tryValidation();
 
                       try {
                         // final newUser = await _authentication.signInWithEmailAndPassword(
@@ -483,6 +487,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         //     password: userPassword
                         // );
                         // print(newUser.user);
+                        final user = await login.getToken(userId, userPassword);
+                        print(user);
 
                         // if(newUser.user != null){
                         //   Navigator.push(
