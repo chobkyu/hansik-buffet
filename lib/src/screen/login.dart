@@ -543,7 +543,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       foregroundColor: Colors.white,
                       minimumSize: const Size(155, 40),
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
                       backgroundColor: Colors.amber[900]),
                   icon: const Icon(Icons.add),
                   label: const Text('Google'),
