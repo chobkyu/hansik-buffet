@@ -2,14 +2,13 @@
 
 import 'dart:convert';
 
-import 'package:kakao_map_plugin_example/src/models/LoginRes.dart';
+import 'package:kakao_map_plugin_example/src/models/login_res.dart';
 import 'package:http/http.dart' as http;
 
 class Login {
   Uri uri = Uri.parse("http://192.168.208.1:8080/users/login");
 
   Future<LoginRes> getToken(String userId, String userPw) async {
-    print('object');
     final response = await http.post(
       uri,
       headers: <String, String>{

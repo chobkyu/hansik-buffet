@@ -37,14 +37,14 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
     try {
-      test();
+      getUser();
       print('object');
     } catch (err) {
       print(err);
     }
   }
 
-  void test() async {
+  void getUser() async {
     print(await storage.read(key: 'token'));
     String? token = await storage.read(key: 'token');
 
@@ -494,7 +494,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: GestureDetector(
                   onTap: () async {
                     if (isSignUpScreen) {
-                      //_tryValidation();
+                      _tryValidation();
                       try {
                         // final newUser =await _authentication.createUserWithEmailAndPassword(
                         //   email: userEmail,
@@ -522,7 +522,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     }
 
                     if (!isSignUpScreen) {
-                      //_tryValidation();
+                      _tryValidation();
 
                       try {
                         final user = await login.getToken(userId, userPassword);
@@ -532,6 +532,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         //https://velog.io/@jakob1/Flutter%EB%A1%9C-%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0
                         await storage.write(key: 'token', value: token);
 
+                        if (!mounted) return;
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
                           return const HomeScreen();
