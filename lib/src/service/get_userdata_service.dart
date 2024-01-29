@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 
 import 'package:kakao_map_plugin_example/src/models/user_data.dart';
@@ -21,17 +23,15 @@ class GetUserData {
 
     if (statusCode < 200 || statusCode > 400) {
       //에러 처리 추가
-      throw Exception('hyesun anal');
+      throw Exception(statusCode);
     }
 
-    // Map<String, dynamic> resBody = jsonDecode(utf8.decode(respone.bodyBytes));
+    Map<String, dynamic> resBody = jsonDecode(utf8.decode(respone.bodyBytes));
 
-    // print(resBody['data']);
+    print(resBody['data']);
 
-    // UserData userData = UserData.fromMap(resBody['data']);
+    UserData userData = UserData.fromMap(resBody['data']);
 
-    // return UserData.fromMap(resBody['data']);
-
-    return UserData.fromMap(respone.body);
+    return userData;
   }
 }

@@ -17,7 +17,14 @@ class MyPage extends StatefulWidget {
 class _MyPageState extends State<MyPage> {
   static GetUserData getUserData = GetUserData();
   static const storage = FlutterSecureStorage();
-  Future<UserData>? userData;
+  UserData userData = UserData(
+    id: 0,
+    userName: 'tq',
+    userNickName: '',
+    userId: '',
+    userImgs: [],
+  );
+
   @override
   void initState() {
     // TODO: implement initState
@@ -33,42 +40,32 @@ class _MyPageState extends State<MyPage> {
     String? token = await storage.read(key: 'token');
 
     try {
-      userData = (await getUserData.getUserData(token!)) as Future<UserData>?;
+      userData = await getUserData.getUserData(token!);
       print(userData);
+      setState(() {});
     } catch (err) {
-      print(err);
+      print(err.toString());
+      await storage.delete(key: 'token');
+      if (!mounted) return;
+      Navigator.push(
+        context,
+        PageRouteBuilder(
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            var begin = const Offset(0.0, 1.0);
+            var end = Offset.zero;
+            var curve = Curves.ease;
+            var tween =
+                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            return SlideTransition(
+              position: animation.drive(tween),
+              child: child,
+            );
+          },
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const LoginScreen(),
+        ),
+      );
     }
-
-    // print(data);
-
-    // // 토큰 만료 혹은 로그인이 안되어있을 시
-    // if (data == 401) {
-    //   await storage.delete(key: 'token');
-    //   if (!mounted) return;
-    //   Navigator.push(
-    //     context,
-    //     PageRouteBuilder(
-    //       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-    //         var begin = const Offset(0.0, 1.0);
-    //         var end = Offset.zero;
-    //         var curve = Curves.ease;
-    //         var tween =
-    //             Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-    //         return SlideTransition(
-    //           position: animation.drive(tween),
-    //           child: child,
-    //         );
-    //       },
-    //       pageBuilder: (context, animation, secondaryAnimation) =>
-    //           const LoginScreen(),
-    //     ),
-    //   );
-    // }
-    // print('hyesun anal is so good');
-    // print(data);
-    // userData = data;
-    //   userData = UserData.fromMap(data as Map<String, dynamic>?);
-    //   print(userData);
   }
 
   @override
@@ -80,39 +77,11 @@ class _MyPageState extends State<MyPage> {
         child: CustomAppBar(title: 'My Page'),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            FutureBuilder<UserData>(
-              //통신데이터 가져오기
-              future: userData,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return buildColumn(snapshot);
-                } else if (snapshot.hasError) {
-                  return Text("${snapshot.error}에러!!");
-                }
-                return const CircularProgressIndicator();
-              },
-            ),
-          ],
-        ),
-      ),
+          child: Column(
+        children: [
+          Text(userData.userId),
+        ],
+      )),
     );
   }
-}
-
-Widget buildColumn(snapshot) {
-  return Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    crossAxisAlignment: CrossAxisAlignment.center,
-    children: [
-      Text('고객번호:${snapshot.data!.id}', style: const TextStyle(fontSize: 20)),
-      Text('고객명:${snapshot.data!.userName}',
-          style: const TextStyle(fontSize: 20)),
-      Text('계좌 아이디:${snapshot.data!.account}',
-          style: const TextStyle(fontSize: 20)),
-      Text('잔액:${snapshot.data!.balance}원',
-          style: const TextStyle(fontSize: 20)),
-    ],
-  );
 }
