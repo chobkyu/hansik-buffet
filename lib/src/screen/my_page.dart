@@ -6,6 +6,7 @@ import 'package:kakao_map_plugin_example/src/models/user_data.dart';
 import 'package:kakao_map_plugin_example/src/screen/login.dart';
 import 'package:kakao_map_plugin_example/src/service/get_userdata_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
+import 'package:kakao_map_plugin_example/src/widget/menu_div.dart';
 
 class MyPage extends StatefulWidget {
   const MyPage({super.key});
@@ -68,6 +69,15 @@ class _MyPageState extends State<MyPage> {
     }
   }
 
+  //imgurl get
+  String getImgUrl(List<dynamic> img) {
+    if (img.isNotEmpty) {
+      return img[0].toString();
+    } else {
+      return 'https://puda.s3.ap-northeast-2.amazonaws.com/client/yi69q6kuvwww.nzyura.com_4GPji3FQ_69b3935b2c0c1a72a22a4bfb4182fe970dc91f1f.jpg';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,7 +89,83 @@ class _MyPageState extends State<MyPage> {
       body: SingleChildScrollView(
           child: Column(
         children: [
-          Text(userData.userId),
+          const SizedBox(
+            height: 20,
+          ),
+          Center(
+            child: Column(
+              children: [
+                const Text(
+                  '회원 정보',
+                  style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                SizedBox(
+                  width: 200,
+                  height: 200,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(100),
+                    child: Image.network(getImgUrl(userData.userImgs)),
+                  ),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  userData.userNickName,
+                  style: const TextStyle(fontSize: 25),
+                ),
+                const SizedBox(
+                  height: 50,
+                ),
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Row(
+                      children: [Icon(Icons.food_bank), Text('한식 뷔페 찾기')],
+                    ),
+                    Row(
+                      children: [Icon(Icons.soup_kitchen), Text('내 정보 수정하기')],
+                    )
+                  ],
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+              ],
+            ),
+          ),
+          Column(
+            children: [
+              const Divider(thickness: 1.2),
+              MenuDiv(
+                text: '한식 뷔페 찾기',
+                move: () {
+                  print('object');
+                },
+              ),
+              MenuDiv(
+                text: '즐겨 찾는 한식 뷔페',
+                move: () {
+                  print('object');
+                },
+              ),
+              MenuDiv(
+                text: '메뉴 등록 하기',
+                move: () {
+                  print('object');
+                },
+              ),
+              MenuDiv(
+                text: '내 정보 수정하기',
+                move: () {
+                  print('object');
+                },
+              ),
+            ],
+          )
         ],
       )),
     );
