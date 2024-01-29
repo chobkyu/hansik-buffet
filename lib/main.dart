@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 //import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:kakao_map_plugin/kakao_map_plugin.dart';
-//import 'package:kakao_map_plugin_example/src/home_screen.dart';
-import 'package:kakao_map_plugin_example/src/map_1_default_screen.dart';
 import 'package:kakao_map_plugin_example/src/screen/home_screen.dart';
+//import 'package:kakao_map_plugin_example/src/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
