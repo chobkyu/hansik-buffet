@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_map_plugin_example/src/screen/home_screen.dart';
 import 'package:kakao_map_plugin_example/src/service/login_service.dart';
+import 'package:kakao_map_plugin_example/src/service/signup_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -14,22 +15,25 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  bool isSignUpScreen = true;
+  bool isSignUpScreen = false;
   final _formKey = GlobalKey<FormState>();
   static const storage = FlutterSecureStorage();
 
-  Login login = Login();
+  static Login login = Login();
+  static SignUpService signUpService = SignUpService();
 
   String userName = '';
   String userNickName = '';
   String userPassword = '';
   String userId = '';
+  bool signflag = false;
 
   void _tryValidation() {
     final isValid =
         _formKey.currentState!.validate(); //폼필드 안 validator를 작동시킬 수 있음
     if (isValid) {
       _formKey.currentState!.save();
+      signflag = true;
     }
   }
 
@@ -329,7 +333,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 onChanged: (value) {
                                   userNickName = value;
                                 },
-                                obscureText: true,
+                                //obscureText: true,
                                 style: const TextStyle(color: Colors.white),
                                 decoration: const InputDecoration(
                                   prefixIcon: Icon(
@@ -381,9 +385,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 key: const ValueKey(5),
                                 keyboardType: TextInputType.emailAddress,
                                 validator: (value) {
-                                  // if (value!.isEmpty || value.contains('@')) {
-                                  //   return 'Please enter a valid email address';
-                                  // }
+                                  if (value!.isEmpty || value.contains('@')) {
+                                    return 'Please enter a valid email address';
+                                  }
                                   return null;
                                 },
                                 onSaved: (value) {
@@ -429,9 +433,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               TextFormField(
                                 key: const ValueKey(6),
                                 validator: (value) {
-                                  // if (value!.isEmpty || value.length < 4) {
-                                  //   return 'Please enter at least 6 characters long.';
-                                  // }
+                                  if (value!.isEmpty || value.length < 4) {
+                                    return 'Please enter at least 6 characters long.';
+                                  }
                                   return null;
                                 },
                                 onSaved: (value) {
@@ -495,22 +499,32 @@ class _LoginScreenState extends State<LoginScreen> {
                   onTap: () async {
                     if (isSignUpScreen) {
                       _tryValidation();
-                      try {
-                        // final newUser =await _authentication.createUserWithEmailAndPassword(
-                        //   email: userEmail,
-                        //   password: userPassword,
-                        // );
+                      if (signflag) {
+                        try {
+                          final user = await signUpService.signUp(
+                              userId, userPassword, userName, userNickName);
 
-                        // if(newUser.user != null){
-                        //   Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(builder: (context){
-                        //       return HomeScreen();
-                        //     })
-                        //   );
-                        // }
-                      } catch (err) {
-                        print(err);
+                          String token = user.token;
+                          print('object');
+                          print(token);
+                          await storage.write(key: 'token', value: token);
+
+                          if (!mounted) return;
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return const HomeScreen();
+                          }));
+                        } catch (err) {
+                          print(err);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content:
+                                  Text('Please check your email and password'),
+                              backgroundColor: Colors.black,
+                            ),
+                          );
+                        }
+                      } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content:
@@ -537,16 +551,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             MaterialPageRoute(builder: (context) {
                           return const HomeScreen();
                         }));
-                        //Navigator.of(context).pop();
-                        // if(newUser.user != null){
-                        //   Navigator.push(
-                        //       context,
-                        //       MaterialPageRoute(builder: (context){
-                        //         return HomeScreen();
-                        //       })
-                        //   );
-                        //Navigator.of(context).pop();
-                        //}
                       } catch (err) {
                         print(err);
                         ScaffoldMessenger.of(context).showSnackBar(

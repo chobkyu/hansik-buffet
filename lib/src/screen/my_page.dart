@@ -39,7 +39,7 @@ class _MyPageState extends State<MyPage> {
 
   void getUser() async {
     String? token = await storage.read(key: 'token');
-
+    print(token);
     try {
       userData = await getUserData.getUserData(token!);
       print(userData);
