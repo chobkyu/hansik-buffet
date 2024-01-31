@@ -505,7 +505,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               userId, userPassword, userName, userNickName);
 
                           String token = user.token;
-                          print('object');
                           print(token);
                           await storage.write(key: 'token', value: token);
 
