@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_map_plugin_example/src/models/user_data.dart';
 import 'package:kakao_map_plugin_example/src/screen/login.dart';
+import 'package:kakao_map_plugin_example/src/screen/update_myinfo.dart';
 import 'package:kakao_map_plugin_example/src/service/get_userdata_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 import 'package:kakao_map_plugin_example/src/widget/menu_div.dart';
@@ -161,7 +162,26 @@ class _MyPageState extends State<MyPage> {
               MenuDiv(
                 text: '내 정보 수정하기',
                 move: () {
-                  print('object');
+                  if (!mounted) return;
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        var begin = const Offset(0.0, 1.0);
+                        var end = Offset.zero;
+                        var curve = Curves.ease;
+                        var tween = Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: curve));
+                        return SlideTransition(
+                          position: animation.drive(tween),
+                          child: child,
+                        );
+                      },
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          const UpdateMyInfo(),
+                    ),
+                  );
                 },
               ),
             ],

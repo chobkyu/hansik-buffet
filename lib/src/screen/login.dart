@@ -195,31 +195,31 @@ class _LoginScreenState extends State<LoginScreen> {
                                   color: Colors.white,
                                 ),
                                 decoration: const InputDecoration(
-                                    prefixIcon: Icon(
-                                      Icons.account_circle,
-                                      color: Colors.white,
+                                  prefixIcon: Icon(
+                                    Icons.account_circle,
+                                    color: Colors.white,
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.white),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(35),
                                     ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.white),
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(35),
-                                      ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.black,
                                     ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Colors.black,
-                                      ),
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(35),
-                                      ),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(35),
                                     ),
-                                    hintText: 'UserName',
-                                    hintStyle: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.white54,
-                                    ),
-                                    contentPadding: EdgeInsets.all(10)),
+                                  ),
+                                  hintText: 'UserName',
+                                  hintStyle: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.white54,
+                                  ),
+                                  contentPadding: EdgeInsets.all(10),
+                                ),
                               ),
                               const SizedBox(
                                 height: 8,
