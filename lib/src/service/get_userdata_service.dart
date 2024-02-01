@@ -17,16 +17,16 @@ class GetUserData {
       'Authorization': auth
     };
 
-    final respone = await http.get(uri, headers: headers);
+    final response = await http.get(uri, headers: headers);
 
-    final int statusCode = respone.statusCode;
+    final int statusCode = response.statusCode;
 
     if (statusCode < 200 || statusCode > 400) {
       //에러 처리 추가
       throw Exception(statusCode);
     }
 
-    Map<String, dynamic> resBody = jsonDecode(utf8.decode(respone.bodyBytes));
+    Map<String, dynamic> resBody = jsonDecode(utf8.decode(response.bodyBytes));
 
     print(resBody['data']);
 

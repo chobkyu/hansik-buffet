@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:kakao_map_plugin/kakao_map_plugin.dart';
+import 'package:kakao_map_plugin_example/src/models/hansic_data.dart';
+import 'package:kakao_map_plugin_example/src/models/hansic_data.dart';
+import 'package:kakao_map_plugin_example/src/service/get_hansicdata_service.dart';
+import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 
 /// 여러개 마커에 이벤트 등록하기1
 /// https://apis.map.kakao.com/web/sample/multipleMarkerEvent/
@@ -16,48 +20,72 @@ class Overlay12MarkersEvent1Screen extends StatefulWidget {
 class _Overlay12MarkersEvent1ScreenState
     extends State<Overlay12MarkersEvent1Screen> {
   late KakaoMapController mapController;
+  static GetHansicService hansicService = GetHansicService();
 
   Set<Marker> markers = {};
+
+  List<HansicData>? hansics;
 
   @override
   void initState() {
     super.initState();
+    try {
+      getHansics();
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  void getHansics() async {
+    try {
+      hansics = await hansicService.getHansicData();
+      print(hansics?.length);
+      setState(() {});
+    } catch (err) {
+      print(err);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('지도'),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(50),
+        child: CustomAppBar(title: '한식 뷔페'),
       ),
       body: KakaoMap(
         onMapCreated: ((controller) async {
           mapController = controller;
+          for (int i = 0; i < hansics!.length; i++) {
+            markers.add(Marker(
+                markerId: markers.length.toString(),
+                latLng: LatLng(hansics![i].lat, hansics![i].lng),
+                infoWindowContent: '<div>${hansics?[i].name}</div>'));
+          }
+          // markers.add(Marker(
+          //     markerId: markers.length.toString(),
+          //     latLng: LatLng(33.450705, 126.570677),
+          //     infoWindowContent: '<div>카카오</div>'));
 
-          markers.add(Marker(
-              markerId: markers.length.toString(),
-              latLng: LatLng(33.450705, 126.570677),
-              infoWindowContent: '<div>카카오</div>'));
+          // markers.add(Marker(
+          //     markerId: markers.length.toString(),
+          //     latLng: LatLng(33.450936, 126.569477),
+          //     infoWindowContent: '<div>생태연못</div>'));
 
-          markers.add(Marker(
-              markerId: markers.length.toString(),
-              latLng: LatLng(33.450936, 126.569477),
-              infoWindowContent: '<div>생태연못</div>'));
+          // markers.add(Marker(
+          //     markerId: markers.length.toString(),
+          //     latLng: LatLng(33.450879, 126.569940),
+          //     infoWindowContent: '<div>텃밭</div>'));
 
-          markers.add(Marker(
-              markerId: markers.length.toString(),
-              latLng: LatLng(33.450879, 126.569940),
-              infoWindowContent: '<div>텃밭</div>'));
-
-          markers.add(Marker(
-              markerId: markers.length.toString(),
-              latLng: LatLng(33.451393, 126.570738),
-              infoWindowContent: '<div>근린공원</div>'));
+          // markers.add(Marker(
+          //     markerId: markers.length.toString(),
+          //     latLng: LatLng(33.451393, 126.570738),
+          //     infoWindowContent: '<div>근린공원</div>'));
 
           setState(() {});
         }),
         markers: markers.toList(),
-        center: LatLng(33.450705, 126.570677),
+        center: LatLng(37.4860146411306, 126.89329203683),
         onMarkerTap: (markerId, latLng, zoomLevel) {
           ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('marker click:\n\n$latLng')));
