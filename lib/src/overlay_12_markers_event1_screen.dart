@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'package:kakao_map_plugin_example/src/models/hansic_data.dart';
+import 'package:kakao_map_plugin_example/src/screen/hansic_detail.dart';
 import 'package:kakao_map_plugin_example/src/service/get_hansicdata_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 
@@ -95,7 +96,48 @@ class _Overlay12MarkersEvent1ScreenState
         center: LatLng(37.4860146411306, 126.89329203683),
         onMarkerTap: (markerId, latLng, zoomLevel) {
           ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('marker click:\n\n$latLng')));
+            SnackBar(
+              duration: const Duration(seconds: 1),
+              backgroundColor: Colors.white,
+              content: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          var begin = const Offset(0.0, 1.0);
+                          var end = Offset.zero;
+                          var curve = Curves.ease;
+                          var tween = Tween(begin: begin, end: end)
+                              .chain(CurveTween(curve: curve));
+                          return SlideTransition(
+                            position: animation.drive(tween),
+                            child: child,
+                          );
+                        },
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            HansicDetail(
+                          latLng: latLng,
+                        ),
+                      ));
+                },
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.amber, elevation: 1),
+                child: const Text(
+                  '자세히 보기',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              // Text(
+              //   'marker click:\n\n$latLng\n$markerId',
+              //   style: const TextStyle(color: Colors.black),
+              // ),
+            ),
+          );
         },
       ),
     );
