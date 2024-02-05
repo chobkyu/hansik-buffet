@@ -2,12 +2,14 @@
 
 import 'dart:convert';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:kakao_map_plugin_example/src/models/hansic_data.dart';
 import 'package:http/http.dart' as http;
 
 class GetHansicService {
   Future<List<HansicData>> getHansicData() async {
-    Uri uri = Uri.parse("http://192.168.208.1:8080/hansic/all");
+    String? baseUrl = dotenv.env['BASE_URL'];
+    Uri uri = Uri.parse("$baseUrl/hansic/all");
 
     final response = await http.get(uri);
 
@@ -33,7 +35,7 @@ class GetHansicService {
 
   //지역별 조회
   Future<List<HansicData>> getHansicDataFromLoc(int id) async {
-    Uri uri = Uri.parse("http://192.168.208.1:8080/hansic/loc/$id");
+    Uri uri = Uri.parse("http://3.34.181.72:5000/hansic/loc/$id");
 
     final response = await http.get(uri);
 

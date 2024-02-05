@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-//import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'package:kakao_map_plugin_example/src/screen/home_screen.dart';
 //import 'package:kakao_map_plugin_example/src/home_screen.dart';
@@ -12,7 +12,9 @@ void main() async {
   /// 라이브러리 메모리에 appKey 등록
   /// 지도가 호출되기 전에만 세팅해 주면 됩니다.
   /// dotEnv 대신 appKey 를 직접 넣어주셔도 됩니다.
-  AuthRepository.initialize(appKey: '953cd48574502f85dc7cf90e2592050e');
+  await dotenv.load(fileName: 'assets/env/.env');
+  String? appKey = dotenv.env['BASE_URL'].toString();
+  AuthRepository.initialize(appKey: appKey);
 
   runApp(const MyApp());
 }

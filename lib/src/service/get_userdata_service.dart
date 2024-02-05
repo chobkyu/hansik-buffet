@@ -2,13 +2,16 @@
 
 import 'dart:convert';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:kakao_map_plugin_example/src/models/user_data.dart';
 import 'package:http/http.dart' as http;
 
 class GetUserData {
-  Uri uri = Uri.parse("http://192.168.208.1:8080/users/userinfo");
+  String? baseUrl = dotenv.env['BASE_URL'];
 
   Future<UserData> getUserData(String token) async {
+    Uri uri = Uri.parse("$baseUrl/users/userinfo");
+
     String auth = 'Bearer $token';
     //header
     Map<String, String> headers = {
