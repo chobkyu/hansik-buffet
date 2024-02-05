@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_map_plugin_example/src/overlay_12_markers_event1_screen.dart';
+import 'package:kakao_map_plugin_example/src/screen/hansic_screen.dart';
 import 'package:kakao_map_plugin_example/src/screen/login.dart';
 import 'package:kakao_map_plugin_example/src/screen/my_page.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
@@ -151,6 +152,34 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                       pageBuilder: (context, animation, secondaryAnimation) =>
                           const Overlay12MarkersEvent1Screen(),
+                    ),
+                  );
+                },
+                color: Colors.amber,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              HomeButton(
+                text: '한식 스크린',
+                move: () {
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        var begin = const Offset(0.0, 1.0);
+                        var end = Offset.zero;
+                        var curve = Curves.ease;
+                        var tween = Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: curve));
+                        return SlideTransition(
+                          position: animation.drive(tween),
+                          child: child,
+                        );
+                      },
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          const HansicScreen(),
                     ),
                   );
                 },

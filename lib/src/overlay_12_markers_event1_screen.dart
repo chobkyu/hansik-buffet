@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'package:kakao_map_plugin_example/src/models/hansic_data.dart';
-import 'package:kakao_map_plugin_example/src/models/hansic_data.dart';
 import 'package:kakao_map_plugin_example/src/service/get_hansicdata_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 
@@ -52,8 +51,13 @@ class _Overlay12MarkersEvent1ScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(50),
-        child: CustomAppBar(title: '한식 뷔페'),
+        preferredSize: Size.fromHeight(100),
+        child: Column(
+          children: [
+            CustomAppBar(title: '한식 뷔페'),
+            Text('data'),
+          ],
+        ),
       ),
       body: KakaoMap(
         onMapCreated: ((controller) async {
@@ -62,7 +66,8 @@ class _Overlay12MarkersEvent1ScreenState
             markers.add(Marker(
                 markerId: markers.length.toString(),
                 latLng: LatLng(hansics![i].lat, hansics![i].lng),
-                infoWindowContent: '<div>${hansics?[i].name}</div>'));
+                infoWindowContent:
+                    '<div style="width:200px;"><div style="background-color:orange;">${hansics?[i].name}</div><div style="marginTop:0.5rem;"><span style="display:block;">${hansics?[i].userStar}</span><span style="display:block">${hansics?[i].location}</span> <span style="display:block;">${hansics?[i].addr}</span></div></div>'));
           }
           // markers.add(Marker(
           //     markerId: markers.length.toString(),

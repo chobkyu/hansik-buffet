@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:kakao_map_plugin/kakao_map_plugin.dart';
@@ -13,7 +15,8 @@ void main() async {
   /// 지도가 호출되기 전에만 세팅해 주면 됩니다.
   /// dotEnv 대신 appKey 를 직접 넣어주셔도 됩니다.
   await dotenv.load(fileName: 'assets/env/.env');
-  String? appKey = dotenv.env['BASE_URL'].toString();
+  String? appKey = dotenv.env['APP_KEY'].toString();
+  print(appKey);
   AuthRepository.initialize(appKey: appKey);
 
   runApp(const MyApp());
