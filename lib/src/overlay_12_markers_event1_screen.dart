@@ -51,12 +51,13 @@ class _Overlay12MarkersEvent1ScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(100),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(100),
         child: Column(
           children: [
-            CustomAppBar(title: '한식 뷔페'),
-            Text('data'),
+            const CustomAppBar(title: '한식 뷔페'),
+            Text(hansics?[0].addr ?? "dsfa"),
+            if (hansics != null) Text(hansics!.length.toString())
           ],
         ),
       ),

@@ -391,8 +391,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   return null;
                                 },
                                 onSaved: (value) {
-                                  userId:
-                                  value!;
+                                  userId = value!;
                                 },
                                 onChanged: (value) {
                                   userId = value;

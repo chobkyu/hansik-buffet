@@ -29,7 +29,6 @@ class _MyPageState extends State<MyPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     try {
       getUser();
