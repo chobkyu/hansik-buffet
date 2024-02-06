@@ -2,36 +2,46 @@
 
 import 'dart:convert';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:kakao_map_plugin_example/src/models/user_data.dart';
 import 'package:http/http.dart' as http;
 
 class GetUserData {
-  Uri uri = Uri.parse("http://192.168.208.1:8080/users/userinfo");
+  String? baseUrl = dotenv.env['BASE_URL'];
 
   Future<UserData> getUserData(String token) async {
-    String auth = 'Bearer $token';
-    //header
-    Map<String, String> headers = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/josn',
-      'Authorization': auth
-    };
+    try {
+      Uri uri = Uri.parse("$baseUrl/users/userinfo");
 
-    final respone = await http.get(uri, headers: headers);
+      String auth = 'Bearer $token';
+      //header
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/josn',
+        'Authorization': auth
+      };
 
-    final int statusCode = respone.statusCode;
+      final response = await http.get(uri, headers: headers);
 
-    if (statusCode < 200 || statusCode > 400) {
-      //에러 처리 추가
-      throw Exception(statusCode);
+      final int statusCode = response.statusCode;
+
+      if (statusCode < 200 || statusCode > 400) {
+        //에러 처리 추가
+        throw Exception(statusCode);
+      }
+
+      Map<String, dynamic> resBody =
+          jsonDecode(utf8.decode(response.bodyBytes));
+
+      print(resBody['data']);
+
+      UserData userData = UserData.fromMap(resBody['data']);
+
+      print(userData);
+      return userData;
+    } catch (err) {
+      print(err);
+      throw Exception('error');
     }
-
-    Map<String, dynamic> resBody = jsonDecode(utf8.decode(respone.bodyBytes));
-
-    print(resBody['data']);
-
-    UserData userData = UserData.fromMap(resBody['data']);
-
-    return userData;
   }
 }

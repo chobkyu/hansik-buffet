@@ -1,5 +1,7 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
-//import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'package:kakao_map_plugin_example/src/screen/home_screen.dart';
 //import 'package:kakao_map_plugin_example/src/home_screen.dart';
@@ -12,7 +14,10 @@ void main() async {
   /// 라이브러리 메모리에 appKey 등록
   /// 지도가 호출되기 전에만 세팅해 주면 됩니다.
   /// dotEnv 대신 appKey 를 직접 넣어주셔도 됩니다.
-  AuthRepository.initialize(appKey: '953cd48574502f85dc7cf90e2592050e');
+  await dotenv.load(fileName: 'assets/env/.env');
+  String? appKey = dotenv.env['APP_KEY'].toString();
+  print(appKey);
+  AuthRepository.initialize(appKey: appKey);
 
   runApp(const MyApp());
 }
@@ -44,3 +49,31 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+
+
+/*todo
+-공통
+사진 업로드
+
+-user
+회원 정보 수정 페이지
+프로필 사진 변경
+즐겨찾기 한뷔 페이지
+오늘 먹은 메뉴 등록하기
+
+
+-hansic
+한식 뷔페 상세페이지
+즐겨찾기 기능
+별점 주기
+
+-review
+리뷰 리스트 페이지
+리뷰 상세 보기 페이지
+
+-owner
+사업자 회원가입 페이지
+메뉴 업로드 하기 페이지
+사업자 메뉴 페이지
+
+*/

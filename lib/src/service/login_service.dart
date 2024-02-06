@@ -2,13 +2,16 @@
 
 import 'dart:convert';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:kakao_map_plugin_example/src/models/login_res.dart';
 import 'package:http/http.dart' as http;
 
 class Login {
-  Uri uri = Uri.parse("http://192.168.208.1:8080/users/login");
-
   Future<LoginRes> getToken(String userId, String userPw) async {
+    String? baseUrl = dotenv.env['BASE_URL'];
+
+    Uri uri = Uri.parse("$baseUrl/users/login");
+
     final response = await http.post(
       uri,
       headers: <String, String>{
