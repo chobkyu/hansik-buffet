@@ -28,7 +28,7 @@ class HansicData {
       id: json["id"],
       name: json["name"],
       addr: json["addr"],
-      userStar: json["userStar"] ?? '',
+      userStar: json["userStar"] ?? '0',
       googleStar: json["google_star"],
       locationId: json["location_id"],
       lat: json["lat"].toDouble(),

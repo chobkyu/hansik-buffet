@@ -10,31 +10,38 @@ class GetUserData {
   String? baseUrl = dotenv.env['BASE_URL'];
 
   Future<UserData> getUserData(String token) async {
-    Uri uri = Uri.parse("$baseUrl/users/userinfo");
+    try {
+      Uri uri = Uri.parse("$baseUrl/users/userinfo");
 
-    String auth = 'Bearer $token';
-    //header
-    Map<String, String> headers = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/josn',
-      'Authorization': auth
-    };
+      String auth = 'Bearer $token';
+      //header
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/josn',
+        'Authorization': auth
+      };
 
-    final response = await http.get(uri, headers: headers);
+      final response = await http.get(uri, headers: headers);
 
-    final int statusCode = response.statusCode;
+      final int statusCode = response.statusCode;
 
-    if (statusCode < 200 || statusCode > 400) {
-      //에러 처리 추가
-      throw Exception(statusCode);
+      if (statusCode < 200 || statusCode > 400) {
+        //에러 처리 추가
+        throw Exception(statusCode);
+      }
+
+      Map<String, dynamic> resBody =
+          jsonDecode(utf8.decode(response.bodyBytes));
+
+      print(resBody['data']);
+
+      UserData userData = UserData.fromMap(resBody['data']);
+
+      print(userData);
+      return userData;
+    } catch (err) {
+      print(err);
+      throw Exception('error');
     }
-
-    Map<String, dynamic> resBody = jsonDecode(utf8.decode(response.bodyBytes));
-
-    print(resBody['data']);
-
-    UserData userData = UserData.fromMap(resBody['data']);
-
-    return userData;
   }
 }

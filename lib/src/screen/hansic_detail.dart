@@ -1,5 +1,9 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:kakao_map_plugin/kakao_map_plugin.dart';
+import 'package:kakao_map_plugin_example/src/models/hansic_data.dart';
+import 'package:kakao_map_plugin_example/src/service/get_hansicdata_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 
 class HansicDetail extends StatefulWidget {
@@ -12,6 +16,49 @@ class HansicDetail extends StatefulWidget {
 }
 
 class _HansicDetailState extends State<HansicDetail> {
+  static GetHansicService hansicService = GetHansicService();
+
+  late HansicData hansicData = HansicData(
+    id: 0,
+    name: '한식 뷔페 이름',
+    addr: '한식 뷔페 주소',
+    userStar: '사용자 별점',
+    googleStar: '구글별점',
+    locationId: 0,
+    lat: 0,
+    lng: 0,
+    location: '한식 뷔페 지역',
+    imgUrl: '대표 이미지 url',
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    try {
+      getHansic();
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  void getHansic() async {
+    try {
+      hansicData = await hansicService.getHansicDetailData(widget.latLng);
+      print(hansicData);
+      setState(() {});
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  String starToString(String star) {
+    if (star == null) {
+      return "0 (참여자 100)";
+    } else {
+      return "$star (참여자 100)";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,9 +82,9 @@ class _HansicDetailState extends State<HansicDetail> {
               const SizedBox(
                 height: 15,
               ),
-              const Text(
-                '수라 한식 뷔폐 응암점',
-                style: TextStyle(
+              Text(
+                hansicData.name,
+                style: const TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
                 ),
@@ -45,16 +92,16 @@ class _HansicDetailState extends State<HansicDetail> {
               const SizedBox(
                 height: 15,
               ),
-              const Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text(
+                  const Text(
                     '후기 (25)',
                     style: TextStyle(fontSize: 16),
                   ),
                   Text(
-                    '구글 별점  0',
-                    style: TextStyle(fontSize: 16),
+                    hansicData.googleStar,
+                    style: const TextStyle(fontSize: 16),
                   ),
                 ],
               ),
@@ -75,9 +122,12 @@ class _HansicDetailState extends State<HansicDetail> {
                         const SizedBox(
                           width: 10,
                         ),
-                        const Text(
-                          '서울시 은평구 응암동 45-10 101호',
-                          style: TextStyle(fontSize: 15),
+                        Flexible(
+                          child: Text(
+                            hansicData.addr,
+                            style: const TextStyle(fontSize: 15),
+                            maxLines: 3,
+                          ),
                         ),
                       ],
                     ),
@@ -94,9 +144,9 @@ class _HansicDetailState extends State<HansicDetail> {
                         const SizedBox(
                           width: 10,
                         ),
-                        const Text(
-                          '사용자 별점 3.7 (참여자 100)',
-                          style: TextStyle(fontSize: 15),
+                        Text(
+                          hansicData.userStar,
+                          style: const TextStyle(fontSize: 15),
                         ),
                       ],
                     ),
