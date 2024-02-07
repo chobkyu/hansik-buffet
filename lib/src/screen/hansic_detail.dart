@@ -74,10 +74,13 @@ class _HansicDetailState extends State<HansicDetail> {
               const SizedBox(
                 height: 30,
               ),
-              Container(
-                color: Colors.amber,
+              SizedBox(
                 height: 380,
                 width: 320,
+                child: ClipRRect(
+                  child: Image.network(
+                      'https://puda.s3.ap-northeast-2.amazonaws.com/client/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7+2024-02-07+151707.png'),
+                ),
               ),
               const SizedBox(
                 height: 15,

@@ -6,6 +6,7 @@ import 'package:kakao_map_plugin_example/src/overlay_12_markers_event1_screen.da
 import 'package:kakao_map_plugin_example/src/screen/hansic_screen.dart';
 import 'package:kakao_map_plugin_example/src/screen/login.dart';
 import 'package:kakao_map_plugin_example/src/screen/my_page.dart';
+import 'package:kakao_map_plugin_example/src/screen/review_write.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 import 'package:kakao_map_plugin_example/src/widget/home_button.dart';
 
@@ -159,6 +160,31 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(
                 height: 10,
+              ),
+              HomeButton(
+                text: 'review write',
+                move: () {
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        var begin = const Offset(0.0, 1.0);
+                        var end = Offset.zero;
+                        var curve = Curves.ease;
+                        var tween = Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: curve));
+                        return SlideTransition(
+                          position: animation.drive(tween),
+                          child: child,
+                        );
+                      },
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          const ReviewWrite(),
+                    ),
+                  );
+                },
+                color: Colors.amber,
               ),
               // HomeButton(
               //   text: '한식 스크린',

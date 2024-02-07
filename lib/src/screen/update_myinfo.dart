@@ -100,7 +100,7 @@ class _UpdateMyInfoState extends State<UpdateMyInfo> {
     if (img.isNotEmpty) {
       return img[0].toString();
     } else {
-      return 'https://puda.s3.ap-northeast-2.amazonaws.com/client/yi69q6kuvwww.nzyura.com_4GPji3FQ_69b3935b2c0c1a72a22a4bfb4182fe970dc91f1f.jpg';
+      return 'https://puda.s3.ap-northeast-2.amazonaws.com/client/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7+2024-02-07+152742.png';
     }
   }
 
@@ -156,7 +156,7 @@ class _UpdateMyInfoState extends State<UpdateMyInfo> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(100),
                       child: Image.network(
-                          'https://puda.s3.ap-northeast-2.amazonaws.com/client/yi69q6kuvwww.nzyura.com_4GPji3FQ_69b3935b2c0c1a72a22a4bfb4182fe970dc91f1f.jpg'),
+                          'https://puda.s3.ap-northeast-2.amazonaws.com/client/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7+2024-02-07+152742.png'),
                     ),
                   ),
                   const SizedBox(
