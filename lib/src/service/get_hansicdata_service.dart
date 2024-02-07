@@ -71,8 +71,7 @@ class GetHansicService {
 
       print(latlng);
 
-      Uri uri =
-          Uri.parse("http://192.168.208.1:5000/hansic/place?lat=$lat&lng=$lng");
+      Uri uri = Uri.parse("$baseUrl/hansic/place?lat=$lat&lng=$lng");
       final response = await http.get(uri);
 
       final int statusCode = response.statusCode;
