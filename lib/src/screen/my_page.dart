@@ -74,7 +74,7 @@ class _MyPageState extends State<MyPage> {
     if (img.isNotEmpty) {
       return img[0].toString();
     } else {
-      return 'https://puda.s3.ap-northeast-2.amazonaws.com/client/yi69q6kuvwww.nzyura.com_4GPji3FQ_69b3935b2c0c1a72a22a4bfb4182fe970dc91f1f.jpg';
+      return 'https://puda.s3.ap-northeast-2.amazonaws.com/client/U_nuVL__0tNfEPk8Eb9PXISEad-qOs4aOEI0u-Zclq928dHx835CxJjMk3HKzg4ieprrKff_42Th2Tao7yezAg.webp';
     }
   }
 
