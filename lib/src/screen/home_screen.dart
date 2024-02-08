@@ -3,12 +3,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_map_plugin_example/src/overlay_12_markers_event1_screen.dart';
-import 'package:kakao_map_plugin_example/src/screen/hansic_screen.dart';
 import 'package:kakao_map_plugin_example/src/screen/login.dart';
 import 'package:kakao_map_plugin_example/src/screen/my_page.dart';
 import 'package:kakao_map_plugin_example/src/screen/review_write.dart';
+import 'package:kakao_map_plugin_example/src/service/geolocator_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 import 'package:kakao_map_plugin_example/src/widget/home_button.dart';
+import 'package:geolocator/geolocator.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -21,6 +22,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   static const storage = FlutterSecureStorage();
+  static GeolocatorService geolocatorService = GeolocatorService();
 
   @override
   Widget build(BuildContext context) {
@@ -135,7 +137,15 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               HomeButton(
                 text: '지도',
-                move: () {
+                move: () async {
+                  Position position = await geolocatorService.getLocation();
+                  double lat = position.latitude;
+                  double lng = position.longitude;
+
+                  print(lat);
+                  print(lng);
+
+                  if (!mounted) return;
                   Navigator.push(
                     context,
                     PageRouteBuilder(
@@ -152,7 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       },
                       pageBuilder: (context, animation, secondaryAnimation) =>
-                          const Overlay12MarkersEvent1Screen(),
+                          Overlay12MarkersEvent1Screen(lat: lat, lng: lng),
                     ),
                   );
                 },

@@ -4,15 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'package:kakao_map_plugin_example/src/models/hansic_data.dart';
 import 'package:kakao_map_plugin_example/src/screen/hansic_detail.dart';
+import 'package:kakao_map_plugin_example/src/service/geolocator_service.dart';
 import 'package:kakao_map_plugin_example/src/service/get_hansicdata_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
+import 'package:geolocator/geolocator.dart';
 
 /// 여러개 마커에 이벤트 등록하기1
 /// https://apis.map.kakao.com/web/sample/multipleMarkerEvent/
 class Overlay12MarkersEvent1Screen extends StatefulWidget {
-  const Overlay12MarkersEvent1Screen({Key? key, this.title}) : super(key: key);
+  const Overlay12MarkersEvent1Screen(
+      {Key? key, this.title, required this.lat, required this.lng})
+      : super(key: key);
 
   final String? title;
+  final double lat;
+  final double lng;
 
   @override
   State<Overlay12MarkersEvent1Screen> createState() =>
@@ -23,10 +29,14 @@ class _Overlay12MarkersEvent1ScreenState
     extends State<Overlay12MarkersEvent1Screen> {
   late KakaoMapController mapController;
   static GetHansicService hansicService = GetHansicService();
+  static GeolocatorService geolocatorService = GeolocatorService();
 
   Set<Marker> markers = {};
 
   List<HansicData>? hansics;
+
+  late double lat = 37.4916927972275;
+  late double lng = 126.899358119287;
 
   @override
   void initState() {
@@ -40,8 +50,14 @@ class _Overlay12MarkersEvent1ScreenState
 
   void getHansics() async {
     try {
+      //await geolocatorService.getLocation();
+
       hansics = await hansicService.getHansicData();
       print(hansics?.length);
+      Position position = await geolocatorService.getLocation();
+      print(position);
+      lat = position.latitude;
+      lng = position.longitude * -1;
       setState(() {});
     } catch (err) {
       print(err);
@@ -52,10 +68,22 @@ class _Overlay12MarkersEvent1ScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(100),
+        preferredSize: const Size.fromHeight(200),
         child: Column(
           children: [
             const CustomAppBar(title: '한식 뷔페'),
+            ElevatedButton(
+              onPressed: () async {
+                Position position = await geolocatorService.getLocation();
+                print(position);
+                lat = position.latitude;
+                lng = position.longitude * -1;
+                setState(() {});
+              },
+              child: Text(widget.lng.toString()),
+            ),
+            Text(widget.lat.toString()),
+            Text(widget.lng.toString()),
             Text(hansics?[0].addr ?? "dsfa"),
             if (hansics != null) Text(hansics!.length.toString())
           ],
@@ -94,7 +122,7 @@ class _Overlay12MarkersEvent1ScreenState
           setState(() {});
         }),
         markers: markers.toList(),
-        center: LatLng(37.4860146411306, 126.89329203683),
+        center: LatLng(widget.lat, widget.lng),
         onMarkerTap: (markerId, latLng, zoomLevel) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
