@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kakao_map_plugin_example/src/overlay_12_markers_event1_screen.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 
 class HansicScreen extends StatefulWidget {
