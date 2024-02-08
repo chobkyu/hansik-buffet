@@ -3,7 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_map_plugin_example/src/models/user_data.dart';
+import 'package:kakao_map_plugin_example/src/overlay_12_markers_event1_screen.dart';
 import 'package:kakao_map_plugin_example/src/screen/login.dart';
+import 'package:kakao_map_plugin_example/src/screen/review_write.dart';
 import 'package:kakao_map_plugin_example/src/screen/update_myinfo.dart';
 import 'package:kakao_map_plugin_example/src/service/get_userdata_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
@@ -120,14 +122,70 @@ class _MyPageState extends State<MyPage> {
                 const SizedBox(
                   height: 50,
                 ),
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Row(
-                      children: [Icon(Icons.food_bank), Text('한식 뷔페 찾기')],
+                      children: [
+                        const Icon(Icons.food_bank),
+                        InkWell(
+                          onTap: () {
+                            if (!mounted) return;
+                            Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    var begin = const Offset(0.0, 1.0);
+                                    var end = Offset.zero;
+                                    var curve = Curves.ease;
+                                    var tween = Tween(begin: begin, end: end)
+                                        .chain(CurveTween(curve: curve));
+                                    return SlideTransition(
+                                      position: animation.drive(tween),
+                                      child: child,
+                                    );
+                                  },
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      //const Overlay12MarkersEvent1Screen(),
+                                      const ReviewWrite()),
+                            );
+                          },
+                          child: const Text('한식 뷔페 찾기'),
+                        ),
+                      ],
                     ),
                     Row(
-                      children: [Icon(Icons.soup_kitchen), Text('내 정보 수정하기')],
+                      children: [
+                        const Icon(Icons.soup_kitchen),
+                        InkWell(
+                          onTap: () {
+                            if (!mounted) return;
+                            Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) {
+                                  var begin = const Offset(0.0, 1.0);
+                                  var end = Offset.zero;
+                                  var curve = Curves.ease;
+                                  var tween = Tween(begin: begin, end: end)
+                                      .chain(CurveTween(curve: curve));
+                                  return SlideTransition(
+                                    position: animation.drive(tween),
+                                    child: child,
+                                  );
+                                },
+                                pageBuilder:
+                                    (context, animation, secondaryAnimation) =>
+                                        const UpdateMyInfo(),
+                              ),
+                            );
+                          },
+                          child: const Text('내 정보 수정하기'),
+                        ),
+                      ],
                     )
                   ],
                 ),
@@ -143,7 +201,26 @@ class _MyPageState extends State<MyPage> {
               MenuDiv(
                 text: '한식 뷔페 찾기',
                 move: () {
-                  print('object');
+                  if (!mounted) return;
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          var begin = const Offset(0.0, 1.0);
+                          var end = Offset.zero;
+                          var curve = Curves.ease;
+                          var tween = Tween(begin: begin, end: end)
+                              .chain(CurveTween(curve: curve));
+                          return SlideTransition(
+                            position: animation.drive(tween),
+                            child: child,
+                          );
+                        },
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            //const Overlay12MarkersEvent1Screen(),
+                            const ReviewWrite()),
+                  );
                 },
               ),
               MenuDiv(
