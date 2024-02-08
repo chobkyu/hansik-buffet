@@ -48,6 +48,16 @@ class _Overlay12MarkersEvent1ScreenState
     }
   }
 
+  LatLng getGeo() {
+    if (widget.lng < 0) {
+      LatLng latLng = LatLng(lat, lng);
+      return latLng;
+    } else {
+      LatLng latLng = LatLng(widget.lat, widget.lng);
+      return latLng;
+    }
+  }
+
   void getHansics() async {
     try {
       //await geolocatorService.getLocation();
@@ -68,7 +78,7 @@ class _Overlay12MarkersEvent1ScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(200),
+        preferredSize: const Size.fromHeight(150),
         child: Column(
           children: [
             const CustomAppBar(title: '한식 뷔페'),
@@ -82,8 +92,6 @@ class _Overlay12MarkersEvent1ScreenState
               },
               child: Text(widget.lng.toString()),
             ),
-            Text(widget.lat.toString()),
-            Text(widget.lng.toString()),
             Text(hansics?[0].addr ?? "dsfa"),
             if (hansics != null) Text(hansics!.length.toString())
           ],
@@ -99,30 +107,11 @@ class _Overlay12MarkersEvent1ScreenState
                 infoWindowContent:
                     '<div style="width:200px;"><div style="background-color:orange;">${hansics?[i].name}</div><div style="marginTop:0.5rem;"><span style="display:block;">${hansics?[i].userStar}</span><span style="display:block">${hansics?[i].location}</span> <span style="display:block;">${hansics?[i].addr}</span></div></div>'));
           }
-          // markers.add(Marker(
-          //     markerId: markers.length.toString(),
-          //     latLng: LatLng(33.450705, 126.570677),
-          //     infoWindowContent: '<div>카카오</div>'));
-
-          // markers.add(Marker(
-          //     markerId: markers.length.toString(),
-          //     latLng: LatLng(33.450936, 126.569477),
-          //     infoWindowContent: '<div>생태연못</div>'));
-
-          // markers.add(Marker(
-          //     markerId: markers.length.toString(),
-          //     latLng: LatLng(33.450879, 126.569940),
-          //     infoWindowContent: '<div>텃밭</div>'));
-
-          // markers.add(Marker(
-          //     markerId: markers.length.toString(),
-          //     latLng: LatLng(33.451393, 126.570738),
-          //     infoWindowContent: '<div>근린공원</div>'));
 
           setState(() {});
         }),
         markers: markers.toList(),
-        center: LatLng(widget.lat, widget.lng),
+        center: getGeo(),
         onMarkerTap: (markerId, latLng, zoomLevel) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

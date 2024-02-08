@@ -1,14 +1,14 @@
 // ignore_for_file: avoid_print
-
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_map_plugin_example/src/overlay_12_markers_event1_screen.dart';
 import 'package:kakao_map_plugin_example/src/screen/login.dart';
 import 'package:kakao_map_plugin_example/src/screen/my_page.dart';
-import 'package:kakao_map_plugin_example/src/screen/review_write.dart';
+import 'package:kakao_map_plugin_example/src/screen/review_list.dart';
 import 'package:kakao_map_plugin_example/src/service/geolocator_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 import 'package:kakao_map_plugin_example/src/widget/home_button.dart';
+// ignore: depend_on_referenced_packages
 import 'package:geolocator/geolocator.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -172,7 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 10,
               ),
               HomeButton(
-                text: 'review write',
+                text: 'review list',
                 move: () {
                   Navigator.push(
                     context,
@@ -190,7 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       },
                       pageBuilder: (context, animation, secondaryAnimation) =>
-                          const ReviewWrite(),
+                          const ReviewList(),
                     ),
                   );
                 },
