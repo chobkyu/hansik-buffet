@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:kakao_map_plugin_example/src/screen/review_detail.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 
 class ReviewList extends StatefulWidget {
@@ -67,11 +68,37 @@ class _ReviewListState extends State<ReviewList> {
                       ),
                       Column(
                         children: [
-                          Text(
-                            '카리나는 이쁘다 ${entries[index]}',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    var begin = const Offset(0.0, 1.0);
+                                    var end = Offset.zero;
+                                    var curve = Curves.ease;
+                                    var tween = Tween(begin: begin, end: end)
+                                        .chain(CurveTween(curve: curve));
+                                    return SlideTransition(
+                                      position: animation.drive(tween),
+                                      child: child,
+                                    );
+                                  },
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      ReviewDetail(
+                                    reviewId: index,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              '카리나는 이쁘다 ${entries[index]}',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
                             ),
                           ),
                           RatingBar.builder(
