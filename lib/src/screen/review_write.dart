@@ -79,6 +79,7 @@ class _ReviewWriteState extends State<ReviewWrite> {
                 ),
                 child: RatingBar.builder(
                   initialRating: 3,
+                  itemSize: 30,
                   minRating: 0,
                   direction: Axis.horizontal,
                   allowHalfRating: true,
