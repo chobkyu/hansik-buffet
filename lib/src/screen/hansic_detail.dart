@@ -108,6 +108,10 @@ class _HansicDetailState extends State<HansicDetail> {
                     hansicData.googleStar,
                     style: const TextStyle(fontSize: 16),
                   ),
+                  const Icon(
+                    Icons.favorite_border,
+                    size: 30,
+                  ),
                 ],
               ),
               const Divider(
