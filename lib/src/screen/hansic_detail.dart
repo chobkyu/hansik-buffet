@@ -108,6 +108,10 @@ class _HansicDetailState extends State<HansicDetail> {
                     hansicData.googleStar,
                     style: const TextStyle(fontSize: 16),
                   ),
+                  const Icon(
+                    Icons.favorite_border,
+                    size: 30,
+                  ),
                 ],
               ),
               const Divider(
@@ -168,9 +172,12 @@ class _HansicDetailState extends State<HansicDetail> {
                         const SizedBox(
                           width: 10,
                         ),
-                        const Text(
-                          '리뷰 보기 (참여자 25)',
-                          style: TextStyle(fontSize: 15),
+                        InkWell(
+                          onTap: () {},
+                          child: const Text(
+                            '리뷰 보기 (참여자 25)',
+                            style: TextStyle(fontSize: 15),
+                          ),
                         ),
                       ],
                     ),

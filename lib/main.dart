@@ -66,6 +66,7 @@ class _MyAppState extends State<MyApp> {
 한식 뷔페 상세페이지
 즐겨찾기 기능
 별점 주기
+location list 가져오기
 
 -review
 리뷰 리스트 페이지
