@@ -35,6 +35,8 @@ class _HansicDetailState extends State<HansicDetail> {
     lng: 0,
     location: '한식 뷔페 지역',
     imgUrl: '대표 이미지 url',
+    count: 0,
+    favorite: false,
   );
 
   @override
@@ -47,6 +49,7 @@ class _HansicDetailState extends State<HansicDetail> {
     }
   }
 
+  //한식 뷔페 데이터 받아오기
   void getHansic() async {
     try {
       hansicData = await hansicService.getHansicDetailData(widget.latLng);
@@ -66,6 +69,7 @@ class _HansicDetailState extends State<HansicDetail> {
     }
   }
 
+  //즐겨찾기
   void postFavorite() async {
     try {
       String? token = await storage.read(key: 'token');
@@ -74,6 +78,7 @@ class _HansicDetailState extends State<HansicDetail> {
 
       if (status == 201) {
         //즐겨찾기 추가
+        getHansic();
       } else if (status == 401) {
         //유효하지 않은 토큰 및 비로그인 유저
         await storage.delete(key: 'token');
@@ -144,23 +149,34 @@ class _HansicDetailState extends State<HansicDetail> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const Text(
-                    '후기 (25)',
+                  Text(
+                    '후기 ${hansicData.count}',
                     style: TextStyle(fontSize: 16),
                   ),
                   Text(
                     hansicData.googleStar,
                     style: const TextStyle(fontSize: 16),
                   ),
-                  IconButton(
-                    onPressed: () {
-                      postFavorite();
-                    },
-                    icon: const Icon(
-                      Icons.favorite_border,
-                      size: 30,
+                  if (hansicData.favorite)
+                    IconButton(
+                      onPressed: () {
+                        postFavorite();
+                      },
+                      icon: const Icon(
+                        Icons.favorite_border,
+                        size: 30,
+                      ),
                     ),
-                  ),
+                  if (!hansicData.favorite)
+                    IconButton(
+                      onPressed: () {
+                        postFavorite();
+                      },
+                      icon: const Icon(
+                        Icons.favorite,
+                        size: 30,
+                      ),
+                    ),
                 ],
               ),
               const Divider(

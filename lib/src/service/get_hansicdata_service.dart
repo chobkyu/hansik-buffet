@@ -6,14 +6,15 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'package:kakao_map_plugin_example/src/models/hansic_data.dart';
 import 'package:http/http.dart' as http;
+import 'package:kakao_map_plugin_example/src/models/hansic_list.dart';
 
 class GetHansicService {
-  Future<List<HansicData>> getHansicData() async {
-    String? baseUrl = dotenv.env['BASE_URL'];
+  Future<List<HansicList>> getHansicData() async {
+    String? baseUrl = dotenv.env['TEST_URL'];
     Uri uri = Uri.parse("$baseUrl/hansic/loc/1");
 
     final response = await http.get(uri);
-
+    print(response);
     final int statusCode = response.statusCode;
 
     if (statusCode < 200 || statusCode > 400) {
@@ -23,10 +24,10 @@ class GetHansicService {
 
     Map<String, dynamic> data = json.decode(response.body);
 
-    List<HansicData> result = [];
+    List<HansicList> result = [];
 
     for (int i = 0; i < data["data"].length; i++) {
-      HansicData hansicData = HansicData.fromMap(data["data"][i]);
+      HansicList hansicData = HansicList.fromMap(data["data"][i]);
       result.add(hansicData);
     }
 
@@ -35,7 +36,7 @@ class GetHansicService {
   }
 
   //지역별 조회
-  Future<List<HansicData>> getHansicDataFromLoc(int id) async {
+  Future<List<HansicList>> getHansicDataFromLoc(int id) async {
     String? baseUrl = dotenv.env['BASE_URL'];
 
     Uri uri = Uri.parse("$baseUrl/hansic/loc/$id");
@@ -51,10 +52,12 @@ class GetHansicService {
 
     Map<String, dynamic> data = json.decode(response.body);
 
-    List<HansicData> result = [];
+    print(data);
+
+    List<HansicList> result = [];
 
     for (int i = 0; i < data["data"].length; i++) {
-      HansicData hansicData = HansicData.fromMap(data["data"][i]);
+      HansicList hansicData = HansicList.fromMap(data["data"][i]);
       result.add(hansicData);
     }
 

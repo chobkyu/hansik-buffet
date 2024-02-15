@@ -1,4 +1,4 @@
-class HansicData {
+class HansicList {
   late int id;
   late String name;
   late String addr;
@@ -9,10 +9,8 @@ class HansicData {
   late double lng;
   late String location;
   late String imgUrl;
-  late int count;
-  late bool favorite;
 
-  HansicData({
+  HansicList({
     required this.id,
     required this.name,
     required this.addr,
@@ -23,12 +21,10 @@ class HansicData {
     required this.lng,
     required this.location,
     required this.imgUrl,
-    required this.count,
-    required this.favorite,
   });
 
-  factory HansicData.fromMap(Map<String, dynamic> json) {
-    return HansicData(
+  factory HansicList.fromMap(Map<String, dynamic> json) {
+    return HansicList(
       id: json["id"],
       name: json["name"],
       addr: json["addr"],
@@ -39,8 +35,6 @@ class HansicData {
       lng: json["lng"].toDouble(),
       location: json["location"],
       imgUrl: json["imgUrl"] ?? '',
-      count: json["count"],
-      favorite: json["favorite"],
     );
   }
 }
