@@ -10,7 +10,7 @@ import 'package:kakao_map_plugin_example/src/models/hansic_list.dart';
 
 class GetHansicService {
   Future<List<HansicList>> getHansicData() async {
-    String? baseUrl = dotenv.env['TEST_URL'];
+    String? baseUrl = dotenv.env['BASE_URL'];
     Uri uri = Uri.parse("$baseUrl/hansic/loc/1");
 
     final response = await http.get(uri);

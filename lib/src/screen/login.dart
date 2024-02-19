@@ -545,10 +545,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         await storage.write(key: 'token', value: token);
 
                         if (!mounted) return;
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return const HomeScreen();
-                        }));
+                        Navigator.of(context).pop(); //로그인 안되어있을 시 처리 예정
                       } catch (err) {
                         print(err);
                         ScaffoldMessenger.of(context).showSnackBar(

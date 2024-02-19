@@ -163,7 +163,7 @@ class _HansicDetailState extends State<HansicDetail> {
                         postFavorite();
                       },
                       icon: const Icon(
-                        Icons.favorite_border,
+                        Icons.favorite,
                         size: 30,
                       ),
                     ),
@@ -173,7 +173,7 @@ class _HansicDetailState extends State<HansicDetail> {
                         postFavorite();
                       },
                       icon: const Icon(
-                        Icons.favorite,
+                        Icons.favorite_border,
                         size: 30,
                       ),
                     ),
@@ -286,7 +286,10 @@ class _HansicDetailState extends State<HansicDetail> {
                         );
                       },
                       pageBuilder: (context, animation, secondaryAnimation) =>
-                          const ReviewWrite(),
+                          ReviewWrite(
+                        id: hansicData.id,
+                        hansicName: hansicData.name,
+                      ),
                     ),
                   );
                 },

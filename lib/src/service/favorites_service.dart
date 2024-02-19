@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 class FavoriteService {
   Future<int> favoriteStar(int hansicId, String token) async {
-    String? baseUrl = dotenv.env['BASE_URL'];
+    String? baseUrl = dotenv.env['TEST_URL'];
     Uri uri = Uri.parse("$baseUrl/hansic/star/$hansicId");
     String auth = 'Bearer $token';
 
