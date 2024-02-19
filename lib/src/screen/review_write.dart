@@ -2,17 +2,77 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:kakao_map_plugin_example/src/models/review_write.dart';
+import 'package:kakao_map_plugin_example/src/models/user_data.dart';
+import 'package:kakao_map_plugin_example/src/screen/login.dart';
+import 'package:kakao_map_plugin_example/src/service/get_userdata_service.dart';
+import 'package:kakao_map_plugin_example/src/service/review_write_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 import 'package:kakao_map_plugin_example/src/widget/home_button.dart';
 
 class ReviewWrite extends StatefulWidget {
-  const ReviewWrite({super.key});
+  const ReviewWrite({super.key, required this.id, required this.hansicName});
+
+  final int id;
+  final String hansicName;
 
   @override
   State<ReviewWrite> createState() => _ReviewWriteState();
 }
 
 class _ReviewWriteState extends State<ReviewWrite> {
+  static GetUserData getUserData = GetUserData();
+  static const storage = FlutterSecureStorage();
+  static ReviewWriteService reviewWriteService = ReviewWriteService();
+
+  UserData userData = UserData(
+    id: 0,
+    userName: 'tq',
+    userNickName: '',
+    userId: '',
+    userImgs: [],
+  );
+
+  ReviewCreate reviewCreate = ReviewCreate(
+    id: 0,
+    detailReview: '',
+    userRating: 0,
+  );
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    try {
+      getUser();
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  void getUser() async {
+    String? token = await storage.read(key: 'token');
+    print(token);
+    try {
+      userData = await getUserData.getUserData(token!);
+      print(userData);
+      setState(() {});
+    } catch (err) {
+      print(err.toString());
+      await storage.delete(key: 'token');
+      if (!mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) {
+            return const LoginScreen();
+          },
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,9 +88,9 @@ class _ReviewWriteState extends State<ReviewWrite> {
               const SizedBox(
                 height: 40,
               ),
-              const Text(
-                '한식 뷔페 이름',
-                style: TextStyle(
+              Text(
+                widget.hansicName,
+                style: const TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
                 ),
@@ -43,6 +103,12 @@ class _ReviewWriteState extends State<ReviewWrite> {
                 child: TextFormField(
                   maxLines: 15,
                   //style: const TextStyle(color: Colors.white),
+                  onSaved: (value) {
+                    reviewCreate.detailReview = value!;
+                  },
+                  onChanged: (value) {
+                    reviewCreate.detailReview = value;
+                  },
                   decoration: const InputDecoration(
                     prefixIcon: Icon(
                       Icons.supervised_user_circle_outlined,
@@ -91,6 +157,7 @@ class _ReviewWriteState extends State<ReviewWrite> {
                   ),
                   onRatingUpdate: (rating) {
                     print(rating);
+                    reviewCreate.userRating = rating;
                   },
                 ),
               ),
@@ -99,7 +166,26 @@ class _ReviewWriteState extends State<ReviewWrite> {
               ),
               HomeButton(
                 text: '등록하기',
-                move: () {},
+                move: () async {
+                  reviewCreate.id = widget.id;
+                  print(reviewCreate.id);
+                  String? token = await storage.read(key: 'token');
+
+                  try {
+                    int res = await reviewWriteService.writeReview(
+                        reviewCreate, token!);
+
+                    if (res == 201) {
+                      //등록 완료 팝업 예정
+                      if (!mounted) return;
+                      Navigator.pop(context);
+                    } else {
+                      //에러 처리 예정
+                    }
+                  } catch (err) {
+                    print(err);
+                  }
+                },
                 color: Colors.amber,
               )
             ],

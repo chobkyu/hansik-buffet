@@ -1,9 +1,12 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'package:kakao_map_plugin_example/src/models/hansic_data.dart';
+import 'package:kakao_map_plugin_example/src/screen/login.dart';
 import 'package:kakao_map_plugin_example/src/screen/review_write.dart';
+import 'package:kakao_map_plugin_example/src/service/favorites_service.dart';
 import 'package:kakao_map_plugin_example/src/service/get_hansicdata_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 
@@ -18,6 +21,8 @@ class HansicDetail extends StatefulWidget {
 
 class _HansicDetailState extends State<HansicDetail> {
   static GetHansicService hansicService = GetHansicService();
+  static FavoriteService favoriteService = FavoriteService();
+  static const storage = FlutterSecureStorage();
 
   late HansicData hansicData = HansicData(
     id: 0,
@@ -30,6 +35,8 @@ class _HansicDetailState extends State<HansicDetail> {
     lng: 0,
     location: '한식 뷔페 지역',
     imgUrl: '대표 이미지 url',
+    count: 0,
+    favorite: false,
   );
 
   @override
@@ -42,6 +49,7 @@ class _HansicDetailState extends State<HansicDetail> {
     }
   }
 
+  //한식 뷔페 데이터 받아오기
   void getHansic() async {
     try {
       hansicData = await hansicService.getHansicDetailData(widget.latLng);
@@ -58,6 +66,47 @@ class _HansicDetailState extends State<HansicDetail> {
       return "0 (참여자 100)";
     } else {
       return "$star (참여자 100)";
+    }
+  }
+
+  //즐겨찾기
+  void postFavorite() async {
+    try {
+      String? token = await storage.read(key: 'token');
+
+      int status = await favoriteService.favoriteStar(hansicData.id, token!);
+
+      if (status == 201) {
+        //즐겨찾기 추가
+        getHansic();
+      } else if (status == 401) {
+        //유효하지 않은 토큰 및 비로그인 유저
+        await storage.delete(key: 'token');
+        if (!mounted) return;
+        Navigator.push(
+          context,
+          PageRouteBuilder(
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              var begin = const Offset(0.0, 1.0);
+              var end = Offset.zero;
+              var curve = Curves.ease;
+              var tween =
+                  Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+              return SlideTransition(
+                position: animation.drive(tween),
+                child: child,
+              );
+            },
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                const LoginScreen(),
+          ),
+        );
+      } else {
+        //error 처리
+      }
+    } catch (err) {
+      print(err);
     }
   }
 
@@ -100,18 +149,34 @@ class _HansicDetailState extends State<HansicDetail> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const Text(
-                    '후기 (25)',
+                  Text(
+                    '후기 ${hansicData.count}',
                     style: TextStyle(fontSize: 16),
                   ),
                   Text(
                     hansicData.googleStar,
                     style: const TextStyle(fontSize: 16),
                   ),
-                  const Icon(
-                    Icons.favorite_border,
-                    size: 30,
-                  ),
+                  if (hansicData.favorite)
+                    IconButton(
+                      onPressed: () {
+                        postFavorite();
+                      },
+                      icon: const Icon(
+                        Icons.favorite,
+                        size: 30,
+                      ),
+                    ),
+                  if (!hansicData.favorite)
+                    IconButton(
+                      onPressed: () {
+                        postFavorite();
+                      },
+                      icon: const Icon(
+                        Icons.favorite_border,
+                        size: 30,
+                      ),
+                    ),
                 ],
               ),
               const Divider(
@@ -221,7 +286,10 @@ class _HansicDetailState extends State<HansicDetail> {
                         );
                       },
                       pageBuilder: (context, animation, secondaryAnimation) =>
-                          const ReviewWrite(),
+                          ReviewWrite(
+                        id: hansicData.id,
+                        hansicName: hansicData.name,
+                      ),
                     ),
                   );
                 },

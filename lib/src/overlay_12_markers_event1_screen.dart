@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'package:kakao_map_plugin_example/src/models/hansic_data.dart';
+import 'package:kakao_map_plugin_example/src/models/hansic_list.dart';
 import 'package:kakao_map_plugin_example/src/screen/hansic_detail.dart';
 import 'package:kakao_map_plugin_example/src/service/geolocator_service.dart';
 import 'package:kakao_map_plugin_example/src/service/get_hansicdata_service.dart';
@@ -33,7 +34,7 @@ class _Overlay12MarkersEvent1ScreenState
 
   Set<Marker> markers = {};
 
-  List<HansicData>? hansics;
+  List<HansicList>? hansics;
 
   late double lat = 37.4916927972275;
   late double lng = 126.899358119287;
@@ -61,7 +62,7 @@ class _Overlay12MarkersEvent1ScreenState
   void getHansics() async {
     try {
       //await geolocatorService.getLocation();
-
+      print('getHansics 호출');
       hansics = await hansicService.getHansicData();
       print(hansics?.length);
       Position position = await geolocatorService.getLocation();
