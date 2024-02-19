@@ -60,17 +60,21 @@ class _ReviewWriteState extends State<ReviewWrite> {
       setState(() {});
     } catch (err) {
       print(err.toString());
-      await storage.delete(key: 'token');
-      if (!mounted) return;
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) {
-            return const LoginScreen();
-          },
-        ),
-      );
+      goToLoginPage();
     }
+  }
+
+  void goToLoginPage() async {
+    await storage.delete(key: 'token');
+    if (!mounted) return;
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return const LoginScreen();
+        },
+      ),
+    );
   }
 
   @override
@@ -179,6 +183,8 @@ class _ReviewWriteState extends State<ReviewWrite> {
                       //등록 완료 팝업 예정
                       if (!mounted) return;
                       Navigator.pop(context);
+                    } else if (res == 401) {
+                      goToLoginPage();
                     } else {
                       //에러 처리 예정
                     }
