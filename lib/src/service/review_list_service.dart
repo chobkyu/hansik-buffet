@@ -9,7 +9,7 @@ import 'package:kakao_map_plugin_example/src/models/review_list.dart';
 class ReviewListService {
   Future<List<ReviewDto>> getReviewList(int id) async {
     try {
-      String? baseUrl = dotenv.env['TEST_URL'];
+      String? baseUrl = dotenv.env['BASE_URL'];
       Uri uri = Uri.parse("$baseUrl/review/list/$id");
 
       Map<String, String> headers = {
