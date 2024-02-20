@@ -29,7 +29,7 @@ class GetUserData {
         //에러 처리 추가
         throw Exception(statusCode);
       }
-
+      print(response.body);
       Map<String, dynamic> resBody =
           jsonDecode(utf8.decode(response.bodyBytes));
 

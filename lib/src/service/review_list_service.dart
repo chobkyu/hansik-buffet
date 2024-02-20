@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -7,10 +9,17 @@ import 'package:kakao_map_plugin_example/src/models/review_list.dart';
 class ReviewListService {
   Future<List<ReviewDto>> getReviewList(int id) async {
     try {
-      String? baseUrl = dotenv.env['BASE_URL'];
+      String? baseUrl = dotenv.env['TEST_URL'];
       Uri uri = Uri.parse("$baseUrl/review/list/$id");
 
-      final response = await http.get(uri);
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/josn',
+      };
+
+      final response = await http.get(uri, headers: headers);
+
+      print(response.body);
 
       final int statusCode = response.statusCode;
 
@@ -19,8 +28,8 @@ class ReviewListService {
         throw Exception(statusCode);
       }
 
-      Map<String, dynamic> data = json.decode(response.body);
-
+      //print(jsonDecode(utf8.decode(response.bodyBytes)));
+      List<dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
       List<ReviewDto> result = [];
 
       for (int i = 0; i < data.length; i++) {
