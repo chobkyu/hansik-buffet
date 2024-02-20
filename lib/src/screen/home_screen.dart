@@ -190,7 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       },
                       pageBuilder: (context, animation, secondaryAnimation) =>
-                          const ReviewList(),
+                          const ReviewList(id: 1906),
                     ),
                   );
                 },

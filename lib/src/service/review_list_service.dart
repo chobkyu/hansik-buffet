@@ -3,25 +3,23 @@
 import 'dart:convert';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:kakao_map_plugin_example/src/models/user_data.dart';
 import 'package:http/http.dart' as http;
+import 'package:kakao_map_plugin_example/src/models/review_list.dart';
 
-class GetUserData {
-  String? baseUrl = dotenv.env['BASE_URL'];
-
-  Future<UserData> getUserData(String token) async {
+class ReviewListService {
+  Future<List<ReviewDto>> getReviewList(int id) async {
     try {
-      Uri uri = Uri.parse("$baseUrl/users/userinfo");
+      String? baseUrl = dotenv.env['BASE_URL'];
+      Uri uri = Uri.parse("$baseUrl/review/list/$id");
 
-      String auth = 'Bearer $token';
-      //header
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/josn',
-        'Authorization': auth
       };
 
       final response = await http.get(uri, headers: headers);
+
+      print(response.body);
 
       final int statusCode = response.statusCode;
 
@@ -29,16 +27,17 @@ class GetUserData {
         //에러 처리 추가
         throw Exception(statusCode);
       }
-      print(response.body);
-      Map<String, dynamic> resBody =
-          jsonDecode(utf8.decode(response.bodyBytes));
 
-      print(resBody['data']);
+      //print(jsonDecode(utf8.decode(response.bodyBytes)));
+      List<dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
+      List<ReviewDto> result = [];
 
-      UserData userData = UserData.fromMap(resBody['data']);
+      for (int i = 0; i < data.length; i++) {
+        ReviewDto reviewDto = ReviewDto.fromMap(data[i]);
+        result.add(reviewDto);
+      }
 
-      print(userData);
-      return userData;
+      return result;
     } catch (err) {
       print(err);
       throw Exception('error');

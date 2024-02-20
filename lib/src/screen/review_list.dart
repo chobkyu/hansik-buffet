@@ -2,29 +2,51 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:kakao_map_plugin_example/src/models/review_list.dart';
 import 'package:kakao_map_plugin_example/src/screen/review_detail.dart';
+import 'package:kakao_map_plugin_example/src/service/review_list_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 
 class ReviewList extends StatefulWidget {
-  const ReviewList({super.key});
+  const ReviewList({super.key, required this.id});
 
+  final int id;
   @override
   State<ReviewList> createState() => _ReviewListState();
 }
 
 class _ReviewListState extends State<ReviewList> {
-  final List<String> entries = <String>[
-    'asadfasf',
-    'b',
-    'c',
-    'd',
-    'e',
-    'f',
-    'g',
-    'h',
-    'i',
-  ];
-  final List<int> colorCodes = <int>[600, 500, 400];
+  static ReviewListService reviewListService = ReviewListService();
+
+  List<ReviewDto>? reviewList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    try {
+      getReviewData();
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  void getReviewData() async {
+    try {
+      reviewList = await reviewListService.getReviewList(widget.id);
+      print(reviewList?[0].review);
+      setState(() {});
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  String getImgUrl(List<dynamic> reviewImgs) {
+    if (reviewImgs.isNotEmpty) {
+      return reviewImgs[0];
+    } else {
+      return 'https://puda.s3.ap-northeast-2.amazonaws.com/client/2840159_2891102_2258.png';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +58,7 @@ class _ReviewListState extends State<ReviewList> {
       ),
       body: ListView.builder(
         padding: const EdgeInsets.all(8),
-        itemCount: entries.length,
+        itemCount: reviewList?.length,
         itemBuilder: (BuildContext context, int index) {
           return Column(
             children: [
@@ -60,7 +82,8 @@ class _ReviewListState extends State<ReviewList> {
                         child: ClipRRect(
                           //borderRadius: BorderRadius.circular(100),
                           child: Image.network(
-                              'https://puda.s3.ap-northeast-2.amazonaws.com/client/2840159_2891102_2258.png'),
+                            getImgUrl(reviewList![index].reviewImg),
+                          ),
                         ),
                       ),
                       const SizedBox(
@@ -94,7 +117,8 @@ class _ReviewListState extends State<ReviewList> {
                               );
                             },
                             child: Text(
-                              '카리나는 이쁘다 ${entries[index]}',
+                              reviewList![index].review,
+                              //'카리나는 이쁘다 ${entries[index]}',
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 20,
@@ -102,7 +126,7 @@ class _ReviewListState extends State<ReviewList> {
                             ),
                           ),
                           RatingBar.builder(
-                            initialRating: 3,
+                            initialRating: reviewList![index].star,
                             itemSize: 18,
                             ignoreGestures: true,
                             minRating: 0,
