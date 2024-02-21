@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:kakao_map_plugin_example/src/models/location.dart';
 
 class UpdateUserService {
   Future<dynamic> updateUser(String? userId, String? userPw, String? userName,
@@ -37,5 +38,28 @@ class UpdateUserService {
     print(response);
 
     return response;
+  }
+
+  Future<List<LocationDto>> getLocation() async {
+    try {
+      String? baseUrl = dotenv.env['BASE_URL'];
+
+      Uri uri = Uri.parse("$baseUrl/users/location");
+
+      final response = await http.get(uri);
+
+      List<LocationDto> locationList = [];
+      Map<String, dynamic> data = json.decode(response.body);
+
+      for (int i = 0; i < data.length; i++) {
+        LocationDto locationDto = LocationDto.fromMap(data["data"][i]);
+        locationList.add(locationDto);
+      }
+      print(locationList[0].location);
+      return locationList;
+    } catch (err) {
+      print(err);
+      throw Exception('err');
+    }
   }
 }

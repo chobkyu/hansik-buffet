@@ -1,7 +1,8 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, unused_element
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:kakao_map_plugin_example/src/models/location.dart';
 import 'package:kakao_map_plugin_example/src/models/user_data.dart';
 import 'package:kakao_map_plugin_example/src/screen/login.dart';
 import 'package:kakao_map_plugin_example/src/screen/my_page.dart';
@@ -40,6 +41,9 @@ class _UpdateMyInfoState extends State<UpdateMyInfo> {
     userId: '',
     userImgs: [],
   );
+
+  List<LocationDto> locationList = [];
+
   void _tryValidation() {
     final isValid =
         _formKey.currentState!.validate(); //폼필드 안 validator를 작동시킬 수 있음
@@ -69,6 +73,8 @@ class _UpdateMyInfoState extends State<UpdateMyInfo> {
       userName = userData.userName;
       userNickName = userData.userNickName;
       userId = userData.userId;
+
+      locationList = await updateUserService.getLocation();
 
       setState(() {});
     } catch (err) {
