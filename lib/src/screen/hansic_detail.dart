@@ -107,6 +107,7 @@ class _HansicDetailState extends State<HansicDetail> {
         //error 처리
       }
     } catch (err) {
+      print('err');
       print(err);
     }
   }
