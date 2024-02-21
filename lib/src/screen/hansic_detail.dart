@@ -55,7 +55,9 @@ class _HansicDetailState extends State<HansicDetail> {
   //한식 뷔페 데이터 받아오기
   void getHansic() async {
     try {
-      hansicData = await hansicService.getHansicDetailData(widget.latLng);
+      String? token = await storage.read(key: 'token');
+      hansicData =
+          await hansicService.getHansicDetailData(widget.latLng, token);
       print(hansicData);
       setState(() {});
     } catch (err) {
@@ -154,7 +156,7 @@ class _HansicDetailState extends State<HansicDetail> {
                 children: [
                   Text(
                     '후기 ${hansicData.count}',
-                    style: TextStyle(fontSize: 16),
+                    style: const TextStyle(fontSize: 16),
                   ),
                   Text(
                     hansicData.googleStar,
@@ -163,16 +165,19 @@ class _HansicDetailState extends State<HansicDetail> {
                   if (hansicData.favorite)
                     IconButton(
                       onPressed: () {
+                        print(hansicData.favorite);
                         postFavorite();
                       },
                       icon: const Icon(
                         Icons.favorite,
                         size: 30,
+                        color: Colors.red,
                       ),
                     ),
                   if (!hansicData.favorite)
                     IconButton(
                       onPressed: () {
+                        print(hansicData.favorite);
                         postFavorite();
                       },
                       icon: const Icon(

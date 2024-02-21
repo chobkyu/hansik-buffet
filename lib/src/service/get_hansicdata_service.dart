@@ -65,7 +65,7 @@ class GetHansicService {
     return result;
   }
 
-  Future<HansicData> getHansicDetailData(LatLng latlng) async {
+  Future<HansicData> getHansicDetailData(LatLng latlng, String? token) async {
     try {
       String? baseUrl = dotenv.env['BASE_URL'];
 
@@ -73,9 +73,16 @@ class GetHansicService {
       double lng = latlng.longitude;
 
       print(latlng);
+      String auth = 'Bearer $token';
 
       Uri uri = Uri.parse("$baseUrl/hansic/place?lat=$lat&lng=$lng");
-      final response = await http.get(uri);
+      final response = await http.get(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': auth
+        },
+      );
 
       final int statusCode = response.statusCode;
 
