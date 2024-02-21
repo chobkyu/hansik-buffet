@@ -63,7 +63,6 @@ class _MyAppState extends State<MyApp> {
 
 
 -hansic
-즐겨찾기 ui
 별점 주기
 location list 가져오기
 
