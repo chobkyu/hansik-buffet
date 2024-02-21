@@ -68,8 +68,9 @@ class _MyAppState extends State<MyApp> {
 location list 가져오기
 
 -review
-리뷰 리스트 페이지
-리뷰 상세 보기 페이지
+리뷰 리스트 페이지 ui
+리뷰 상세 보기 페이지 ui 및 이미지 업로드
+댓글 기능
 
 -owner
 사업자 회원가입 페이지

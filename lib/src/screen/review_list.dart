@@ -8,9 +8,15 @@ import 'package:kakao_map_plugin_example/src/service/review_list_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 
 class ReviewList extends StatefulWidget {
-  const ReviewList({super.key, required this.id});
+  const ReviewList({
+    super.key,
+    required this.id,
+    required this.hansicName,
+  });
 
   final int id;
+  final String hansicName;
+
   @override
   State<ReviewList> createState() => _ReviewListState();
 }
@@ -52,9 +58,9 @@ class _ReviewListState extends State<ReviewList> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const PreferredSize(
+      appBar: PreferredSize(
         preferredSize: Size.fromHeight(50),
-        child: CustomAppBar(title: 'Review'),
+        child: CustomAppBar(title: '${widget.hansicName} 리뷰'),
       ),
       body: ListView.builder(
         padding: const EdgeInsets.all(8),
@@ -112,6 +118,8 @@ class _ReviewListState extends State<ReviewList> {
                                           secondaryAnimation) =>
                                       ReviewDetail(
                                     reviewId: index,
+                                    reviewDto: reviewList![index],
+                                    hansicName: widget.hansicName,
                                   ),
                                 ),
                               );

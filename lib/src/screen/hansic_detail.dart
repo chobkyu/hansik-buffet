@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print
 
+import 'dart:core';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_map_plugin/kakao_map_plugin.dart';
@@ -108,7 +110,6 @@ class _HansicDetailState extends State<HansicDetail> {
       }
     } catch (err) {
       print('err');
-      print(err);
     }
   }
 
@@ -260,7 +261,10 @@ class _HansicDetailState extends State<HansicDetail> {
                                   },
                                   pageBuilder: (context, animation,
                                           secondaryAnimation) =>
-                                      ReviewList(id: hansicData.id),
+                                      ReviewList(
+                                    id: hansicData.id,
+                                    hansicName: hansicData.name,
+                                  ),
                                 ),
                               );
                             },
