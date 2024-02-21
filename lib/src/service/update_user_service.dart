@@ -51,7 +51,7 @@ class UpdateUserService {
       List<LocationDto> locationList = [];
       Map<String, dynamic> data = json.decode(response.body);
 
-      for (int i = 0; i < data.length; i++) {
+      for (int i = 0; i < data["data"].length; i++) {
         LocationDto locationDto = LocationDto.fromMap(data["data"][i]);
         locationList.add(locationDto);
       }

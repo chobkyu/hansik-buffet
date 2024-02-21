@@ -10,6 +10,7 @@ import 'package:kakao_map_plugin_example/src/service/get_userdata_service.dart';
 import 'package:kakao_map_plugin_example/src/service/update_user_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 import 'package:kakao_map_plugin_example/src/widget/home_button.dart';
+import 'package:kakao_map_plugin_example/src/widget/location_dropdown.dart';
 
 class UpdateMyInfo extends StatefulWidget {
   const UpdateMyInfo({super.key});
@@ -42,7 +43,8 @@ class _UpdateMyInfoState extends State<UpdateMyInfo> {
     userImgs: [],
   );
 
-  List<LocationDto> locationList = [];
+  late List<LocationDto> locationList = [];
+  LocationDto? locationDto;
 
   void _tryValidation() {
     final isValid =
@@ -74,7 +76,9 @@ class _UpdateMyInfoState extends State<UpdateMyInfo> {
       userNickName = userData.userNickName;
       userId = userData.userId;
 
+      //지역 리스트 조회
       locationList = await updateUserService.getLocation();
+      locationDto = locationList[0];
 
       setState(() {});
     } catch (err) {
@@ -147,7 +151,7 @@ class _UpdateMyInfoState extends State<UpdateMyInfo> {
       body: SingleChildScrollView(
         child: Container(
           width: 600,
-          height: 700,
+          height: 800,
           //color: Colors.amber[50],
           margin: const EdgeInsets.all(30),
           padding: const EdgeInsets.all(20),
@@ -398,19 +402,19 @@ class _UpdateMyInfoState extends State<UpdateMyInfo> {
                     child: Padding(
                       padding: const EdgeInsets.only(left: 30, right: 30),
                       child: DropdownButton(
-                        value: _selectedValue,
-                        items: _valueList.map(
+                        value: locationDto,
+                        items: locationList.map(
                           (value) {
                             return DropdownMenuItem(
                               value: value,
-                              child: Text(value),
+                              child: Text(value.location),
                             );
                           },
                         ).toList(),
                         onChanged: (value) {
                           setState(
                             () {
-                              _selectedValue = value;
+                              locationDto = value;
                             },
                           );
                         },
@@ -434,13 +438,35 @@ class _UpdateMyInfoState extends State<UpdateMyInfo> {
                   const SizedBox(
                     height: 30,
                   ),
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                        //background color of dropdown button
+                        border: Border.all(
+                          color: Colors.amber,
+                          // width: 3,
+                        ), //border of dropdown button
+                        borderRadius: BorderRadius.circular(
+                            50), //border raiuds of dropdown button
+                        boxShadow: const <BoxShadow>[
+                          //apply shadow on Dropdown button
+                          BoxShadow(
+                              color: Colors.white, //shadow for button
+                              blurRadius: 5) //blur radius of shadow
+                        ]),
+                    child: Padding(
+                        padding: const EdgeInsets.only(left: 30, right: 30),
+                        child: LocationDropDown(locationList: locationList)),
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
                   HomeButton(
                     text: 'update',
                     move: () async {
                       updateUser();
                     },
                     color: Colors.amber,
-                  )
+                  ),
                 ],
                 //column's children
               ),
