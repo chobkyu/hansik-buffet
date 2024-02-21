@@ -17,7 +17,7 @@ class FavoriteService {
 
     final int statusCode = response.statusCode;
 
-    if (statusCode < 200 || statusCode > 400) {
+    if (statusCode < 200 || statusCode > 401) {
       //에러 처리 추가
       throw Exception(statusCode);
     }

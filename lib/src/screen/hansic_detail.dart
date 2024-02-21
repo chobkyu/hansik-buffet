@@ -1,10 +1,13 @@
 // ignore_for_file: avoid_print
 
+import 'dart:core';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'package:kakao_map_plugin_example/src/models/hansic_data.dart';
 import 'package:kakao_map_plugin_example/src/screen/login.dart';
+import 'package:kakao_map_plugin_example/src/screen/review_list.dart';
 import 'package:kakao_map_plugin_example/src/screen/review_write.dart';
 import 'package:kakao_map_plugin_example/src/service/favorites_service.dart';
 import 'package:kakao_map_plugin_example/src/service/get_hansicdata_service.dart';
@@ -106,7 +109,7 @@ class _HansicDetailState extends State<HansicDetail> {
         //error 처리
       }
     } catch (err) {
-      print(err);
+      print('err');
     }
   }
 
@@ -239,9 +242,36 @@ class _HansicDetailState extends State<HansicDetail> {
                         ),
                         InkWell(
                           onTap: () {},
-                          child: const Text(
-                            '리뷰 보기 (참여자 25)',
-                            style: TextStyle(fontSize: 15),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    var begin = const Offset(0.0, 1.0);
+                                    var end = Offset.zero;
+                                    var curve = Curves.ease;
+                                    var tween = Tween(begin: begin, end: end)
+                                        .chain(CurveTween(curve: curve));
+                                    return SlideTransition(
+                                      position: animation.drive(tween),
+                                      child: child,
+                                    );
+                                  },
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      ReviewList(
+                                    id: hansicData.id,
+                                    hansicName: hansicData.name,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: const Text(
+                              '리뷰 보기 (참여자 25)',
+                              style: TextStyle(fontSize: 15),
+                            ),
                           ),
                         ),
                       ],

@@ -54,23 +54,23 @@ class _MyAppState extends State<MyApp> {
 /*todo
 -공통
 사진 업로드
+에러 처리
 
 -user
-회원 정보 수정 페이지
 프로필 사진 변경
 즐겨찾기 한뷔 페이지
 오늘 먹은 메뉴 등록하기
 
 
 -hansic
-한식 뷔페 상세페이지
-즐겨찾기 기능
+즐겨찾기 ui
 별점 주기
 location list 가져오기
 
 -review
-리뷰 리스트 페이지
-리뷰 상세 보기 페이지
+리뷰 리스트 페이지 ui
+리뷰 상세 보기 페이지 ui 및 이미지 업로드
+댓글 기능
 
 -owner
 사업자 회원가입 페이지

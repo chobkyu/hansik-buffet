@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:kakao_map_plugin_example/src/models/review_list.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 import 'package:kakao_map_plugin_example/src/widget/text_inContainer.dart';
 
 class ReviewDetail extends StatefulWidget {
-  const ReviewDetail({super.key, required this.reviewId});
+  const ReviewDetail({
+    super.key,
+    required this.reviewId,
+    required this.reviewDto,
+    required this.hansicName,
+  });
 
   final int reviewId;
+  final ReviewDto reviewDto;
+  final String hansicName;
   @override
   State<ReviewDetail> createState() => _ReviewDetailState();
 }
@@ -16,9 +24,9 @@ class _ReviewDetailState extends State<ReviewDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: const PreferredSize(
-          preferredSize: Size.fromHeight(50),
-          child: CustomAppBar(title: 'Review'),
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(50),
+          child: CustomAppBar(title: '${widget.hansicName} 리뷰'),
         ),
         body: SingleChildScrollView(
           child: Center(
@@ -28,7 +36,7 @@ class _ReviewDetailState extends State<ReviewDetail> {
                   height: 40,
                 ),
                 TextInContainer(
-                  text: widget.reviewId.toString(),
+                  text: '${widget.reviewDto.user.userNickName}님의 리뷰',
                   color: Colors.amber,
                   circular: 30,
                   fontSize: 20,
@@ -39,7 +47,7 @@ class _ReviewDetailState extends State<ReviewDetail> {
                   height: 30,
                 ),
                 TextInContainer(
-                  text: '게시글',
+                  text: widget.reviewDto.review,
                   color: Colors.amber,
                   circular: 35,
                   fontSize: 20,
@@ -56,7 +64,8 @@ class _ReviewDetailState extends State<ReviewDetail> {
                     color: Colors.grey[350],
                   ),
                   child: RatingBar.builder(
-                    initialRating: 3,
+                    initialRating: widget.reviewDto.star,
+                    ignoreGestures: true,
                     itemSize: 30,
                     minRating: 0,
                     direction: Axis.horizontal,
