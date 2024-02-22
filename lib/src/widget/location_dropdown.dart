@@ -5,6 +5,9 @@ class LocationDropDown extends StatefulWidget {
   const LocationDropDown({super.key, required this.locationList});
 
   final List<LocationDto> locationList;
+  //이건 나중에
+  //final LocationDto locationDto;
+
   @override
   State<LocationDropDown> createState() => _LocationDropDownState();
 }
@@ -14,7 +17,6 @@ class _LocationDropDownState extends State<LocationDropDown> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     test();
   }

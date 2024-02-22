@@ -4,11 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'package:kakao_map_plugin_example/src/models/hansic_data.dart';
 import 'package:kakao_map_plugin_example/src/models/hansic_list.dart';
+import 'package:kakao_map_plugin_example/src/models/location.dart';
 import 'package:kakao_map_plugin_example/src/screen/hansic_detail.dart';
 import 'package:kakao_map_plugin_example/src/service/geolocator_service.dart';
 import 'package:kakao_map_plugin_example/src/service/get_hansicdata_service.dart';
+import 'package:kakao_map_plugin_example/src/service/update_user_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:kakao_map_plugin_example/src/widget/home_button.dart';
+import 'package:kakao_map_plugin_example/src/widget/location_dropdown.dart';
 
 /// 여러개 마커에 이벤트 등록하기1
 /// https://apis.map.kakao.com/web/sample/multipleMarkerEvent/
@@ -31,6 +35,11 @@ class _Overlay12MarkersEvent1ScreenState
   late KakaoMapController mapController;
   static GetHansicService hansicService = GetHansicService();
   static GeolocatorService geolocatorService = GeolocatorService();
+  static UpdateUserService updateUserService = UpdateUserService();
+
+  //지역 별 조회
+  late List<LocationDto> locationList = [];
+  LocationDto? locationDto;
 
   Set<Marker> markers = {};
 
@@ -69,6 +78,11 @@ class _Overlay12MarkersEvent1ScreenState
       print(position);
       lat = position.latitude;
       lng = position.longitude * -1;
+
+      //지역 리스트 조회
+      locationList = await updateUserService.getLocation();
+      locationDto = locationList[0];
+
       setState(() {});
     } catch (err) {
       print(err);
@@ -83,18 +97,48 @@ class _Overlay12MarkersEvent1ScreenState
         child: Column(
           children: [
             const CustomAppBar(title: '한식 뷔페'),
-            ElevatedButton(
-              onPressed: () async {
-                Position position = await geolocatorService.getLocation();
-                print(position);
-                lat = position.latitude;
-                lng = position.longitude * -1;
-                setState(() {});
-              },
-              child: Text(widget.lng.toString()),
+            const SizedBox(
+              height: 10,
             ),
-            Text(hansics?[0].addr ?? "dsfa"),
-            if (hansics != null) Text(hansics!.length.toString())
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      //background color of dropdown button
+                      border: Border.all(
+                        color: Colors.amber,
+                        // width: 3,
+                      ), //border of dropdown button
+                      borderRadius: BorderRadius.circular(
+                          50), //border raiuds of dropdown button
+                      boxShadow: const <BoxShadow>[
+                        //apply shadow on Dropdown button
+                        BoxShadow(
+                          color: Colors.white, //shadow for button
+                          blurRadius: 5,
+                        ) //blur radius of shadow
+                      ],
+                    ),
+                    child: Padding(
+                        padding: const EdgeInsets.only(left: 30, right: 30),
+                        child: LocationDropDown(locationList: locationList)),
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                HomeButton(
+                  text: '검색',
+                  move: () {
+                    print(MediaQuery.of(context).size.width);
+                  },
+                  color: Colors.amber,
+                ),
+              ],
+            ),
           ],
         ),
       ),

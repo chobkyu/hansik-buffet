@@ -32,8 +32,7 @@ class _UpdateMyInfoState extends State<UpdateMyInfo> {
   late String userPw = 'User Password';
   late String userId = 'User ID';
 
-  final _valueList = ['1', '2', '3'];
-  String? _selectedValue = '1';
+  final String? _selectedValue = '1';
 
   UserData userData = UserData(
     id: 0,
@@ -384,60 +383,60 @@ class _UpdateMyInfoState extends State<UpdateMyInfo> {
                   //       fontSize: 20 //font size on dropdown button
                   //       ),
                   // ),
-                  DecoratedBox(
-                    decoration: BoxDecoration(
-                        //background color of dropdown button
-                        border: Border.all(
-                          color: Colors.amber,
-                          // width: 3,
-                        ), //border of dropdown button
-                        borderRadius: BorderRadius.circular(
-                            50), //border raiuds of dropdown button
-                        boxShadow: const <BoxShadow>[
-                          //apply shadow on Dropdown button
-                          BoxShadow(
-                              color: Colors.white, //shadow for button
-                              blurRadius: 5) //blur radius of shadow
-                        ]),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 30, right: 30),
-                      child: DropdownButton(
-                        value: locationDto,
-                        items: locationList.map(
-                          (value) {
-                            return DropdownMenuItem(
-                              value: value,
-                              child: Text(value.location),
-                            );
-                          },
-                        ).toList(),
-                        onChanged: (value) {
-                          setState(
-                            () {
-                              locationDto = value;
-                            },
-                          );
-                        },
-                        icon: const Padding(
-                            //Icon at tail, arrow bottom is default icon
-                            padding: EdgeInsets.only(left: 20),
-                            child: Icon(Icons.arrow_circle_down_sharp)),
-                        iconEnabledColor: Colors.grey, //Icon color
-                        style: const TextStyle(
-                            //te
-                            color: Colors.black, //Font color
-                            fontSize: 20 //font size on dropdown button
-                            ),
+                  // DecoratedBox(
+                  //   decoration: BoxDecoration(
+                  //       //background color of dropdown button
+                  //       border: Border.all(
+                  //         color: Colors.amber,
+                  //         // width: 3,
+                  //       ), //border of dropdown button
+                  //       borderRadius: BorderRadius.circular(
+                  //           50), //border raiuds of dropdown button
+                  //       boxShadow: const <BoxShadow>[
+                  //         //apply shadow on Dropdown button
+                  //         BoxShadow(
+                  //             color: Colors.white, //shadow for button
+                  //             blurRadius: 5) //blur radius of shadow
+                  //       ]),
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.only(left: 30, right: 30),
+                  //     child: DropdownButton(
+                  //       value: locationDto,
+                  //       items: locationList.map(
+                  //         (value) {
+                  //           return DropdownMenuItem(
+                  //             value: value,
+                  //             child: Text(value.location),
+                  //           );
+                  //         },
+                  //       ).toList(),
+                  //       onChanged: (value) {
+                  //         setState(
+                  //           () {
+                  //             locationDto = value;
+                  //           },
+                  //         );
+                  //       },
+                  //       icon: const Padding(
+                  //           //Icon at tail, arrow bottom is default icon
+                  //           padding: EdgeInsets.only(left: 20),
+                  //           child: Icon(Icons.arrow_circle_down_sharp)),
+                  //       iconEnabledColor: Colors.grey, //Icon color
+                  //       style: const TextStyle(
+                  //           //te
+                  //           color: Colors.black, //Font color
+                  //           fontSize: 20 //font size on dropdown button
+                  //           ),
 
-                        dropdownColor: Colors.white, //dropdown background color
-                        underline: Container(), //remove underline
-                        isExpanded: true, //make true to make width 100%
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
+                  //       dropdownColor: Colors.white, //dropdown background color
+                  //       underline: Container(), //remove underline
+                  //       isExpanded: true, //make true to make width 100%
+                  //     ),
+                  //   ),
+                  // ),
+                  // const SizedBox(
+                  //   height: 30,
+                  // ),
                   DecoratedBox(
                     decoration: BoxDecoration(
                         //background color of dropdown button
