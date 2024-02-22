@@ -40,6 +40,7 @@ class _Overlay12MarkersEvent1ScreenState
   //지역 별 조회
   late List<LocationDto> locationList = [];
   LocationDto? locationDto;
+  LocationDto? searchLocationDto;
 
   Set<Marker> markers = {};
 
@@ -52,6 +53,7 @@ class _Overlay12MarkersEvent1ScreenState
   void initState() {
     super.initState();
     try {
+      print('?????');
       getHansics();
     } catch (err) {
       print(err);
@@ -74,6 +76,7 @@ class _Overlay12MarkersEvent1ScreenState
       print('getHansics 호출');
       hansics = await hansicService.getHansicData();
       print(hansics?.length);
+      //내 위치 조회
       Position position = await geolocatorService.getLocation();
       print(position);
       lat = position.latitude;
@@ -87,6 +90,32 @@ class _Overlay12MarkersEvent1ScreenState
     } catch (err) {
       print(err);
     }
+  }
+
+  //지역 별 조회
+  void getHansicsLoc(int id) async {
+    try {
+      print('지역 별 조회');
+      print(hansics?.length);
+
+      print(hansics?[0].location);
+      hansics!.clear();
+      setState(() {});
+      //print(hansics![0].name);
+
+      hansics = await hansicService.getHansicDataFromLoc(id);
+      lat = hansics![0].lat;
+      lng = hansics![0].lng;
+
+      setState(() {});
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  void getLocation(LocationDto selectedLoc) {
+    print(selectedLoc.location);
+    searchLocationDto = selectedLoc;
   }
 
   @override
@@ -123,8 +152,12 @@ class _Overlay12MarkersEvent1ScreenState
                       ],
                     ),
                     child: Padding(
-                        padding: const EdgeInsets.only(left: 30, right: 30),
-                        child: LocationDropDown(locationList: locationList)),
+                      padding: const EdgeInsets.only(left: 30, right: 30),
+                      child: LocationDropDown(
+                        locationList: locationList,
+                        getLocation: getLocation,
+                      ),
+                    ),
                   ),
                 ),
                 const SizedBox(
@@ -133,7 +166,8 @@ class _Overlay12MarkersEvent1ScreenState
                 HomeButton(
                   text: '검색',
                   move: () {
-                    print(MediaQuery.of(context).size.width);
+                    //print(MediaQuery.of(context).size.width);
+                    getHansicsLoc(searchLocationDto!.id);
                   },
                   color: Colors.amber,
                 ),

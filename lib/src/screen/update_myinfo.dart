@@ -140,6 +140,10 @@ class _UpdateMyInfoState extends State<UpdateMyInfo> {
     }
   }
 
+  void getLocation(LocationDto selectedLoc) {
+    print(selectedLoc);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -454,7 +458,10 @@ class _UpdateMyInfoState extends State<UpdateMyInfo> {
                         ]),
                     child: Padding(
                         padding: const EdgeInsets.only(left: 30, right: 30),
-                        child: LocationDropDown(locationList: locationList)),
+                        child: LocationDropDown(
+                          locationList: locationList,
+                          getLocation: getLocation,
+                        )),
                   ),
                   const SizedBox(
                     height: 30,

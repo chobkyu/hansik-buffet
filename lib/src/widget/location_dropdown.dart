@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:kakao_map_plugin_example/src/models/location.dart';
 
 class LocationDropDown extends StatefulWidget {
-  const LocationDropDown({super.key, required this.locationList});
+  const LocationDropDown(
+      {super.key, required this.locationList, required this.getLocation});
 
   final List<LocationDto> locationList;
+  final Function getLocation;
   //이건 나중에
   //final LocationDto locationDto;
 
@@ -41,6 +43,7 @@ class _LocationDropDownState extends State<LocationDropDown> {
         setState(
           () {
             _selectedValue = value!;
+            widget.getLocation(value);
           },
         );
       },
