@@ -145,7 +145,7 @@ class _Overlay12MarkersEvent1ScreenState
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
+                SizedBox(
                   width: MediaQuery.of(context).size.width * 0.5,
                   child: DecoratedBox(
                     decoration: BoxDecoration(

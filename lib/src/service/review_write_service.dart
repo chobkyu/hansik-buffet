@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 
 import 'package:kakao_map_plugin_example/src/models/review_write.dart';

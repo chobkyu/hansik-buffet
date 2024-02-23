@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:kakao_map_plugin_example/src/models/review_list.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
-import 'package:kakao_map_plugin_example/src/widget/text_inContainer.dart';
+import 'package:kakao_map_plugin_example/src/widget/text_incontainer.dart';
 
 class ReviewDetail extends StatefulWidget {
   const ReviewDetail({
