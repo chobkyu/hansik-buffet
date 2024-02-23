@@ -2,10 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:kakao_map_plugin/kakao_map_plugin.dart';
-import 'package:kakao_map_plugin_example/src/models/hansic_data.dart';
 import 'package:kakao_map_plugin_example/src/models/hansic_list.dart';
 import 'package:kakao_map_plugin_example/src/models/location.dart';
 import 'package:kakao_map_plugin_example/src/screen/hansic_detail.dart';
+import 'package:kakao_map_plugin_example/src/screen/hansic_screen.dart';
 import 'package:kakao_map_plugin_example/src/service/geolocator_service.dart';
 import 'package:kakao_map_plugin_example/src/service/get_hansicdata_service.dart';
 import 'package:kakao_map_plugin_example/src/service/update_user_service.dart';
@@ -107,6 +107,19 @@ class _Overlay12MarkersEvent1ScreenState
       lat = hansics![0].lat;
       lng = hansics![0].lng;
 
+      if (!mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) {
+            return HansicScreen(
+              lat: lat,
+              lng: lng,
+              locId: id,
+            );
+          },
+        ),
+      );
       setState(() {});
     } catch (err) {
       print(err);
