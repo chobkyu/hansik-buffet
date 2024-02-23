@@ -37,6 +37,7 @@ class GetHansicService {
 
   //지역별 조회
   Future<List<HansicList>> getHansicDataFromLoc(int id) async {
+    print(id);
     String? baseUrl = dotenv.env['BASE_URL'];
 
     Uri uri = Uri.parse("$baseUrl/hansic/loc/$id");

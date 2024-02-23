@@ -1,7 +1,8 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, unused_element
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:kakao_map_plugin_example/src/models/location.dart';
 import 'package:kakao_map_plugin_example/src/models/user_data.dart';
 import 'package:kakao_map_plugin_example/src/screen/login.dart';
 import 'package:kakao_map_plugin_example/src/screen/my_page.dart';
@@ -9,6 +10,7 @@ import 'package:kakao_map_plugin_example/src/service/get_userdata_service.dart';
 import 'package:kakao_map_plugin_example/src/service/update_user_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 import 'package:kakao_map_plugin_example/src/widget/home_button.dart';
+import 'package:kakao_map_plugin_example/src/widget/location_dropdown.dart';
 
 class UpdateMyInfo extends StatefulWidget {
   const UpdateMyInfo({super.key});
@@ -30,8 +32,7 @@ class _UpdateMyInfoState extends State<UpdateMyInfo> {
   late String userPw = 'User Password';
   late String userId = 'User ID';
 
-  final _valueList = ['1', '2', '3'];
-  String? _selectedValue = '1';
+  final String? _selectedValue = '1';
 
   UserData userData = UserData(
     id: 0,
@@ -40,6 +41,10 @@ class _UpdateMyInfoState extends State<UpdateMyInfo> {
     userId: '',
     userImgs: [],
   );
+
+  late List<LocationDto> locationList = [];
+  LocationDto? locationDto;
+
   void _tryValidation() {
     final isValid =
         _formKey.currentState!.validate(); //폼필드 안 validator를 작동시킬 수 있음
@@ -69,6 +74,10 @@ class _UpdateMyInfoState extends State<UpdateMyInfo> {
       userName = userData.userName;
       userNickName = userData.userNickName;
       userId = userData.userId;
+
+      //지역 리스트 조회
+      locationList = await updateUserService.getLocation();
+      locationDto = locationList[0];
 
       setState(() {});
     } catch (err) {
@@ -131,6 +140,10 @@ class _UpdateMyInfoState extends State<UpdateMyInfo> {
     }
   }
 
+  void getLocation(LocationDto selectedLoc) {
+    print(selectedLoc);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -141,7 +154,7 @@ class _UpdateMyInfoState extends State<UpdateMyInfo> {
       body: SingleChildScrollView(
         child: Container(
           width: 600,
-          height: 700,
+          height: 800,
           //color: Colors.amber[50],
           margin: const EdgeInsets.all(30),
           padding: const EdgeInsets.all(20),
@@ -374,6 +387,60 @@ class _UpdateMyInfoState extends State<UpdateMyInfo> {
                   //       fontSize: 20 //font size on dropdown button
                   //       ),
                   // ),
+                  // DecoratedBox(
+                  //   decoration: BoxDecoration(
+                  //       //background color of dropdown button
+                  //       border: Border.all(
+                  //         color: Colors.amber,
+                  //         // width: 3,
+                  //       ), //border of dropdown button
+                  //       borderRadius: BorderRadius.circular(
+                  //           50), //border raiuds of dropdown button
+                  //       boxShadow: const <BoxShadow>[
+                  //         //apply shadow on Dropdown button
+                  //         BoxShadow(
+                  //             color: Colors.white, //shadow for button
+                  //             blurRadius: 5) //blur radius of shadow
+                  //       ]),
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.only(left: 30, right: 30),
+                  //     child: DropdownButton(
+                  //       value: locationDto,
+                  //       items: locationList.map(
+                  //         (value) {
+                  //           return DropdownMenuItem(
+                  //             value: value,
+                  //             child: Text(value.location),
+                  //           );
+                  //         },
+                  //       ).toList(),
+                  //       onChanged: (value) {
+                  //         setState(
+                  //           () {
+                  //             locationDto = value;
+                  //           },
+                  //         );
+                  //       },
+                  //       icon: const Padding(
+                  //           //Icon at tail, arrow bottom is default icon
+                  //           padding: EdgeInsets.only(left: 20),
+                  //           child: Icon(Icons.arrow_circle_down_sharp)),
+                  //       iconEnabledColor: Colors.grey, //Icon color
+                  //       style: const TextStyle(
+                  //           //te
+                  //           color: Colors.black, //Font color
+                  //           fontSize: 20 //font size on dropdown button
+                  //           ),
+
+                  //       dropdownColor: Colors.white, //dropdown background color
+                  //       underline: Container(), //remove underline
+                  //       isExpanded: true, //make true to make width 100%
+                  //     ),
+                  //   ),
+                  // ),
+                  // const SizedBox(
+                  //   height: 30,
+                  // ),
                   DecoratedBox(
                     decoration: BoxDecoration(
                         //background color of dropdown button
@@ -390,40 +457,11 @@ class _UpdateMyInfoState extends State<UpdateMyInfo> {
                               blurRadius: 5) //blur radius of shadow
                         ]),
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 30, right: 30),
-                      child: DropdownButton(
-                        value: _selectedValue,
-                        items: _valueList.map(
-                          (value) {
-                            return DropdownMenuItem(
-                              value: value,
-                              child: Text(value),
-                            );
-                          },
-                        ).toList(),
-                        onChanged: (value) {
-                          setState(
-                            () {
-                              _selectedValue = value;
-                            },
-                          );
-                        },
-                        icon: const Padding(
-                            //Icon at tail, arrow bottom is default icon
-                            padding: EdgeInsets.only(left: 20),
-                            child: Icon(Icons.arrow_circle_down_sharp)),
-                        iconEnabledColor: Colors.grey, //Icon color
-                        style: const TextStyle(
-                            //te
-                            color: Colors.black, //Font color
-                            fontSize: 20 //font size on dropdown button
-                            ),
-
-                        dropdownColor: Colors.white, //dropdown background color
-                        underline: Container(), //remove underline
-                        isExpanded: true, //make true to make width 100%
-                      ),
-                    ),
+                        padding: const EdgeInsets.only(left: 30, right: 30),
+                        child: LocationDropDown(
+                          locationList: locationList,
+                          getLocation: getLocation,
+                        )),
                   ),
                   const SizedBox(
                     height: 30,
@@ -434,7 +472,7 @@ class _UpdateMyInfoState extends State<UpdateMyInfo> {
                       updateUser();
                     },
                     color: Colors.amber,
-                  )
+                  ),
                 ],
                 //column's children
               ),
