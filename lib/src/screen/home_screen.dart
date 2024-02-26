@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_map_plugin_example/src/overlay_12_markers_event1_screen.dart';
 import 'package:kakao_map_plugin_example/src/screen/image_upload.dart';
+import 'package:kakao_map_plugin_example/src/screen/image_upload2.dart';
 import 'package:kakao_map_plugin_example/src/screen/login.dart';
 import 'package:kakao_map_plugin_example/src/screen/my_page.dart';
 import 'package:kakao_map_plugin_example/src/service/geolocator_service.dart';
@@ -190,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       },
                       pageBuilder: (context, animation, secondaryAnimation) =>
-                          const ImageUploadScreen(),
+                          const ImgUpload2(),
                     ),
                   );
                 },

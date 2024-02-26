@@ -16,7 +16,7 @@ class ImageUploadScreen extends StatefulWidget {
 
 class _ImageUploadScreenState extends State<ImageUploadScreen> {
   final List<PlatformFile> _files = [];
-
+  String test = 'tprtm';
   //이미지 가져오기
   void _pickFiles() async {
     List<PlatformFile>? uploadedFiles = (await FilePicker.platform.pickFiles(
@@ -33,10 +33,11 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
   Future<int> _uploadToSignedURL(
       {required PlatformFile file, required String url}) async {
     String s3Url = await getUrl();
-    print(s3Url);
-    print(file);
+    //print(s3Url);
+    //print(file);
+    //print(file.bytes);
     http.Response response = await http.put(Uri.parse(s3Url), body: file.bytes);
-    print(response.body);
+    //print(response.body);
     return response.statusCode;
   }
 
@@ -66,54 +67,65 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
       appBar: AppBar(
         title: const Text('imgUpload'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ElevatedButton(
-              onPressed: _pickFiles,
-              child: const Text("Choose a file"),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  width: 1,
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              ElevatedButton(
+                onPressed: _pickFiles,
+                child: const Text("Choose a file"),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    width: 1,
+                  ),
+                ),
+                width: 350,
+                height: 500,
+                child: Scrollbar(
+                  thumbVisibility: true,
+                  child: ListView.builder(
+                    itemCount: _files.isEmpty ? 1 : _files.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return _files.isEmpty
+                          ? const ListTile(
+                              title:
+                                  Text("파일을 업로드해주세요 - 한 번에 여러 파일을 업로드할 수 있습니다"))
+                          : ListTile(
+                              title: Text(_files.elementAt(index).name),
+                              trailing: IconButton(
+                                icon: const Icon(Icons.delete),
+                                onPressed: () {
+                                  setState(() {
+                                    _files.removeAt(index);
+                                  });
+                                },
+                              ),
+                            );
+                    },
+                  ),
                 ),
               ),
-              width: 350,
-              height: 500,
-              child: Scrollbar(
-                thumbVisibility: true,
-                child: ListView.builder(
-                  itemCount: _files.isEmpty ? 1 : _files.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return _files.isEmpty
-                        ? const ListTile(
-                            title:
-                                Text("파일을 업로드해주세요 - 한 번에 여러 파일을 업로드할 수 있습니다"))
-                        : ListTile(
-                            title: Text(_files.elementAt(index).name),
-                            trailing: IconButton(
-                              icon: const Icon(Icons.delete),
-                              onPressed: () {
-                                setState(() {
-                                  _files.removeAt(index);
-                                });
-                              },
-                            ),
-                          );
-                  },
-                ),
+              ElevatedButton(
+                onPressed: () {
+                  _uploadToSignedURL(
+                      file: _files.elementAt(0), url: "url-you-have");
+                },
+                child: const Text("Upload to S3"),
               ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                _uploadToSignedURL(
-                    file: _files.elementAt(0), url: "url-you-have");
-              },
-              child: const Text("Upload to S3"),
-            ),
-          ],
+              ElevatedButton(
+                onPressed: () {
+                  print(_files);
+                  test = _files.toString();
+                  setState(() {});
+                },
+                child: const Text('test'),
+              ),
+              Text(test),
+            ],
+          ),
         ),
       ),
     );
