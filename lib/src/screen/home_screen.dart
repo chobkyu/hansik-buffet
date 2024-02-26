@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_map_plugin_example/src/overlay_12_markers_event1_screen.dart';
 import 'package:kakao_map_plugin_example/src/screen/login.dart';
@@ -30,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(
         () => setState(() => _selectedIndex = _tabController.index));
   }
@@ -52,181 +53,19 @@ class _HomeScreenState extends State<HomeScreen>
               ? 'Hansajang'
               : _selectedIndex == 1
                   ? "Search"
-                  : "MyPage",
+                  : _selectedIndex == 2
+                      ? "MyPage"
+                      : "TestHome",
         ),
       ),
       //body 바꿀거임 ㅇㅇ
-      // body: SingleChildScrollView(
-      //   child: Center(
-      //     child: Column(
-      //       children: [
-      //         const SizedBox(
-      //           height: 10,
-      //         ),
-      //         HomeButton(
-      //           text: 'login',
-      //           move: () {
-      //             Navigator.push(
-      //               context,
-      //               PageRouteBuilder(
-      //                 transitionsBuilder:
-      //                     (context, animation, secondaryAnimation, child) {
-      //                   var begin = const Offset(0.0, 1.0);
-      //                   var end = Offset.zero;
-      //                   var curve = Curves.ease;
-      //                   var tween = Tween(begin: begin, end: end)
-      //                       .chain(CurveTween(curve: curve));
-      //                   return SlideTransition(
-      //                     position: animation.drive(tween),
-      //                     child: child,
-      //                   );
-      //                 },
-      //                 pageBuilder: (context, animation, secondaryAnimation) =>
-      //                     const LoginScreen(),
-      //               ),
-      //             );
-      //           },
-      //           color: Colors.amber,
-      //         ),
-      //         const SizedBox(
-      //           height: 10,
-      //         ),
-      //         HomeButton(
-      //           text: 'myPage',
-      //           move: () async {
-      //             String? token = await storage.read(key: 'token');
-      //             print(token);
-      //             if (token == null) {
-      //               if (!mounted) return;
-      //               Navigator.push(
-      //                 context,
-      //                 PageRouteBuilder(
-      //                   transitionsBuilder:
-      //                       (context, animation, secondaryAnimation, child) {
-      //                     var begin = const Offset(0.0, 1.0);
-      //                     var end = Offset.zero;
-      //                     var curve = Curves.ease;
-      //                     var tween = Tween(begin: begin, end: end)
-      //                         .chain(CurveTween(curve: curve));
-      //                     return SlideTransition(
-      //                       position: animation.drive(tween),
-      //                       child: child,
-      //                     );
-      //                   },
-      //                   pageBuilder: (context, animation, secondaryAnimation) =>
-      //                       const LoginScreen(),
-      //                 ),
-      //               );
-      //             } else {
-      //               if (!mounted) return;
-      //               Navigator.push(
-      //                 context,
-      //                 PageRouteBuilder(
-      //                   transitionsBuilder:
-      //                       (context, animation, secondaryAnimation, child) {
-      //                     var begin = const Offset(0.0, 1.0);
-      //                     var end = Offset.zero;
-      //                     var curve = Curves.ease;
-      //                     var tween = Tween(begin: begin, end: end)
-      //                         .chain(CurveTween(curve: curve));
-      //                     return SlideTransition(
-      //                       position: animation.drive(tween),
-      //                       child: child,
-      //                     );
-      //                   },
-      //                   pageBuilder: (context, animation, secondaryAnimation) =>
-      //                       const MyPage(),
-      //                 ),
-      //               );
-      //             }
-      //           },
-      //           color: Colors.amber,
-      //         ),
-      //         const SizedBox(
-      //           height: 10,
-      //         ),
-      //         HomeButton(
-      //           text: 'logout',
-      //           move: () {
-      //             const storage = FlutterSecureStorage();
-      //             storage.delete(key: 'token');
-      //           },
-      //           color: Colors.amber,
-      //         ),
-      //         const SizedBox(
-      //           height: 10,
-      //         ),
-      //         HomeButton(
-      //           text: '지도',
-      //           move: () async {
-      //             Position position = await geolocatorService.getLocation();
-      //             double lat = position.latitude;
-      //             double lng = position.longitude;
-
-      //             print(lat);
-      //             print(lng);
-
-      //             if (!mounted) return;
-      //             Navigator.push(
-      //               context,
-      //               PageRouteBuilder(
-      //                 transitionsBuilder:
-      //                     (context, animation, secondaryAnimation, child) {
-      //                   var begin = const Offset(0.0, 1.0);
-      //                   var end = Offset.zero;
-      //                   var curve = Curves.ease;
-      //                   var tween = Tween(begin: begin, end: end)
-      //                       .chain(CurveTween(curve: curve));
-      //                   return SlideTransition(
-      //                     position: animation.drive(tween),
-      //                     child: child,
-      //                   );
-      //                 },
-      //                 pageBuilder: (context, animation, secondaryAnimation) =>
-      //                     Overlay12MarkersEvent1Screen(lat: lat, lng: lng),
-      //               ),
-      //             );
-      //           },
-      //           color: Colors.amber,
-      //         ),
-      //         const SizedBox(
-      //           height: 10,
-      //         ),
-
-      //         // HomeButton(
-      //         //   text: '한식 스크린',
-      //         //   move: () {
-      //         //     Navigator.push(
-      //         //       context,
-      //         //       PageRouteBuilder(
-      //         //         transitionsBuilder:
-      //         //             (context, animation, secondaryAnimation, child) {
-      //         //           var begin = const Offset(0.0, 1.0);
-      //         //           var end = Offset.zero;
-      //         //           var curve = Curves.ease;
-      //         //           var tween = Tween(begin: begin, end: end)
-      //         //               .chain(CurveTween(curve: curve));
-      //         //           return SlideTransition(
-      //         //             position: animation.drive(tween),
-      //         //             child: child,
-      //         //           );
-      //         //         },
-      //         //         pageBuilder: (context, animation, secondaryAnimation) =>
-      //         //             const HansicScreen(),
-      //         //       ),
-      //         //     );
-      //         //   },
-      //         //   color: Colors.amber,
-      //         // ),
-      //       ],
-      //     ),
-      //   ),
-      // ),
       body: _selectedIndex == 0
-          ? testContainer()
+          ? homeContainer()
           : _selectedIndex == 1
               ? testContainer()
-              : const TestMyPage(),
+              : _selectedIndex == 2
+                  ? const TestMyPage()
+                  : testHome(),
       bottomNavigationBar: SizedBox(
         height: 90,
         child: TabBar(
@@ -248,6 +87,12 @@ class _HomeScreenState extends State<HomeScreen>
                   _selectedIndex == 2 ? Icons.person : Icons.person_outline),
               text: "MyPage",
             ),
+            Tab(
+              icon: Icon(_selectedIndex == 3
+                  ? Icons.directions_run
+                  : Icons.directions_walk_outlined),
+              text: "TestHome",
+            ),
           ],
         ),
       ),
@@ -257,6 +102,246 @@ class _HomeScreenState extends State<HomeScreen>
   Widget testContainer() {
     return Container(
       child: const Center(child: Text("hi")),
+    );
+  }
+
+  Widget homeContainer() {
+    return Center(
+      child: Stack(
+        children: [
+          Center(
+            child: Ink(
+              width: 300,
+              height: 480,
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.7),
+                    spreadRadius: 5,
+                    blurRadius: 5.0,
+                    offset: const Offset(0, 0),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    testButton("1"),
+                    testButton("2"),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    testButton("3"),
+                    testButton("4"),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    testButton("5"),
+                    testButton("6"),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget testButton(text) {
+    return Center(
+        child: Ink(
+      color: Colors.white,
+      child: InkWell(
+        onTap: () {
+          print(text);
+        },
+        child: Ink(
+          width: 150,
+          height: 160,
+          child: Text(text),
+        ),
+      ),
+    ));
+  }
+
+  // 기존에 있던 홈
+  Widget testHome() {
+    return SingleChildScrollView(
+      child: Center(
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 10,
+            ),
+            HomeButton(
+              text: 'login',
+              move: () {
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      var begin = const Offset(0.0, 1.0);
+                      var end = Offset.zero;
+                      var curve = Curves.ease;
+                      var tween = Tween(begin: begin, end: end)
+                          .chain(CurveTween(curve: curve));
+                      return SlideTransition(
+                        position: animation.drive(tween),
+                        child: child,
+                      );
+                    },
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const LoginScreen(),
+                  ),
+                );
+              },
+              color: Colors.amber,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            HomeButton(
+              text: 'myPage',
+              move: () async {
+                String? token = await storage.read(key: 'token');
+                print(token);
+                if (token == null) {
+                  if (!mounted) return;
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        var begin = const Offset(0.0, 1.0);
+                        var end = Offset.zero;
+                        var curve = Curves.ease;
+                        var tween = Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: curve));
+                        return SlideTransition(
+                          position: animation.drive(tween),
+                          child: child,
+                        );
+                      },
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          const LoginScreen(),
+                    ),
+                  );
+                } else {
+                  if (!mounted) return;
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        var begin = const Offset(0.0, 1.0);
+                        var end = Offset.zero;
+                        var curve = Curves.ease;
+                        var tween = Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: curve));
+                        return SlideTransition(
+                          position: animation.drive(tween),
+                          child: child,
+                        );
+                      },
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          const MyPage(),
+                    ),
+                  );
+                }
+              },
+              color: Colors.amber,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            HomeButton(
+              text: 'logout',
+              move: () {
+                const storage = FlutterSecureStorage();
+                storage.delete(key: 'token');
+              },
+              color: Colors.amber,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            HomeButton(
+              text: '지도',
+              move: () async {
+                Position position = await geolocatorService.getLocation();
+                double lat = position.latitude;
+                double lng = position.longitude;
+
+                print(lat);
+                print(lng);
+
+                if (!mounted) return;
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      var begin = const Offset(0.0, 1.0);
+                      var end = Offset.zero;
+                      var curve = Curves.ease;
+                      var tween = Tween(begin: begin, end: end)
+                          .chain(CurveTween(curve: curve));
+                      return SlideTransition(
+                        position: animation.drive(tween),
+                        child: child,
+                      );
+                    },
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        Overlay12MarkersEvent1Screen(lat: lat, lng: lng),
+                  ),
+                );
+              },
+              color: Colors.amber,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+
+            // HomeButton(
+            //   text: '한식 스크린',
+            //   move: () {
+            //     Navigator.push(
+            //       context,
+            //       PageRouteBuilder(
+            //         transitionsBuilder:
+            //             (context, animation, secondaryAnimation, child) {
+            //           var begin = const Offset(0.0, 1.0);
+            //           var end = Offset.zero;
+            //           var curve = Curves.ease;
+            //           var tween = Tween(begin: begin, end: end)
+            //               .chain(CurveTween(curve: curve));
+            //           return SlideTransition(
+            //             position: animation.drive(tween),
+            //             child: child,
+            //           );
+            //         },
+            //         pageBuilder: (context, animation, secondaryAnimation) =>
+            //             const HansicScreen(),
+            //       ),
+            //     );
+            //   },
+            //   color: Colors.amber,
+            // ),
+          ],
+        ),
+      ),
     );
   }
 }
