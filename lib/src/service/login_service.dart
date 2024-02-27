@@ -23,7 +23,7 @@ class Login {
     //print(response.statusCode);
     Map<String, dynamic> resBody = jsonDecode(utf8.decode(response.bodyBytes));
 
-    //print(resBody);
+    print(resBody);
     if (response.statusCode != 201) {}
 
     LoginRes loginRes = LoginRes.fromMap(resBody);
