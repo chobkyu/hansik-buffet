@@ -13,7 +13,6 @@ void main() async {
 
   /// 라이브러리 메모리에 appKey 등록
   /// 지도가 호출되기 전에만 세팅해 주면 됩니다.
-  /// dotEnv 대신 appKey 를 직접 넣어주셔도 됩니다.
   await dotenv.load(fileName: 'assets/env/.env');
   String? appKey = dotenv.env['APP_KEY'].toString();
   print(appKey);
