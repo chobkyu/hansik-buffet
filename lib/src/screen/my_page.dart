@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_map_plugin_example/src/models/user_data.dart';
 import 'package:kakao_map_plugin_example/src/overlay_12_markers_event1_screen.dart';
-import 'package:kakao_map_plugin_example/src/screen/favorite_mylist.dart';
 import 'package:kakao_map_plugin_example/src/screen/login.dart';
 import 'package:kakao_map_plugin_example/src/screen/update_myinfo.dart';
 import 'package:kakao_map_plugin_example/src/service/geolocator_service.dart';
@@ -81,7 +80,7 @@ class _MyPageState extends State<MyPage> {
     if (img.isNotEmpty) {
       return img[0].toString();
     } else {
-      return 'https://puda.s3.ap-northeast-2.amazonaws.com/client/U_nuVL__0tNfEPk8Eb9PXISEad-qOs4aOEI0u-Zclq928dHx835CxJjMk3HKzg4ieprrKff_42Th2Tao7yezAg.webp';
+      return 'https://hansicbuffet.s3.ap-northeast-2.amazonaws.com/b0f790a446bb8255116e088aa8ae7abe';
     }
   }
 
@@ -250,26 +249,7 @@ class _MyPageState extends State<MyPage> {
               MenuDiv(
                 text: '즐겨 찾는 한식 뷔페',
                 move: () {
-                  if (!mounted) return;
-                  Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      transitionsBuilder:
-                          (context, animation, secondaryAnimation, child) {
-                        var begin = const Offset(0.0, 1.0);
-                        var end = Offset.zero;
-                        var curve = Curves.ease;
-                        var tween = Tween(begin: begin, end: end)
-                            .chain(CurveTween(curve: curve));
-                        return SlideTransition(
-                          position: animation.drive(tween),
-                          child: child,
-                        );
-                      },
-                      pageBuilder: (context, animation, secondaryAnimation) =>
-                          const FavoriteMyList(),
-                    ),
-                  );
+                  print('object');
                 },
               ),
               MenuDiv(

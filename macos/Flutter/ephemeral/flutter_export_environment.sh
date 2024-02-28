@@ -1,7 +1,7 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=/Users/johyunchol/flutter"
-export "FLUTTER_APPLICATION_PATH=/Users/johyunchol/Documents/workspace/kkensu/kakao_map_plugin/example"
+export "FLUTTER_ROOT=C:\Users\USER2022\Desktop\flutter_windows_3.13.0-stable\flutter"
+export "FLUTTER_APPLICATION_PATH=C:\Users\USER2022\Desktop\example"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_BUILD_DIR=build"
 export "FLUTTER_BUILD_NAME=1.0.0"
