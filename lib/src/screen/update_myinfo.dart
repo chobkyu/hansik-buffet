@@ -86,11 +86,13 @@ class _UpdateMyInfoState extends State<UpdateMyInfo> {
       userName = userData.userName;
       userNickName = userData.userNickName;
       userId = userData.userId;
-      print(userData.userImgs[0]);
 
       if (userData.userImgs.isNotEmpty) {
         print('object');
         imgUrl = userData.userImgs[0]['imgUrl'];
+      } else {
+        imgUrl =
+            'https://hansicbuffet.s3.ap-northeast-2.amazonaws.com/b0f790a446bb8255116e088aa8ae7abe';
       }
 
       //지역 리스트 조회
