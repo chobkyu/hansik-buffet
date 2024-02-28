@@ -1,3 +1,5 @@
+import 'package:kakao_map_plugin_example/src/models/image_data.dart';
+
 class UserData {
   late int id;
   late String userName;

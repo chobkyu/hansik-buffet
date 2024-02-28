@@ -1,7 +1,10 @@
 // ignore_for_file: avoid_print
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:kakao_map_plugin_example/src/models/image_data.dart';
 import 'package:kakao_map_plugin_example/src/models/user_data.dart';
 import 'package:kakao_map_plugin_example/src/overlay_12_markers_event1_screen.dart';
 import 'package:kakao_map_plugin_example/src/screen/login.dart';
@@ -78,7 +81,9 @@ class _MyPageState extends State<MyPage> {
   //imgurl get
   String getImgUrl(List<dynamic> img) {
     if (img.isNotEmpty) {
-      return img[0].toString();
+      //print(img[0]['imgUrl']);
+
+      return img[0]['imgUrl'];
     } else {
       return 'https://hansicbuffet.s3.ap-northeast-2.amazonaws.com/b0f790a446bb8255116e088aa8ae7abe';
     }

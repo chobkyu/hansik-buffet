@@ -3,14 +3,11 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dio/dio.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 
 class ImgUpload extends StatefulWidget {
   const ImgUpload({super.key});
