@@ -1,3 +1,5 @@
+import 'package:kakao_map_plugin_example/src/models/favorites_data.dart';
+
 class FavoriteListDto {
   late String userId;
   late String userNickName;

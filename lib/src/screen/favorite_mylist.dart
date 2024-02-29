@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_map_plugin_example/src/models/favorite_list.dart';
+import 'package:kakao_map_plugin_example/src/models/favorites_data.dart';
 import 'package:kakao_map_plugin_example/src/service/favorites_list_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 
@@ -33,6 +34,10 @@ class _FavoriteMyListState extends State<FavoriteMyList> {
 
       FavoriteListDto favoriteListDto =
           await favoriteListService.getFavoriteList(token);
+
+      List<dynamic> favorites = favoriteListDto.favorites;
+      print(favorites.length);
+      setState(() {});
     } catch (err) {
       print("this is catch");
       print(err.toString());
