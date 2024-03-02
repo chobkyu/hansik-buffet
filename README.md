@@ -1,4 +1,4 @@
-# kakao_map_plugin_example
+#hansik buffet
 
 Demonstrates how to use the kakao_map_plugin plugin.
 
