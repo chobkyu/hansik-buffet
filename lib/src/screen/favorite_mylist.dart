@@ -5,8 +5,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'package:kakao_map_plugin_example/src/models/favorite_list.dart';
 import 'package:kakao_map_plugin_example/src/models/favorites_data.dart';
+import 'package:kakao_map_plugin_example/src/screen/hansic_detail.dart';
 import 'package:kakao_map_plugin_example/src/screen/home_screen.dart';
 import 'package:kakao_map_plugin_example/src/service/favorites_list_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
@@ -65,10 +67,6 @@ class _FavoriteMyListState extends State<FavoriteMyList> {
     }
   }
 
-  // String getDataTest(hansics) {
-
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -108,7 +106,33 @@ class _FavoriteMyListState extends State<FavoriteMyList> {
                       Column(
                         children: [
                           InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              LatLng latLng = LatLng(
+                                  favorites[index].hansics.lat,
+                                  favorites[index].hansics.lng);
+                              Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    var begin = const Offset(0.0, 1.0);
+                                    var end = Offset.zero;
+                                    var curve = Curves.ease;
+                                    var tween = Tween(begin: begin, end: end)
+                                        .chain(CurveTween(curve: curve));
+                                    return SlideTransition(
+                                      position: animation.drive(tween),
+                                      child: child,
+                                    );
+                                  },
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      HansicDetail(
+                                    latLng: latLng,
+                                  ),
+                                ),
+                              );
+                            },
                             child: Text(
                               favorites[index].hansics.name,
                               style: const TextStyle(
@@ -116,6 +140,9 @@ class _FavoriteMyListState extends State<FavoriteMyList> {
                                 fontSize: 20,
                               ),
                             ),
+                          ),
+                          Text(
+                            favorites[index].hansics.addr,
                           ),
                           RatingBar.builder(
                             initialRating: favorites[index].hansics.userStar,
