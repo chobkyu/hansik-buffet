@@ -59,7 +59,7 @@ class _ReviewListState extends State<ReviewList> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(50),
+        preferredSize: const Size.fromHeight(50),
         child: CustomAppBar(title: '${widget.hansicName} 리뷰'),
       ),
       body: ListView.builder(

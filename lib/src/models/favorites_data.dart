@@ -19,7 +19,7 @@ class FavoritesDataDto {
       id: json["id"],
       userId: json["userId"],
       useFlag: json["useFlag"],
-      hansics: json["hansics"],
+      hansics: FavoriteHansicDto.fromMap(json["hansics"]),
     );
   }
 }
