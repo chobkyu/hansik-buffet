@@ -172,7 +172,10 @@ class _MyPageState extends State<MyPage> {
                               ),
                             );
                           },
-                          child: const Text('한식 뷔페 찾기'),
+                          child: const Text(
+                            '한식 뷔페 찾기',
+                            style: TextStyle(fontSize: 16),
+                          ),
                         ),
                       ],
                     ),
@@ -203,7 +206,10 @@ class _MyPageState extends State<MyPage> {
                               ),
                             );
                           },
-                          child: const Text('내 정보 수정하기'),
+                          child: const Text(
+                            '내 정보 수정하기',
+                            style: TextStyle(fontSize: 16),
+                          ),
                         ),
                       ],
                     )
@@ -220,6 +226,7 @@ class _MyPageState extends State<MyPage> {
               const Divider(thickness: 1.2),
               MenuDiv(
                 text: '한식 뷔페 찾기',
+                fontSize: 18,
                 move: () async {
                   Position position = await geolocatorService.getLocation();
                   double lat = position.latitude;
@@ -254,6 +261,7 @@ class _MyPageState extends State<MyPage> {
               ),
               MenuDiv(
                 text: '즐겨 찾는 한식 뷔페',
+                fontSize: 18,
                 move: () {
                   if (!mounted) return;
                   Navigator.push(
@@ -279,12 +287,14 @@ class _MyPageState extends State<MyPage> {
               ),
               MenuDiv(
                 text: '메뉴 등록 하기',
+                fontSize: 18,
                 move: () {
                   print('object');
                 },
               ),
               MenuDiv(
                 text: '내 정보 수정하기',
+                fontSize: 18,
                 move: () {
                   if (!mounted) return;
                   Navigator.push(

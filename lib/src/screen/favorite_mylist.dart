@@ -1,7 +1,5 @@
 // ignore_for_file: avoid_print
 
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -9,7 +7,6 @@ import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'package:kakao_map_plugin_example/src/models/favorite_list.dart';
 import 'package:kakao_map_plugin_example/src/models/favorites_data.dart';
 import 'package:kakao_map_plugin_example/src/screen/hansic_detail.dart';
-import 'package:kakao_map_plugin_example/src/screen/home_screen.dart';
 import 'package:kakao_map_plugin_example/src/service/favorites_list_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 
