@@ -1,6 +1,6 @@
 # hansik buffet
 
-Demonstrates how to use the kakao_map_plugin plugin.
+내 주변에 있는 한식 뷔페 찾기
 
 ## Getting Started
 
