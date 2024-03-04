@@ -244,6 +244,7 @@ class _TestMyPageState extends State<TestMyPage> {
               const Divider(thickness: 1.2),
               MenuDiv(
                 text: '한식 뷔페 찾기',
+                fontSize: 18,
                 move: () async {
                   Position position = await geolocatorService.getLocation();
                   double lat = position.latitude;
@@ -278,6 +279,7 @@ class _TestMyPageState extends State<TestMyPage> {
               ),
               MenuDiv(
                 text: '즐겨 찾는 한식 뷔페',
+                fontSize: 18,
                 move: () {
                   if (!mounted) return;
                   Navigator.push(
@@ -303,12 +305,14 @@ class _TestMyPageState extends State<TestMyPage> {
               ),
               MenuDiv(
                 text: '메뉴 등록 하기',
+                fontSize: 18,
                 move: () {
                   print('object');
                 },
               ),
               MenuDiv(
                 text: '내 정보 수정하기',
+                fontSize: 18,
                 move: () {
                   if (!mounted) return;
                   Navigator.push(
@@ -334,6 +338,7 @@ class _TestMyPageState extends State<TestMyPage> {
               ),
               MenuDiv(
                 text: '로그아웃 하기',
+                fontSize: 18,
                 move: () {
                   const storage = FlutterSecureStorage();
                   storage.delete(key: 'token');
