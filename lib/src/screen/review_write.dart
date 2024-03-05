@@ -152,7 +152,7 @@ class _ReviewWriteState extends State<ReviewWrite> {
                   itemSize: 30,
                   minRating: 0,
                   direction: Axis.horizontal,
-                  allowHalfRating: true,
+                  allowHalfRating: false,
                   itemCount: 5,
                   itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
                   itemBuilder: (context, _) => const Icon(
