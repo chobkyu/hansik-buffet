@@ -96,6 +96,7 @@ class _ReviewListState extends State<ReviewList> {
                         width: 10,
                       ),
                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           InkWell(
                             onTap: () {

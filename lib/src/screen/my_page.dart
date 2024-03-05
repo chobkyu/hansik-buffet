@@ -286,7 +286,7 @@ class _MyPageState extends State<MyPage> {
                 },
               ),
               MenuDiv(
-                text: '메뉴 등록 하기',
+                text: '내가 쓴 리뷰 조회',
                 fontSize: 18,
                 move: () {
                   print('object');

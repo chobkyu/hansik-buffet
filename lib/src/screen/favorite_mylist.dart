@@ -89,79 +89,82 @@ class _FavoriteMyListState extends State<FavoriteMyList> {
                   ),
                   child: SizedBox(
                     width: double.infinity,
-                    child: Row(children: [
-                      SizedBox(
-                        child: ClipRRect(
-                          child: Image.network(
-                            'https://puda.s3.ap-northeast-2.amazonaws.com/client/2840159_2891102_2258.png',
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          child: ClipRRect(
+                            child: Image.network(
+                              'https://puda.s3.ap-northeast-2.amazonaws.com/client/2840159_2891102_2258.png',
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              LatLng latLng = LatLng(
-                                  favorites[index].hansics.lat,
-                                  favorites[index].hansics.lng);
-                              Navigator.push(
-                                context,
-                                PageRouteBuilder(
-                                  transitionsBuilder: (context, animation,
-                                      secondaryAnimation, child) {
-                                    var begin = const Offset(0.0, 1.0);
-                                    var end = Offset.zero;
-                                    var curve = Curves.ease;
-                                    var tween = Tween(begin: begin, end: end)
-                                        .chain(CurveTween(curve: curve));
-                                    return SlideTransition(
-                                      position: animation.drive(tween),
-                                      child: child,
-                                    );
-                                  },
-                                  pageBuilder: (context, animation,
-                                          secondaryAnimation) =>
-                                      HansicDetail(
-                                    latLng: latLng,
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                LatLng latLng = LatLng(
+                                    favorites[index].hansics.lat,
+                                    favorites[index].hansics.lng);
+                                Navigator.push(
+                                  context,
+                                  PageRouteBuilder(
+                                    transitionsBuilder: (context, animation,
+                                        secondaryAnimation, child) {
+                                      var begin = const Offset(0.0, 1.0);
+                                      var end = Offset.zero;
+                                      var curve = Curves.ease;
+                                      var tween = Tween(begin: begin, end: end)
+                                          .chain(CurveTween(curve: curve));
+                                      return SlideTransition(
+                                        position: animation.drive(tween),
+                                        child: child,
+                                      );
+                                    },
+                                    pageBuilder: (context, animation,
+                                            secondaryAnimation) =>
+                                        HansicDetail(
+                                      latLng: latLng,
+                                    ),
                                   ),
+                                );
+                              },
+                              child: Text(
+                                favorites[index].hansics.name,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
                                 ),
-                              );
-                            },
-                            child: Text(
-                              favorites[index].hansics.name,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
                               ),
                             ),
-                          ),
-                          Text(
-                            favorites[index].hansics.addr,
-                          ),
-                          RatingBar.builder(
-                            initialRating: favorites[index].hansics.userStar,
-                            itemSize: 18,
-                            ignoreGestures: true,
-                            minRating: 0,
-                            direction: Axis.horizontal,
-                            allowHalfRating: true,
-                            itemCount: 5,
-                            itemPadding:
-                                const EdgeInsets.symmetric(horizontal: 0.5),
-                            itemBuilder: (context, _) => const Icon(
-                              Icons.star,
-                              color: Colors.amber,
+                            Text(
+                              favorites[index].hansics.googleStar,
                             ),
-                            onRatingUpdate: (rating) {
-                              print(rating);
-                            },
-                          ),
-                        ],
-                      )
-                    ]),
+                            RatingBar.builder(
+                              initialRating: favorites[index].hansics.userStar,
+                              itemSize: 18,
+                              ignoreGestures: true,
+                              minRating: 0,
+                              direction: Axis.horizontal,
+                              allowHalfRating: true,
+                              itemCount: 5,
+                              itemPadding:
+                                  const EdgeInsets.symmetric(horizontal: 0.5),
+                              itemBuilder: (context, _) => const Icon(
+                                Icons.star,
+                                color: Colors.amber,
+                              ),
+                              onRatingUpdate: (rating) {
+                                print(rating);
+                              },
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ],
