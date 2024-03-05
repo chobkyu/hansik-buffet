@@ -6,6 +6,8 @@ import 'package:kakao_map_plugin_example/src/overlay_12_markers_event1_screen.da
 import 'package:kakao_map_plugin_example/src/screen/img_upload.dart';
 import 'package:kakao_map_plugin_example/src/screen/login.dart';
 import 'package:kakao_map_plugin_example/src/screen/my_page.dart';
+import 'package:kakao_map_plugin_example/src/screen/review_list.dart';
+import 'package:kakao_map_plugin_example/src/screen/review_write.dart';
 import 'package:kakao_map_plugin_example/src/screen/test_mypage.dart';
 import 'package:kakao_map_plugin_example/src/service/geolocator_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
@@ -375,6 +377,111 @@ class _HomeScreenState extends State<HomeScreen>
             //   },
             //   color: Colors.amber,
             // ),
+            HomeButton(
+              text: 'test Review',
+              move: () async {
+                String? token = await storage.read(key: 'token');
+                print(token);
+                if (token == null) {
+                  if (!mounted) return;
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        var begin = const Offset(0.0, 1.0);
+                        var end = Offset.zero;
+                        var curve = Curves.ease;
+                        var tween = Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: curve));
+                        return SlideTransition(
+                          position: animation.drive(tween),
+                          child: child,
+                        );
+                      },
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          const LoginScreen(),
+                    ),
+                  );
+                } else {
+                  if (!mounted) return;
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        var begin = const Offset(0.0, 1.0);
+                        var end = Offset.zero;
+                        var curve = Curves.ease;
+                        var tween = Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: curve));
+                        return SlideTransition(
+                          position: animation.drive(tween),
+                          child: child,
+                        );
+                      },
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          const ReviewList(id: 1804, hansicName: "알랄라"),
+                    ),
+                  );
+                }
+              },
+              color: Colors.amber,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            HomeButton(
+              text: 'test Review Write',
+              move: () async {
+                String? token = await storage.read(key: 'token');
+                print(token);
+                if (token == null) {
+                  if (!mounted) return;
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        var begin = const Offset(0.0, 1.0);
+                        var end = Offset.zero;
+                        var curve = Curves.ease;
+                        var tween = Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: curve));
+                        return SlideTransition(
+                          position: animation.drive(tween),
+                          child: child,
+                        );
+                      },
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          const LoginScreen(),
+                    ),
+                  );
+                } else {
+                  if (!mounted) return;
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        var begin = const Offset(0.0, 1.0);
+                        var end = Offset.zero;
+                        var curve = Curves.ease;
+                        var tween = Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: curve));
+                        return SlideTransition(
+                          position: animation.drive(tween),
+                          child: child,
+                        );
+                      },
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          const ReviewWrite(id: 1804, hansicName: ""),
+                    ),
+                  );
+                }
+              },
+              color: Colors.amber,
+            ),
           ],
         ),
       ),
