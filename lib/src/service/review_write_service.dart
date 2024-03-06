@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 
 import 'package:kakao_map_plugin_example/src/models/review_write.dart';
@@ -8,7 +10,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class ReviewWriteService {
   Future<int> writeReview(ReviewCreate reviewWrite, String token) async {
     try {
-      String? baseUrl = dotenv.env['BASE_URL'];
+      String? baseUrl = dotenv.env['TEST_URL'];
       int id = reviewWrite.id;
       String auth = 'Bearer $token';
       Uri uri = Uri.parse("$baseUrl/review/$id");

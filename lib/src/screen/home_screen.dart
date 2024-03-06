@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_map_plugin_example/src/overlay_12_markers_event1_screen.dart';
 import 'package:kakao_map_plugin_example/src/screen/img_upload.dart';
+import 'package:kakao_map_plugin_example/src/screen/index_screen.dart';
 import 'package:kakao_map_plugin_example/src/screen/login.dart';
 import 'package:kakao_map_plugin_example/src/screen/my_page.dart';
 import 'package:kakao_map_plugin_example/src/screen/review_list.dart';
@@ -351,6 +352,39 @@ class _HomeScreenState extends State<HomeScreen>
             ),
             const SizedBox(
               height: 10,
+            ),
+            HomeButton(
+              text: '홈 화면',
+              move: () async {
+                Position position = await geolocatorService.getLocation();
+                double lat = position.latitude;
+                double lng = position.longitude;
+
+                print(lat);
+                print(lng);
+
+                if (!mounted) return;
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      var begin = const Offset(0.0, 1.0);
+                      var end = Offset.zero;
+                      var curve = Curves.ease;
+                      var tween = Tween(begin: begin, end: end)
+                          .chain(CurveTween(curve: curve));
+                      return SlideTransition(
+                        position: animation.drive(tween),
+                        child: child,
+                      );
+                    },
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const IndexScreen(),
+                  ),
+                );
+              },
+              color: Colors.amber,
             ),
             // HomeButton(
             //   text: '한식 스크린',
