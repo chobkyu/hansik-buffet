@@ -10,7 +10,7 @@ import 'package:kakao_map_plugin_example/src/screen/login.dart';
 import 'package:kakao_map_plugin_example/src/service/get_userdata_service.dart';
 import 'package:kakao_map_plugin_example/src/service/review_update_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
-import 'package:kakao_map_plugin_example/src/widget/home_button.dart';
+import 'package:kakao_map_plugin_example/src/widget/small_button.dart';
 
 class ReviewUpdate extends StatefulWidget {
   const ReviewUpdate({
@@ -180,33 +180,39 @@ class _ReviewUpdateState extends State<ReviewUpdate> {
               const SizedBox(
                 height: 15,
               ),
-              HomeButton(
-                text: '업데이트',
-                move: () async {
-                  reviewCreate.id = widget.id;
-                  print(reviewCreate.detailReview);
-                  print(reviewCreate.userRating);
-                  String? token = await storage.read(key: 'token');
-                  print(token);
-                  try {
-                    int res = await reviewUpdateService.updateReview(
-                        reviewCreate, token!, widget.reviewDto.id);
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SmallButton(
+                    text: '수정하기',
+                    move: () async {
+                      reviewCreate.id = widget.id;
+                      print(reviewCreate.detailReview);
+                      print(reviewCreate.userRating);
+                      String? token = await storage.read(key: 'token');
+                      print(token);
+                      try {
+                        int res = await reviewUpdateService.updateReview(
+                            reviewCreate, token!, widget.reviewDto.id);
 
-                    print(res);
-                    if (res == 200) {
-                      //수정 완료 팝업 예정
-                      if (!mounted) return;
-                      Navigator.pop(context);
-                    } else if (res == 401) {
-                      goToLoginPage();
-                    } else {
-                      //에러 처리 예정
-                    }
-                  } catch (err) {
-                    print(err);
-                  }
-                },
-                color: Colors.amber,
+                        print(res);
+                        if (res == 200) {
+                          //수정 완료 팝업 예정
+                          if (!mounted) return;
+                          Navigator.pop(context);
+                        } else if (res == 401) {
+                          goToLoginPage();
+                        } else {
+                          //에러 처리 예정
+                        }
+                      } catch (err) {
+                        print(err);
+                      }
+                    },
+                    color: Colors.amber,
+                    icon: Icons.edit,
+                  ),
+                ],
               )
             ],
           ),

@@ -8,7 +8,7 @@ import 'package:kakao_map_plugin_example/src/screen/review_update.dart';
 import 'package:kakao_map_plugin_example/src/service/get_userdata_service.dart';
 import 'package:kakao_map_plugin_example/src/service/review_delete_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
-import 'package:kakao_map_plugin_example/src/widget/home_button.dart';
+import 'package:kakao_map_plugin_example/src/widget/small_button.dart';
 import 'package:kakao_map_plugin_example/src/widget/text_inContainer.dart';
 
 class TestReviewDetail extends StatefulWidget {
@@ -182,111 +182,111 @@ class _ForRightUserState extends State<ForRightUser> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        HomeButton(
-          text: '수정하기',
-          move: () async {
-            String? token = await widget.storage.read(key: 'token');
-            print(token);
-            if (token == null) {
-              if (!mounted) return;
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  transitionsBuilder:
-                      (context, animation, secondaryAnimation, child) {
-                    var begin = const Offset(0.0, 1.0);
-                    var end = Offset.zero;
-                    var curve = Curves.ease;
-                    var tween = Tween(begin: begin, end: end)
-                        .chain(CurveTween(curve: curve));
-                    return SlideTransition(
-                      position: animation.drive(tween),
-                      child: child,
-                    );
-                  },
-                  pageBuilder: (context, animation, secondaryAnimation) =>
-                      const LoginScreen(),
-                ),
-              );
-            } else {
-              if (!mounted) return;
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  transitionsBuilder:
-                      (context, animation, secondaryAnimation, child) {
-                    var begin = const Offset(0.0, 1.0);
-                    var end = Offset.zero;
-                    var curve = Curves.ease;
-                    var tween = Tween(begin: begin, end: end)
-                        .chain(CurveTween(curve: curve));
-                    return SlideTransition(
-                      position: animation.drive(tween),
-                      child: child,
-                    );
-                  },
-                  pageBuilder: (context, animation, secondaryAnimation) =>
-                      ReviewUpdate(
-                          id: 1804,
-                          hansicName: "",
-                          reviewDto: widget.reviewDto),
-                ),
-              );
-            }
-          },
-          color: Colors.amber,
-        ),
+        SmallButton(
+            text: '수정하기',
+            move: () async {
+              String? token = await widget.storage.read(key: 'token');
+              print(token);
+              if (token == null) {
+                if (!mounted) return;
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      var begin = const Offset(0.0, 1.0);
+                      var end = Offset.zero;
+                      var curve = Curves.ease;
+                      var tween = Tween(begin: begin, end: end)
+                          .chain(CurveTween(curve: curve));
+                      return SlideTransition(
+                        position: animation.drive(tween),
+                        child: child,
+                      );
+                    },
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const LoginScreen(),
+                  ),
+                );
+              } else {
+                if (!mounted) return;
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      var begin = const Offset(0.0, 1.0);
+                      var end = Offset.zero;
+                      var curve = Curves.ease;
+                      var tween = Tween(begin: begin, end: end)
+                          .chain(CurveTween(curve: curve));
+                      return SlideTransition(
+                        position: animation.drive(tween),
+                        child: child,
+                      );
+                    },
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        ReviewUpdate(
+                            id: 1804,
+                            hansicName: "",
+                            reviewDto: widget.reviewDto),
+                  ),
+                );
+              }
+            },
+            color: Colors.amber,
+            icon: Icons.edit),
         const SizedBox(
           width: 15,
         ),
-        HomeButton(
-          text: '삭제하기',
-          move: () async {
-            String? token = await widget.storage.read(key: 'token');
-            print(token);
-            print(widget.userData.id);
-            print(widget.reviewDto.id);
+        SmallButton(
+            text: '삭제하기',
+            move: () async {
+              String? token = await widget.storage.read(key: 'token');
+              print(token);
+              print(widget.userData.id);
+              print(widget.reviewDto.id);
 
-            if (token == null) {
-              if (!mounted) return;
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  transitionsBuilder:
-                      (context, animation, secondaryAnimation, child) {
-                    var begin = const Offset(0.0, 1.0);
-                    var end = Offset.zero;
-                    var curve = Curves.ease;
-                    var tween = Tween(begin: begin, end: end)
-                        .chain(CurveTween(curve: curve));
-                    return SlideTransition(
-                      position: animation.drive(tween),
-                      child: child,
-                    );
-                  },
-                  pageBuilder: (context, animation, secondaryAnimation) =>
-                      const LoginScreen(),
-                ),
-              );
-            } else {
-              if (!mounted) return;
-              int res = await reviewDeleteService.deleteReview(
-                  token, widget.reviewDto.id, widget.userData);
-
-              print(res);
-              if (res == 204) {
-                //수정 완료 팝업 예정
+              if (token == null) {
                 if (!mounted) return;
-                Navigator.pop(context);
-              } else if (res == 401) {
-                //로그인 페이지로
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      var begin = const Offset(0.0, 1.0);
+                      var end = Offset.zero;
+                      var curve = Curves.ease;
+                      var tween = Tween(begin: begin, end: end)
+                          .chain(CurveTween(curve: curve));
+                      return SlideTransition(
+                        position: animation.drive(tween),
+                        child: child,
+                      );
+                    },
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const LoginScreen(),
+                  ),
+                );
               } else {
-                //에러 처리 예정
+                if (!mounted) return;
+                int res = await reviewDeleteService.deleteReview(
+                    token, widget.reviewDto.id, widget.userData);
+
+                print(res);
+                if (res == 204) {
+                  //수정 완료 팝업 예정
+                  if (!mounted) return;
+                  Navigator.pop(context);
+                } else if (res == 401) {
+                  //로그인 페이지로
+                } else {
+                  //에러 처리 예정
+                }
               }
-            }
-          },
-          color: Colors.amber,
-        ),
+            },
+            color: const Color.fromARGB(255, 238, 227, 212),
+            icon: Icons.delete),
       ],
     );
   }
