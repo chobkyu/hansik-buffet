@@ -10,7 +10,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class ReviewWriteService {
   Future<int> writeReview(ReviewCreate reviewWrite, String token) async {
     try {
-      String? baseUrl = dotenv.env['TEST_URL'];
+      String? baseUrl = dotenv.env['BASE_URL'];
       int id = reviewWrite.id;
       String auth = 'Bearer $token';
       Uri uri = Uri.parse("$baseUrl/review/$id");

@@ -1,10 +1,15 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:kakao_map_plugin_example/src/models/hansic_list.dart';
 import 'package:kakao_map_plugin_example/src/models/location.dart';
+import 'package:kakao_map_plugin_example/src/overlay_12_markers_event1_screen.dart';
+import 'package:kakao_map_plugin_example/src/screen/favorite_mylist.dart';
 import 'package:kakao_map_plugin_example/src/screen/hansic_screen.dart';
+import 'package:kakao_map_plugin_example/src/service/geolocator_service.dart';
 import 'package:kakao_map_plugin_example/src/service/get_hansicdata_service.dart';
+import 'package:kakao_map_plugin_example/src/service/update_user_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 import 'package:kakao_map_plugin_example/src/widget/home_button.dart';
 import 'package:kakao_map_plugin_example/src/widget/location_dropdown.dart';
@@ -18,6 +23,8 @@ class IndexScreen extends StatefulWidget {
 
 class _IndexScreenState extends State<IndexScreen> {
   static GetHansicService hansicService = GetHansicService();
+  static UpdateUserService updateUserService = UpdateUserService();
+  static GeolocatorService geolocatorService = GeolocatorService();
 
   late List<LocationDto> locationList = [];
   LocationDto? searchLocationDto;
@@ -25,6 +32,25 @@ class _IndexScreenState extends State<IndexScreen> {
 
   late double lat = 37.4916927972275;
   late double lng = 126.899358119287;
+
+  @override
+  void initState() {
+    super.initState();
+    try {
+      getLocList();
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  void getLocList() async {
+    try {
+      locationList = await updateUserService.getLocation();
+      setState(() {});
+    } catch (err) {
+      print(err);
+    }
+  }
 
   void getLocation(LocationDto selectedLoc) {
     print(selectedLoc.location);
@@ -38,7 +64,7 @@ class _IndexScreenState extends State<IndexScreen> {
       print(hansics?.length);
 
       print(hansics?[0].location);
-      hansics!.clear();
+      //hansics!.clear();
       setState(() {});
       //print(hansics![0].name);
 
@@ -47,18 +73,25 @@ class _IndexScreenState extends State<IndexScreen> {
       lng = hansics![0].lng;
 
       if (!mounted) return;
-      Navigator.pushReplacement(
+      Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) {
-            return HansicScreen(
-              lat: lat,
-              lng: lng,
-              locId: id,
+        PageRouteBuilder(
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            var begin = const Offset(0.0, 1.0);
+            var end = Offset.zero;
+            var curve = Curves.ease;
+            var tween =
+                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            return SlideTransition(
+              position: animation.drive(tween),
+              child: child,
             );
           },
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              HansicScreen(lat: lat, lng: lng, locId: id),
         ),
       );
+
       setState(() {});
     } catch (err) {
       print(err);
@@ -98,7 +131,7 @@ class _IndexScreenState extends State<IndexScreen> {
                         spreadRadius: 0,
                         blurRadius: 10,
                         offset:
-                            const Offset(3, 10), // changes position of shadow
+                            const Offset(3, 5), // changes position of shadow
                       ),
                     ],
                   ),
@@ -127,46 +160,70 @@ class _IndexScreenState extends State<IndexScreen> {
                 const Divider(
                   thickness: 1.2,
                 ),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.45,
-                  height: MediaQuery.of(context).size.height * 0.22,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                      color: Colors.grey,
-                      style: BorderStyle.none,
-                    ),
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 0,
-                        blurRadius: 10,
-                        offset:
-                            const Offset(0, 10), // changes position of shadow
+                InkWell(
+                  onTap: () {
+                    if (!mounted) return;
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          var begin = const Offset(0.0, 1.0);
+                          var end = Offset.zero;
+                          var curve = Curves.ease;
+                          var tween = Tween(begin: begin, end: end)
+                              .chain(CurveTween(curve: curve));
+                          return SlideTransition(
+                            position: animation.drive(tween),
+                            child: child,
+                          );
+                        },
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            const FavoriteMyList(),
                       ),
-                    ],
-                  ),
-                  child: const Column(
-                    children: [
-                      SizedBox(
-                        height: 25,
+                    );
+                  },
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.45,
+                    height: MediaQuery.of(context).size.height * 0.22,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                        color: Colors.grey,
+                        style: BorderStyle.none,
                       ),
-                      Icon(
-                        Icons.kitchen_outlined,
-                        size: 70,
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Text(
-                        '즐겨찾는 한식 뷔페',
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 0,
+                          blurRadius: 10,
+                          offset:
+                              const Offset(0, 5), // changes position of shadow
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
+                    child: const Column(
+                      children: [
+                        SizedBox(
+                          height: 25,
+                        ),
+                        Icon(
+                          Icons.kitchen_outlined,
+                          size: 70,
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Text(
+                          '즐겨찾는 한식 뷔페',
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -189,22 +246,51 @@ class _IndexScreenState extends State<IndexScreen> {
                     color: Colors.grey.withOpacity(0.5),
                     spreadRadius: 0,
                     blurRadius: 10,
-                    offset: const Offset(0, 10), // changes position of shadow
+                    offset: const Offset(0, 5), // changes position of shadow
                   ),
                 ],
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    height: 50,
-                    margin: const EdgeInsets.fromLTRB(20, 8, 0, 8),
-                    child: const Text(
-                      '내 주변 한식 뷔페 찾기',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w600,
+                  InkWell(
+                    onTap: () async {
+                      Position position = await geolocatorService.getLocation();
+                      double lat = position.latitude;
+                      double lng = position.longitude;
+
+                      if (!mounted) return;
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            var begin = const Offset(0.0, 1.0);
+                            var end = Offset.zero;
+                            var curve = Curves.ease;
+                            var tween = Tween(begin: begin, end: end)
+                                .chain(CurveTween(curve: curve));
+                            return SlideTransition(
+                              position: animation.drive(tween),
+                              child: child,
+                            );
+                          },
+                          pageBuilder: (context, animation,
+                                  secondaryAnimation) =>
+                              Overlay12MarkersEvent1Screen(lat: lat, lng: lng),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      height: 50,
+                      margin: const EdgeInsets.fromLTRB(20, 8, 0, 8),
+                      child: const Text(
+                        '내 주변 한식 뷔페 찾기',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ),
@@ -233,7 +319,7 @@ class _IndexScreenState extends State<IndexScreen> {
                     color: Colors.grey.withOpacity(0.5),
                     spreadRadius: 0,
                     blurRadius: 10,
-                    offset: const Offset(0, 10), // changes position of shadow
+                    offset: const Offset(0, 5), // changes position of shadow
                   ),
                 ],
               ),
@@ -335,7 +421,7 @@ class _IndexScreenState extends State<IndexScreen> {
                         spreadRadius: 0,
                         blurRadius: 10,
                         offset:
-                            const Offset(3, 10), // changes position of shadow
+                            const Offset(3, 5), // changes position of shadow
                       ),
                     ],
                   ),
@@ -380,7 +466,7 @@ class _IndexScreenState extends State<IndexScreen> {
                         spreadRadius: 0,
                         blurRadius: 10,
                         offset:
-                            const Offset(3, 10), // changes position of shadow
+                            const Offset(3, 5), // changes position of shadow
                       ),
                     ],
                   ),
@@ -425,7 +511,7 @@ class _IndexScreenState extends State<IndexScreen> {
                         spreadRadius: 0,
                         blurRadius: 10,
                         offset:
-                            const Offset(3, 10), // changes position of shadow
+                            const Offset(3, 5), // changes position of shadow
                       ),
                     ],
                   ),
