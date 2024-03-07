@@ -83,26 +83,35 @@ class _FavoriteMyListState extends State<FavoriteMyList> {
       print("this is catch");
       print(err.toString());
       //에러 처리 예정
-      await storage.delete(key: 'token');
-      if (!mounted) return;
-      Navigator.push(
-        context,
-        PageRouteBuilder(
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            var begin = const Offset(0.0, 1.0);
-            var end = Offset.zero;
-            var curve = Curves.ease;
-            var tween =
-                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-            return SlideTransition(
-              position: animation.drive(tween),
-              child: child,
-            );
-          },
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              const LoginScreen(),
-        ),
-      );
+      // await storage.delete(key: 'token');
+      // if (!mounted) return;
+      // Navigator.push(
+      //   context,
+      //   PageRouteBuilder(
+      //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      //       var begin = const Offset(0.0, 1.0);
+      //       var end = Offset.zero;
+      //       var curve = Curves.ease;
+      //       var tween =
+      //           Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+      //       return SlideTransition(
+      //         position: animation.drive(tween),
+      //         child: child,
+      //       );
+      //     },
+      //     pageBuilder: (context, animation, secondaryAnimation) =>
+      //         const LoginScreen(),
+      //   ),
+      //);
+    }
+  }
+
+  double getUserStar(String userStar) {
+    print(userStar);
+    if (userStar == "NULL") {
+      return 0.0;
+    } else {
+      return double.parse(userStar);
     }
   }
 
@@ -186,7 +195,8 @@ class _FavoriteMyListState extends State<FavoriteMyList> {
                               favorites[index].hansics.googleStar,
                             ),
                             RatingBar.builder(
-                              initialRating: favorites[index].hansics.userStar,
+                              initialRating: getUserStar(
+                                  favorites[index].hansics.userStar),
                               itemSize: 18,
                               ignoreGestures: true,
                               minRating: 0,
