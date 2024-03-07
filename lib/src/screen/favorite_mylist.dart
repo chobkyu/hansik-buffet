@@ -7,6 +7,7 @@ import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'package:kakao_map_plugin_example/src/models/favorite_list.dart';
 import 'package:kakao_map_plugin_example/src/models/favorites_data.dart';
 import 'package:kakao_map_plugin_example/src/screen/hansic_detail.dart';
+import 'package:kakao_map_plugin_example/src/screen/login.dart';
 import 'package:kakao_map_plugin_example/src/service/favorites_list_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 
@@ -36,6 +37,30 @@ class _FavoriteMyListState extends State<FavoriteMyList> {
   void getFavoriteList() async {
     try {
       String? token = await storage.read(key: 'token');
+      print(token);
+      //토큰이 없을 시 로그인 화면으로
+      if (token == null) {
+        if (!mounted) return;
+        Navigator.push(
+          context,
+          PageRouteBuilder(
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              var begin = const Offset(0.0, 1.0);
+              var end = Offset.zero;
+              var curve = Curves.ease;
+              var tween =
+                  Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+              return SlideTransition(
+                position: animation.drive(tween),
+                child: child,
+              );
+            },
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                const LoginScreen(),
+          ),
+        );
+      }
 
       FavoriteListDto favoriteListDto =
           await favoriteListService.getFavoriteList(token);
@@ -58,9 +83,26 @@ class _FavoriteMyListState extends State<FavoriteMyList> {
       print("this is catch");
       print(err.toString());
       //에러 처리 예정
-      // await storage.delete(key: 'token');
-      // if (!mounted) return;
-      // Navigator.pop(context);
+      await storage.delete(key: 'token');
+      if (!mounted) return;
+      Navigator.push(
+        context,
+        PageRouteBuilder(
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            var begin = const Offset(0.0, 1.0);
+            var end = Offset.zero;
+            var curve = Curves.ease;
+            var tween =
+                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            return SlideTransition(
+              position: animation.drive(tween),
+              child: child,
+            );
+          },
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const LoginScreen(),
+        ),
+      );
     }
   }
 
