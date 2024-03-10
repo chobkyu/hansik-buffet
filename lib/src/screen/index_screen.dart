@@ -102,10 +102,6 @@ class _IndexScreenState extends State<IndexScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(50),
-        child: CustomAppBar(title: '한사장'),
-      ),
       body: SingleChildScrollView(
         child: Column(
           children: [

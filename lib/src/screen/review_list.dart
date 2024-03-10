@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:kakao_map_plugin_example/src/models/review_list.dart';
 import 'package:kakao_map_plugin_example/src/screen/review_detail.dart';
-import 'package:kakao_map_plugin_example/src/screen/test_review_detail.dart';
 import 'package:kakao_map_plugin_example/src/service/review_list_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 
@@ -118,7 +117,7 @@ class _ReviewListState extends State<ReviewList> {
                                   },
                                   pageBuilder: (context, animation,
                                           secondaryAnimation) =>
-                                      TestReviewDetail(
+                                      ReviewDetail(
                                     reviewId: index,
                                     reviewDto: reviewList![index],
                                     hansicName: widget.hansicName,
