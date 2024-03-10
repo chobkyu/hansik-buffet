@@ -2,7 +2,7 @@ class FavoriteHansicDto {
   late String name;
   late String addr;
   late String googleStar;
-  late double userStar;
+  late String userStar;
   late int id;
   late double lat;
   late double lng;
@@ -28,10 +28,10 @@ class FavoriteHansicDto {
       name: json["name"],
       addr: json["addr"],
       googleStar: json["google_star"],
-      userStar: json["userStar"] ?? 0,
+      userStar: json["userStar"] ?? '0',
       id: json["id"],
-      lat: json["lat"],
-      lng: json["lng"],
+      lat: json["lat"].toDouble(),
+      lng: json["lng"].toDouble(),
       location: json["location"],
       locationId: json["location_id"],
       sicdangImgs: json["sicdangImgs"],
