@@ -10,7 +10,6 @@ import 'package:kakao_map_plugin_example/src/screen/hansic_screen.dart';
 import 'package:kakao_map_plugin_example/src/service/geolocator_service.dart';
 import 'package:kakao_map_plugin_example/src/service/get_hansicdata_service.dart';
 import 'package:kakao_map_plugin_example/src/service/update_user_service.dart';
-import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 import 'package:kakao_map_plugin_example/src/widget/home_button.dart';
 import 'package:kakao_map_plugin_example/src/widget/location_dropdown.dart';
 
@@ -102,10 +101,6 @@ class _IndexScreenState extends State<IndexScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(50),
-        child: CustomAppBar(title: '한사장'),
-      ),
       body: SingleChildScrollView(
         child: Column(
           children: [

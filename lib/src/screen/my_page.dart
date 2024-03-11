@@ -1,10 +1,7 @@
 // ignore_for_file: avoid_print
 
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:kakao_map_plugin_example/src/models/image_data.dart';
 import 'package:kakao_map_plugin_example/src/models/user_data.dart';
 import 'package:kakao_map_plugin_example/src/overlay_12_markers_event1_screen.dart';
 import 'package:kakao_map_plugin_example/src/screen/favorite_mylist.dart';
@@ -12,7 +9,6 @@ import 'package:kakao_map_plugin_example/src/screen/login.dart';
 import 'package:kakao_map_plugin_example/src/screen/update_myinfo.dart';
 import 'package:kakao_map_plugin_example/src/service/geolocator_service.dart';
 import 'package:kakao_map_plugin_example/src/service/get_userdata_service.dart';
-import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 import 'package:kakao_map_plugin_example/src/widget/menu_div.dart';
 // ignore: depend_on_referenced_packages
 import 'package:geolocator/geolocator.dart';
@@ -28,6 +24,7 @@ class _MyPageState extends State<MyPage> {
   static GetUserData getUserData = GetUserData();
   static const storage = FlutterSecureStorage();
   static GeolocatorService geolocatorService = GeolocatorService();
+  bool _isLogined = false;
 
   UserData userData = UserData(
     id: 0,
@@ -42,19 +39,26 @@ class _MyPageState extends State<MyPage> {
     super.initState();
     try {
       getUser();
+      print("this is initState");
+      print(userData);
     } catch (err) {
       print(err);
     }
   }
 
   void getUser() async {
+    print("this is getUser");
     String? token = await storage.read(key: 'token');
     print(token);
     try {
+      print("this is try");
       userData = await getUserData.getUserData(token!);
+      print("I want userData");
       print(userData);
+      _isLogined = true;
       setState(() {});
     } catch (err) {
+      print("this is catch");
       print(err.toString());
       await storage.delete(key: 'token');
       if (!mounted) return;
@@ -80,13 +84,11 @@ class _MyPageState extends State<MyPage> {
   }
 
   //imgurl get
-  String getImgUrl(List<dynamic> img) {
+  dynamic getImg(List<dynamic> img) {
     if (img.isNotEmpty) {
-      //print(img[0]['imgUrl']);
-
-      return img[0]['imgUrl'];
+      return Image.network(img[0].toString());
     } else {
-      return 'https://hansicbuffet.s3.ap-northeast-2.amazonaws.com/b0f790a446bb8255116e088aa8ae7abe';
+      return Image.asset('assets/images/defaultProfileImg.png');
     }
   }
 
@@ -94,12 +96,32 @@ class _MyPageState extends State<MyPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(50),
-        child: CustomAppBar(title: 'My Page'),
+      body: _isLogined ? logined() : notLogined(),
+    );
+  }
+
+  Widget notLogined() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.amber[800],
+              foregroundColor: Colors.white,
+            ),
+            onPressed: getUser,
+            child: const Text("Login"),
+          ),
+          const Text("Please Login.."),
+        ],
       ),
-      body: SingleChildScrollView(
-          child: Column(
+    );
+  }
+
+  Widget logined() {
+    return SingleChildScrollView(
+      child: Column(
         children: [
           const SizedBox(
             height: 20,
@@ -119,7 +141,7 @@ class _MyPageState extends State<MyPage> {
                   height: 200,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(100),
-                    child: Image.network(getImgUrl(userData.userImgs)),
+                    child: getImg(userData.userImgs),
                   ),
                 ),
                 const SizedBox(
@@ -172,10 +194,7 @@ class _MyPageState extends State<MyPage> {
                               ),
                             );
                           },
-                          child: const Text(
-                            '한식 뷔페 찾기',
-                            style: TextStyle(fontSize: 16),
-                          ),
+                          child: const Text('한식 뷔페 찾기'),
                         ),
                       ],
                     ),
@@ -206,10 +225,7 @@ class _MyPageState extends State<MyPage> {
                               ),
                             );
                           },
-                          child: const Text(
-                            '내 정보 수정하기',
-                            style: TextStyle(fontSize: 16),
-                          ),
+                          child: const Text('내 정보 수정하기'),
                         ),
                       ],
                     )
@@ -286,7 +302,7 @@ class _MyPageState extends State<MyPage> {
                 },
               ),
               MenuDiv(
-                text: '내가 쓴 리뷰 조회',
+                text: '메뉴 등록 하기',
                 fontSize: 18,
                 move: () {
                   print('object');
@@ -318,10 +334,20 @@ class _MyPageState extends State<MyPage> {
                   );
                 },
               ),
+              MenuDiv(
+                text: '로그아웃 하기',
+                fontSize: 18,
+                move: () {
+                  const storage = FlutterSecureStorage();
+                  storage.delete(key: 'token');
+                  _isLogined = false;
+                  setState(() {});
+                },
+              ),
             ],
           )
         ],
-      )),
+      ),
     );
   }
 }
