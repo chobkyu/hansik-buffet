@@ -84,11 +84,11 @@ class _MyPageState extends State<MyPage> {
   }
 
   //imgurl get
-  String getImgUrl(List<dynamic> img) {
+  dynamic getImg(List<dynamic> img) {
     if (img.isNotEmpty) {
-      return img[0].toString();
+      return Image.network(img[0].toString());
     } else {
-      return 'https://puda.s3.ap-northeast-2.amazonaws.com/client/U_nuVL__0tNfEPk8Eb9PXISEad-qOs4aOEI0u-Zclq928dHx835CxJjMk3HKzg4ieprrKff_42Th2Tao7yezAg.webp';
+      return Image.asset('assets/images/defaultProfileImg.png');
     }
   }
 
@@ -141,7 +141,7 @@ class _MyPageState extends State<MyPage> {
                   height: 200,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(100),
-                    child: Image.network(getImgUrl(userData.userImgs)),
+                    child: getImg(userData.userImgs),
                   ),
                 ),
                 const SizedBox(
