@@ -62,7 +62,7 @@ class _IndexScreenState extends State<IndexScreen> {
       print('지역 별 조회');
       print(hansics?.length);
 
-      print(hansics?[0].location);
+      //print(hansics?[0].location);
       //hansics!.clear();
       setState(() {});
       //print(hansics![0].name);
