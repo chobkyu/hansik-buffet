@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:kakao_map_plugin_example/src/screen/loading.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'package:kakao_map_plugin_example/src/models/hansic_list.dart';
@@ -49,6 +50,8 @@ class _HansicScreenState extends State<HansicScreen> {
   late double lat = 37.4916927972275;
   late double lng = 126.899358119287;
 
+  bool isLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -72,6 +75,9 @@ class _HansicScreenState extends State<HansicScreen> {
 
   void getHansics() async {
     try {
+      setState(() {
+        isLoading = true;
+      });
       //await geolocatorService.getLocation();
       print('getHansics 호출');
       hansics = await hansicService.getHansicDataFromLoc(widget.locId);
@@ -86,7 +92,9 @@ class _HansicScreenState extends State<HansicScreen> {
       locationList = await updateUserService.getLocation();
       locationDto = locationList[0];
 
-      setState(() {});
+      setState(() {
+        isLoading = false;
+      });
     } catch (err) {
       print(err);
     }
@@ -133,123 +141,126 @@ class _HansicScreenState extends State<HansicScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(150),
-        child: Column(
-          children: [
-            const CustomAppBar(title: '한식 뷔페'),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      //background color of dropdown button
-                      border: Border.all(
+    return isLoading
+        ? const LoadingScreen()
+        : Scaffold(
+            appBar: PreferredSize(
+              preferredSize: const Size.fromHeight(150),
+              child: Column(
+                children: [
+                  const CustomAppBar(title: '한식 뷔페'),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            //background color of dropdown button
+                            border: Border.all(
+                              color: Colors.amber,
+                              // width: 3,
+                            ), //border of dropdown button
+                            borderRadius: BorderRadius.circular(
+                                50), //border raiuds of dropdown button
+                            boxShadow: const <BoxShadow>[
+                              //apply shadow on Dropdown button
+                              BoxShadow(
+                                color: Colors.white, //shadow for button
+                                blurRadius: 5,
+                              ) //blur radius of shadow
+                            ],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 30, right: 30),
+                            child: LocationDropDown(
+                              locationList: locationList,
+                              getLocation: getLocation,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      HomeButton(
+                        text: '검색',
+                        move: () {
+                          //print(MediaQuery.of(context).size.width);
+                          getHansicsLoc(searchLocationDto!.id);
+                        },
                         color: Colors.amber,
-                        // width: 3,
-                      ), //border of dropdown button
-                      borderRadius: BorderRadius.circular(
-                          50), //border raiuds of dropdown button
-                      boxShadow: const <BoxShadow>[
-                        //apply shadow on Dropdown button
-                        BoxShadow(
-                          color: Colors.white, //shadow for button
-                          blurRadius: 5,
-                        ) //blur radius of shadow
-                      ],
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 30, right: 30),
-                      child: LocationDropDown(
-                        locationList: locationList,
-                        getLocation: getLocation,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            body: KakaoMap(
+              onMapCreated: ((controller) async {
+                mapController = controller;
+                for (int i = 0; i < hansics!.length; i++) {
+                  markers.add(Marker(
+                      markerId: markers.length.toString(),
+                      latLng: LatLng(hansics![i].lat, hansics![i].lng),
+                      infoWindowContent:
+                          '<div style="width:200px;"><div style="background-color:orange;">${hansics?[i].name}</div><div style="marginTop:0.5rem;"><span style="display:block;">${hansics?[i].userStar}</span><span style="display:block">${hansics?[i].location}</span> <span style="display:block;">${hansics?[i].addr}</span></div></div>'));
+                }
+
+                setState(() {});
+              }),
+              markers: markers.toList(),
+              center: getGeo(),
+              onMarkerTap: (markerId, latLng, zoomLevel) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    duration: const Duration(seconds: 1),
+                    backgroundColor: Colors.white,
+                    content: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) {
+                                var begin = const Offset(0.0, 1.0);
+                                var end = Offset.zero;
+                                var curve = Curves.ease;
+                                var tween = Tween(begin: begin, end: end)
+                                    .chain(CurveTween(curve: curve));
+                                return SlideTransition(
+                                  position: animation.drive(tween),
+                                  child: child,
+                                );
+                              },
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      HansicDetail(
+                                latLng: latLng,
+                              ),
+                            ));
+                      },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.amber, elevation: 1),
+                      child: const Text(
+                        '자세히 보기',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
+                    // Text(
+                    //   'marker click:\n\n$latLng\n$markerId',
+                    //   style: const TextStyle(color: Colors.black),
+                    // ),
                   ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                HomeButton(
-                  text: '검색',
-                  move: () {
-                    //print(MediaQuery.of(context).size.width);
-                    getHansicsLoc(searchLocationDto!.id);
-                  },
-                  color: Colors.amber,
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-      body: KakaoMap(
-        onMapCreated: ((controller) async {
-          mapController = controller;
-          for (int i = 0; i < hansics!.length; i++) {
-            markers.add(Marker(
-                markerId: markers.length.toString(),
-                latLng: LatLng(hansics![i].lat, hansics![i].lng),
-                infoWindowContent:
-                    '<div style="width:200px;"><div style="background-color:orange;">${hansics?[i].name}</div><div style="marginTop:0.5rem;"><span style="display:block;">${hansics?[i].userStar}</span><span style="display:block">${hansics?[i].location}</span> <span style="display:block;">${hansics?[i].addr}</span></div></div>'));
-          }
-
-          setState(() {});
-        }),
-        markers: markers.toList(),
-        center: getGeo(),
-        onMarkerTap: (markerId, latLng, zoomLevel) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              duration: const Duration(seconds: 1),
-              backgroundColor: Colors.white,
-              content: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        transitionsBuilder:
-                            (context, animation, secondaryAnimation, child) {
-                          var begin = const Offset(0.0, 1.0);
-                          var end = Offset.zero;
-                          var curve = Curves.ease;
-                          var tween = Tween(begin: begin, end: end)
-                              .chain(CurveTween(curve: curve));
-                          return SlideTransition(
-                            position: animation.drive(tween),
-                            child: child,
-                          );
-                        },
-                        pageBuilder: (context, animation, secondaryAnimation) =>
-                            HansicDetail(
-                          latLng: latLng,
-                        ),
-                      ));
-                },
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.amber, elevation: 1),
-                child: const Text(
-                  '자세히 보기',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              // Text(
-              //   'marker click:\n\n$latLng\n$markerId',
-              //   style: const TextStyle(color: Colors.black),
-              // ),
+                );
+              },
             ),
           );
-        },
-      ),
-    );
   }
 }
