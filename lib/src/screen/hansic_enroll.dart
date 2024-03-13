@@ -4,8 +4,14 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:kakao_map_plugin_example/src/models/enroll_hansic.dart';
 import 'package:kakao_map_plugin_example/src/models/location.dart';
+import 'package:kakao_map_plugin_example/src/models/user_data.dart';
+import 'package:kakao_map_plugin_example/src/screen/login.dart';
+import 'package:kakao_map_plugin_example/src/service/enroll_hansic_service.dart';
+import 'package:kakao_map_plugin_example/src/service/get_userdata_service.dart';
 import 'package:kakao_map_plugin_example/src/service/update_user_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 import 'package:kakao_map_plugin_example/src/widget/home_button.dart';
@@ -21,6 +27,10 @@ class EnrollHansic extends StatefulWidget {
 
 class _EnrollHansicState extends State<EnrollHansic> {
   static UpdateUserService updateUserService = UpdateUserService();
+  static const storage = FlutterSecureStorage();
+  static GetUserData getUserData = GetUserData();
+  static EnrollHansicService enrollHansicService = EnrollHansicService();
+
   late List<LocationDto> locationList = [];
   LocationDto? searchLocationDto;
 
@@ -30,15 +40,53 @@ class _EnrollHansicState extends State<EnrollHansic> {
   List<XFile?> multiImage = []; // 갤러리에서 여러장의 사진을 선택해서 저장할 변수
   late String imgUrl = '';
 
+  String name = '';
+  String addr = '';
+
+  UserData userData = UserData(
+    id: 0,
+    userName: 'tq',
+    userNickName: '',
+    userId: '',
+    userImgs: [],
+  );
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     try {
+      getUser();
       getLocList();
     } catch (err) {
       print(err);
     }
+  }
+
+  void getUser() async {
+    String? token = await storage.read(key: 'token');
+    print(token);
+    try {
+      userData = await getUserData.getUserData(token!);
+      print(userData);
+      setState(() {});
+    } catch (err) {
+      print(err.toString());
+      goToLoginPage();
+    }
+  }
+
+  void goToLoginPage() async {
+    await storage.delete(key: 'token');
+    if (!mounted) return;
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return const LoginScreen();
+        },
+      ),
+    );
   }
 
   void getLocList() async {
@@ -125,6 +173,32 @@ class _EnrollHansicState extends State<EnrollHansic> {
     }
   }
 
+  void enrollHansic() async {
+    try {
+      if (name == '' || addr == '' || searchLocationDto == null) {
+        //에러 처리 예정
+        return;
+      }
+      String? token = await storage.read(key: 'token');
+      EnrollHansicDto enrollHansicDto = EnrollHansicDto(
+          name: name, addr: addr, location: searchLocationDto!.id);
+
+      int status =
+          await enrollHansicService.enrollHansic(enrollHansicDto, token!);
+
+      if (status == 201) {
+        if (!mounted) return;
+        Navigator.of(context).pop();
+      } else if (status == 401) {
+        goToLoginPage();
+      } else if (status == 400) {
+        //알람 처리(입력값 잘못됨)
+      }
+    } catch (err) {
+      print(err);
+    }
+  }
+
   int value = 0;
   Future<void> _dialogBuilder(BuildContext context) {
     // 현재 화면 위에 보여줄 다이얼로그 생성
@@ -139,7 +213,7 @@ class _EnrollHansicState extends State<EnrollHansic> {
             ElevatedButton(
               // 다이얼로그 내의 확인 버튼 터치 시 값 +1
               onPressed: () {
-                setState(() => value++);
+                enrollHansic();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.amber,
@@ -217,6 +291,12 @@ class _EnrollHansicState extends State<EnrollHansic> {
                   ),
                   TextFormField(
                     key: const ValueKey(1),
+                    onSaved: (value) {
+                      name = value!;
+                    },
+                    onChanged: (value) {
+                      name = value;
+                    },
                     decoration: const InputDecoration(
                       prefixIcon: Icon(
                         Icons.account_circle,
@@ -249,6 +329,12 @@ class _EnrollHansicState extends State<EnrollHansic> {
                   ),
                   TextFormField(
                     key: const ValueKey(2),
+                    onSaved: (value) {
+                      addr = value!;
+                    },
+                    onChanged: (value) {
+                      addr = value;
+                    },
                     decoration: const InputDecoration(
                       prefixIcon: Icon(
                         Icons.account_circle,
