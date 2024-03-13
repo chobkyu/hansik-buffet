@@ -482,6 +482,42 @@ class _HomeScreenState extends State<HomeScreen>
               },
               color: Colors.amber,
             ),
+            const SizedBox(
+              height: 10,
+            ),
+            HomeButton(
+              text: '한뷔 등록 관리자 페이지',
+              move: () async {
+                Position position = await geolocatorService.getLocation();
+                double lat = position.latitude;
+                double lng = position.longitude;
+
+                print(lat);
+                print(lng);
+
+                if (!mounted) return;
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      var begin = const Offset(0.0, 1.0);
+                      var end = Offset.zero;
+                      var curve = Curves.ease;
+                      var tween = Tween(begin: begin, end: end)
+                          .chain(CurveTween(curve: curve));
+                      return SlideTransition(
+                        position: animation.drive(tween),
+                        child: child,
+                      );
+                    },
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const EnrollHansic(),
+                  ),
+                );
+              },
+              color: Colors.amber,
+            ),
           ],
         ),
       ),

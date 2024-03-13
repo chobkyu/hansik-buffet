@@ -93,6 +93,40 @@ class _EnrollHansicState extends State<EnrollHansic> {
     }
   }
 
+  int value = 0;
+  Future<void> _dialogBuilder(BuildContext context) {
+    // 현재 화면 위에 보여줄 다이얼로그 생성
+    return showDialog<void>(
+      context: context,
+      builder: (context) {
+        // 빌더로 AlertDialog 위젯을 생성
+        return AlertDialog(
+          title: const Text('소중한 등록 감사합니다.'),
+          content: const Text('해당 식당은 운영진들의 검토 후 리스트에 등록됩니다.'),
+          actions: [
+            ElevatedButton(
+              // 다이얼로그 내의 확인 버튼 터치 시 값 +1
+              onPressed: () {
+                setState(() => value++);
+              },
+              child: const Text('확인'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.amber,
+              ),
+            ),
+            // 다이얼로그 내의 취소 버튼 터치 시 다이얼로그 화면 제거
+            OutlinedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('취소'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -208,7 +242,10 @@ class _EnrollHansicState extends State<EnrollHansic> {
                   ),
                   HomeButton(
                     text: '등록하기',
-                    move: () {},
+                    move: () {
+                      print('object');
+                      _dialogBuilder(context);
+                    },
                     color: Colors.amber,
                   ),
                 ],
