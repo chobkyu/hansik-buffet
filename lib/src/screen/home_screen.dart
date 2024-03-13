@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_map_plugin_example/src/overlay_12_markers_event1_screen.dart';
+import 'package:kakao_map_plugin_example/src/screen/enroll_admin.dart';
 import 'package:kakao_map_plugin_example/src/screen/hansic_enroll.dart';
 import 'package:kakao_map_plugin_example/src/screen/img_upload.dart';
 import 'package:kakao_map_plugin_example/src/screen/index_screen.dart';
@@ -512,7 +513,7 @@ class _HomeScreenState extends State<HomeScreen>
                       );
                     },
                     pageBuilder: (context, animation, secondaryAnimation) =>
-                        const EnrollHansic(),
+                        const EnrollAdmin(),
                   ),
                 );
               },

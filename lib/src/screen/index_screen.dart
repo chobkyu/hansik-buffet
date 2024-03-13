@@ -576,7 +576,7 @@ class _IndexScreenState extends State<IndexScreen> {
                           );
                         },
                         pageBuilder: (context, animation, secondaryAnimation) =>
-                            EnrollHansic(),
+                            const EnrollHansic(),
                       ),
                     );
                   },
