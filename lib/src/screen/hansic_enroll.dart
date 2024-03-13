@@ -5,9 +5,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:kakao_map_plugin_example/src/models/location.dart';
+import 'package:kakao_map_plugin_example/src/service/update_user_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 import 'package:kakao_map_plugin_example/src/widget/home_button.dart';
 import 'package:http/http.dart' as http;
+import 'package:kakao_map_plugin_example/src/widget/location_dropdown.dart';
 
 class EnrollHansic extends StatefulWidget {
   const EnrollHansic({super.key});
@@ -17,11 +20,40 @@ class EnrollHansic extends StatefulWidget {
 }
 
 class _EnrollHansicState extends State<EnrollHansic> {
+  static UpdateUserService updateUserService = UpdateUserService();
+  late List<LocationDto> locationList = [];
+  LocationDto? searchLocationDto;
+
   final ImagePicker picker = ImagePicker();
   List<XFile?> images = []; // 가져온 사진들을 보여주기 위한 변수
   XFile? image; // 카메라로 촬영한 이미지를 저장할 변수
   List<XFile?> multiImage = []; // 갤러리에서 여러장의 사진을 선택해서 저장할 변수
   late String imgUrl = '';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    try {
+      getLocList();
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  void getLocList() async {
+    try {
+      locationList = await updateUserService.getLocation();
+      setState(() {});
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  void getLocation(LocationDto selectedLoc) {
+    print(selectedLoc.location);
+    searchLocationDto = selectedLoc;
+  }
 
   Widget getImg(List<XFile?> image) {
     if (image.isNotEmpty) {
@@ -109,10 +141,10 @@ class _EnrollHansicState extends State<EnrollHansic> {
               onPressed: () {
                 setState(() => value++);
               },
-              child: const Text('확인'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.amber,
               ),
+              child: const Text('확인'),
             ),
             // 다이얼로그 내의 취소 버튼 터치 시 다이얼로그 화면 제거
             OutlinedButton(
@@ -138,7 +170,7 @@ class _EnrollHansicState extends State<EnrollHansic> {
         body: SingleChildScrollView(
           child: Center(
             child: Container(
-              width: MediaQuery.of(context).size.width * 0.8,
+              width: MediaQuery.of(context).size.width * 0.9,
               margin: const EdgeInsets.all(30),
               child: Column(
                 children: [
@@ -147,14 +179,14 @@ class _EnrollHansicState extends State<EnrollHansic> {
                   ),
                   const Text(
                     '여러분이 알고 있는 한식 뷔페를 소개해주세요',
-                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const Text(
                     '운영에 큰 도움이 됩니다!!',
-                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 15,
                   ),
                   SizedBox(
                     width: 200,
@@ -172,6 +204,13 @@ class _EnrollHansicState extends State<EnrollHansic> {
                         child: getImg(images),
                       ),
                     ),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  const Text(
+                    '식당을 소개할 사진을 업로드 해주세요',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
                   ),
                   const SizedBox(
                     height: 40,
@@ -235,6 +274,37 @@ class _EnrollHansicState extends State<EnrollHansic> {
                         color: Colors.amber,
                       ),
                       contentPadding: EdgeInsets.all(10),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        //background color of dropdown button
+                        border: Border.all(
+                          color: Colors.amber,
+                          // width: 3,
+                        ), //border of dropdown button
+                        borderRadius: BorderRadius.circular(
+                            50), //border raiuds of dropdown button
+                        boxShadow: const <BoxShadow>[
+                          //apply shadow on Dropdown button
+                          BoxShadow(
+                            color: Colors.white, //shadow for button
+                            blurRadius: 5,
+                          ) //blur radius of shadow
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 30, right: 30),
+                        child: LocationDropDown(
+                          locationList: locationList,
+                          getLocation: getLocation,
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(
