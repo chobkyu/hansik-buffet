@@ -62,7 +62,22 @@ class _EnrollAdminState extends State<EnrollAdmin> {
       setState(() {});
     } catch (err) {
       print(err);
+      //에러 메세지 처리 예정
+      goToLoginPage();
     }
+  }
+
+  void goToLoginPage() async {
+    await storage.delete(key: 'token');
+    if (!mounted) return;
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return const LoginScreen();
+        },
+      ),
+    );
   }
 
   @override
