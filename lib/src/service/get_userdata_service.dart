@@ -3,7 +3,6 @@
 import 'dart:convert';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:kakao_map_plugin_example/src/models/image_data.dart';
 import 'package:kakao_map_plugin_example/src/models/user_data.dart';
 import 'package:http/http.dart' as http;
 
