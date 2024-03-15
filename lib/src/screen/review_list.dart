@@ -48,7 +48,9 @@ class _ReviewListState extends State<ReviewList> {
 
   dynamic getImg(List<dynamic> reviewImgs) {
     if (reviewImgs.isNotEmpty) {
-      return Image.network(reviewImgs[0]);
+      return Image.network(
+          // 값이 {imgUrl: https://asdfasdfasdf...} 이렇게 넘어옴
+          reviewImgs[0].toString().split(" ")[1].split("}")[0]);
     } else {
       return Image.asset('assets/images/defaultReviewImg.png');
     }

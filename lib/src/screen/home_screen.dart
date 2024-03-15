@@ -14,6 +14,7 @@ import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 import 'package:kakao_map_plugin_example/src/widget/home_button.dart';
 // ignore: depend_on_referenced_packages
 import 'package:geolocator/geolocator.dart';
+import 'package:kakao_map_plugin_example/src/widget/dialog_builder.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -444,6 +445,32 @@ class _HomeScreenState extends State<HomeScreen>
                 }
               },
               color: Colors.amber,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            OutlinedButton(
+              onPressed: () => {
+                DialogBuilder.dialogBuild(
+                  context: context,
+                  text: "error!",
+                  needOneButton: true,
+                ),
+              },
+              child: const Text("one button"),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            OutlinedButton(
+              onPressed: () => {
+                DialogBuilder.dialogBuild(
+                  context: context,
+                  text: "confirm?",
+                  needOneButton: false,
+                ),
+              },
+              child: const Text("two button"),
             ),
           ],
         ),

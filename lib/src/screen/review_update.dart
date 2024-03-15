@@ -6,10 +6,12 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_map_plugin_example/src/models/review_list.dart';
 import 'package:kakao_map_plugin_example/src/models/review_write.dart';
 import 'package:kakao_map_plugin_example/src/models/user_data.dart';
+import 'package:kakao_map_plugin_example/src/screen/home_screen.dart';
 import 'package:kakao_map_plugin_example/src/screen/login.dart';
 import 'package:kakao_map_plugin_example/src/service/get_userdata_service.dart';
 import 'package:kakao_map_plugin_example/src/service/review_update_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
+import 'package:kakao_map_plugin_example/src/widget/dialog_builder.dart';
 import 'package:kakao_map_plugin_example/src/widget/small_button.dart';
 
 class ReviewUpdate extends StatefulWidget {
@@ -197,9 +199,20 @@ class _ReviewUpdateState extends State<ReviewUpdate> {
 
                         print(res);
                         if (res == 200) {
-                          //수정 완료 팝업 예정
+                          //여기도 일단 홈으로 가게
+                          DialogBuilder.dialogBuild(
+                              context: context,
+                              text: '수정되었습니다.',
+                              needOneButton: true,
+                              move: () {
+                                Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                    builder: (context) => const HomeScreen(),
+                                  ),
+                                  (route) => false,
+                                );
+                              });
                           if (!mounted) return;
-                          Navigator.pop(context);
                         } else if (res == 401) {
                           goToLoginPage();
                         } else {
