@@ -5,10 +5,12 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_map_plugin_example/src/models/user_data.dart';
 import 'package:kakao_map_plugin_example/src/overlay_12_markers_event1_screen.dart';
 import 'package:kakao_map_plugin_example/src/screen/favorite_mylist.dart';
+import 'package:kakao_map_plugin_example/src/screen/home_screen.dart';
 import 'package:kakao_map_plugin_example/src/screen/login.dart';
 import 'package:kakao_map_plugin_example/src/screen/update_myinfo.dart';
 import 'package:kakao_map_plugin_example/src/service/geolocator_service.dart';
 import 'package:kakao_map_plugin_example/src/service/get_userdata_service.dart';
+import 'package:kakao_map_plugin_example/src/widget/dialog_builder.dart';
 import 'package:kakao_map_plugin_example/src/widget/menu_div.dart';
 // ignore: depend_on_referenced_packages
 import 'package:geolocator/geolocator.dart';
@@ -338,10 +340,21 @@ class _MyPageState extends State<MyPage> {
                 text: '로그아웃 하기',
                 fontSize: 18,
                 move: () {
-                  const storage = FlutterSecureStorage();
-                  storage.delete(key: 'token');
-                  _isLogined = false;
-                  setState(() {});
+                  DialogBuilder.dialogBuild(
+                      context: context,
+                      text: '로그아웃 하시겠습니까?',
+                      needOneButton: false,
+                      move: () {
+                        const storage = FlutterSecureStorage();
+                        storage.delete(key: 'token');
+                        _isLogined = false;
+                        setState(() {});
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                              builder: (context) => const HomeScreen(),
+                            ),
+                            (route) => false);
+                      });
                 },
               ),
             ],

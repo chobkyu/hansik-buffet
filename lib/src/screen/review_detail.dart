@@ -3,11 +3,14 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_map_plugin_example/src/models/review_list.dart';
 import 'package:kakao_map_plugin_example/src/models/user_data.dart';
+import 'package:kakao_map_plugin_example/src/screen/home_screen.dart';
 import 'package:kakao_map_plugin_example/src/screen/login.dart';
+import 'package:kakao_map_plugin_example/src/screen/review_list.dart';
 import 'package:kakao_map_plugin_example/src/screen/review_update.dart';
 import 'package:kakao_map_plugin_example/src/service/get_userdata_service.dart';
 import 'package:kakao_map_plugin_example/src/service/review_delete_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
+import 'package:kakao_map_plugin_example/src/widget/dialog_builder.dart';
 import 'package:kakao_map_plugin_example/src/widget/small_button.dart';
 import 'package:kakao_map_plugin_example/src/widget/text_inContainer.dart';
 
@@ -270,19 +273,31 @@ class _ForRightUserState extends State<ForRightUser> {
                 );
               } else {
                 if (!mounted) return;
-                int res = await reviewDeleteService.deleteReview(
-                    token, widget.reviewDto.id, widget.userData);
-
-                print(res);
-                if (res == 204) {
-                  //수정 완료 팝업 예정
-                  if (!mounted) return;
-                  Navigator.pop(context);
-                } else if (res == 401) {
-                  //로그인 페이지로
-                } else {
-                  //에러 처리 예정
-                }
+                DialogBuilder.dialogBuild(
+                    context: context,
+                    text: '삭제하시겠습니까?',
+                    needOneButton: false,
+                    move: () async {
+                      // int res = await reviewDeleteService.deleteReview(
+                      //     token, widget.reviewDto.id, widget.userData);
+                      // print(res);
+                      //일단 홈으로 가게. 나중에 페이지 구조화 되면 그때 적용
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                            builder: (context) => const HomeScreen(),
+                          ),
+                          (route) => false);
+                    });
+                // print(res);
+                // if (res == 204) {
+                //   //수정 완료 팝업 예정
+                //   if (!mounted) return;
+                //   Navigator.pop(context);
+                // } else if (res == 401) {
+                //   //로그인 페이지로
+                // } else {
+                //   //에러 처리 예정
+                // }
               }
             },
             color: const Color.fromARGB(255, 238, 227, 212),
