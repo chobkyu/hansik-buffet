@@ -29,6 +29,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  late DateTime _lastPressedAt;
+
   @override
   void initState() {
     super.initState();
@@ -36,13 +38,31 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusManager.instance.primaryFocus?.unfocus(); // 키보드 닫기 이벤트
+    return WillPopScope(
+      //여기는 조금 더 봐야됨
+      onWillPop: () async {
+        final now = DateTime.now();
+        if (now.difference(_lastPressedAt) > const Duration(seconds: 2)) {
+          _lastPressedAt = now;
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('한번 더 뒤로가기를 누를 시 종료됩니다'),
+              duration: Duration(seconds: 2),
+            ),
+          );
+          return false;
+        }
+        return true;
       },
-      child: const MaterialApp(
-        home: Scaffold(
-          body: HomeScreen(),
+      child: GestureDetector(
+        onTap: () {
+          FocusManager.instance.primaryFocus?.unfocus(); // 키보드 닫기 이벤트
+        },
+        child: MaterialApp(
+          theme: ThemeData(fontFamily: 'hangul'),
+          home: const Scaffold(
+            body: HomeScreen(),
+          ),
         ),
       ),
     );

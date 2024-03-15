@@ -17,6 +17,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+   
 
   kakao_map_plugin: ^0.2.4
 
@@ -53,7 +54,10 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-
+  fonts: 
+    - family: hangul
+      fonts :
+      - asset: assets/fonts/goodfont.ttf
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/env/

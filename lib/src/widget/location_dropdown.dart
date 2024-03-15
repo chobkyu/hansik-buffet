@@ -41,10 +41,8 @@ class _LocationDropDownState extends State<LocationDropDown> {
       ).toList(),
       hint: const Text(
         '지역을 선택해주세요',
-        style: TextStyle(
-          fontSize: 13,
-          color: Colors.amber,
-        ),
+        style:
+            TextStyle(fontSize: 14, color: Colors.amber, fontFamily: 'hangul'),
       ),
       onChanged: (value) {
         setState(
