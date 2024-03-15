@@ -40,8 +40,9 @@ class _MyAppState extends State<MyApp> {
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus(); // 키보드 닫기 이벤트
       },
-      child: const MaterialApp(
-        home: Scaffold(
+      child: MaterialApp(
+        theme: ThemeData(fontFamily: 'hangul'),
+        home: const Scaffold(
           body: HomeScreen(),
         ),
       ),

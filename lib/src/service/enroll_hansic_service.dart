@@ -11,7 +11,7 @@ class EnrollHansicService {
   Future<int> enrollHansic(
       EnrollHansicDto enrollHansicDto, String token) async {
     try {
-      String? baseUrl = dotenv.env['TEST_URL'];
+      String? baseUrl = dotenv.env['BASE_URL'];
       String auth = 'Bearer $token';
       Uri uri = Uri.parse("$baseUrl/hansic/enroll");
 
@@ -39,7 +39,7 @@ class EnrollHansicService {
   //enroll 리스트 조회
   Future<List<EnrollListDto>> getEnrollList(String token) async {
     try {
-      String? baseUrl = dotenv.env['TEST_URL'];
+      String? baseUrl = dotenv.env['BASE_URL'];
       String auth = 'Bearer $token';
       Uri uri = Uri.parse("$baseUrl/admin/enroll");
 
