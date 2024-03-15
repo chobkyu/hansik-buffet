@@ -146,7 +146,7 @@ class _Overlay12MarkersEvent1ScreenState
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  width: MediaQuery.of(context).size.width * 0.5,
+                  width: MediaQuery.of(context).size.width * 0.55,
                   child: DecoratedBox(
                     decoration: BoxDecoration(
                       //background color of dropdown button
