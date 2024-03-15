@@ -88,7 +88,7 @@ class _MyPageState extends State<MyPage> {
   //imgurl get
   dynamic getImg(List<dynamic> img) {
     if (img.isNotEmpty) {
-      return Image.network(img[0].toString());
+      return Image.network(img[0].toString().split(" ")[1].split("}")[0]);
     } else {
       return Image.asset('assets/images/defaultProfileImg.png');
     }
