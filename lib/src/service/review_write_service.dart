@@ -8,12 +8,32 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ReviewWriteService {
-  Future<int> writeReview(ReviewCreate reviewWrite, String token) async {
+  Future<int> writeReview(
+      ReviewCreate reviewWrite, String token, String imgUrl) async {
     try {
       String? baseUrl = dotenv.env['BASE_URL'];
       int id = reviewWrite.id;
       String auth = 'Bearer $token';
       Uri uri = Uri.parse("$baseUrl/review/$id");
+
+      String body;
+
+      if (imgUrl != '') {
+        body = jsonEncode(
+          <String, dynamic>{
+            'review': reviewWrite.detailReview,
+            'star': reviewWrite.userRating
+          },
+        );
+      } else {
+        body = jsonEncode(
+          <String, dynamic>{
+            'review': reviewWrite.detailReview,
+            'star': reviewWrite.userRating,
+            'img': imgUrl,
+          },
+        );
+      }
 
       final response = await http.post(
         uri,
@@ -21,12 +41,7 @@ class ReviewWriteService {
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': auth
         },
-        body: jsonEncode(
-          <String, dynamic>{
-            'review': reviewWrite.detailReview,
-            'star': reviewWrite.userRating
-          },
-        ),
+        body: body,
       );
 
       // Map<String, dynamic> resBody = jsonDecode(utf8.decode(response.bodyBytes));
