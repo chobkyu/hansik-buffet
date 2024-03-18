@@ -42,7 +42,7 @@ class _UpdateMyInfoState extends State<UpdateMyInfo> {
   late String userPw = 'User Password';
   late String userId = 'User ID';
 
-  final String? _selectedValue = '1';
+  final String _selectedValue = '1';
 
   UserData userData = UserData(
     id: 0,
@@ -91,8 +91,7 @@ class _UpdateMyInfoState extends State<UpdateMyInfo> {
         print('object');
         imgUrl = userData.userImgs[0]['imgUrl'];
       } else {
-        imgUrl =
-            'https://hansicbuffet.s3.ap-northeast-2.amazonaws.com/b0f790a446bb8255116e088aa8ae7abe';
+        imgUrl = '';
       }
 
       //지역 리스트 조회
@@ -125,12 +124,12 @@ class _UpdateMyInfoState extends State<UpdateMyInfo> {
     }
   }
 
-  String getImgUrl() {
+  dynamic getImg() {
     if (imgUrl != '') {
       print(imgUrl);
-      return imgUrl;
+      return Image.network(imgUrl);
     } else {
-      return 'https://puda.s3.ap-northeast-2.amazonaws.com/client/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7+2024-02-07+152742.png';
+      return Image.asset('assets/images/defaultProfileImg.png');
     }
   }
 
@@ -144,7 +143,7 @@ class _UpdateMyInfoState extends State<UpdateMyInfo> {
       }
 
       await updateUserService.updateUser(userId, userPw, userName, userNickName,
-          int.parse(_selectedValue!), imgUrl, token!);
+          int.parse(_selectedValue), imgUrl, token!);
 
       if (!mounted) return;
       Navigator.pushReplacement(
@@ -250,7 +249,7 @@ class _UpdateMyInfoState extends State<UpdateMyInfo> {
                           });
                           _uploadToSignedURL();
                         },
-                        child: Image.network(getImgUrl()),
+                        child: getImg(),
                       ),
                     ),
                   ),
