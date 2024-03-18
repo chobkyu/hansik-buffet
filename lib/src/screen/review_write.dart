@@ -236,17 +236,7 @@ class _ReviewWriteState extends State<ReviewWrite> {
               ),
               HomeButton(
                 text: '이미지 추가',
-                move: () async {
-                  try {
-                    multiImage = await picker.pickMultiImage();
-                    setState(() {
-                      images.addAll(multiImage);
-                    });
-                    _uploadToSignedURL();
-                  } catch (err) {
-                    print(err);
-                  }
-                },
+                move: () {},
                 color: Colors.amber,
               ),
               const SizedBox(
