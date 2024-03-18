@@ -6,7 +6,7 @@
     <application
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:label="kakao_map_plugin_example"
+        android:label="한사장"
         android:usesCleartextTraffic="true">
 
         <activity

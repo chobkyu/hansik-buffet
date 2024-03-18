@@ -77,10 +77,13 @@ class _Overlay12MarkersEvent1ScreenState
       hansics = await hansicService.getHansicData();
       print(hansics?.length);
       //내 위치 조회
-      Position position = await geolocatorService.getLocation();
-      print(position);
-      lat = position.latitude;
-      lng = position.longitude * -1;
+      // Position position = await geolocatorService.getLocation();
+      // print('?????');
+      // print(position.latitude);
+      // print(position.longitude);
+      // print('?????');
+      // lat = position.latitude;
+      // lng = position.longitude * -1;
 
       //지역 리스트 조회
       locationList = await updateUserService.getLocation();

@@ -23,6 +23,7 @@ class HomeButton extends StatelessWidget {
           textStyle: const TextStyle(
             fontWeight: FontWeight.w700,
             fontSize: 20,
+            fontFamily: 'hangul',
           ),
           padding: const EdgeInsets.all(13),
           backgroundColor: color,
