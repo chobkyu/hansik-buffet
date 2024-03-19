@@ -153,6 +153,27 @@ class _HomeScreenState extends State<HomeScreen>
               move: () async {
                 String? token = await storage.read(key: 'token');
                 print(token);
+                if (!mounted) return;
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      var begin = const Offset(0.0, 1.0);
+                      var end = Offset.zero;
+                      var curve = Curves.ease;
+                      var tween = Tween(begin: begin, end: end)
+                          .chain(CurveTween(curve: curve));
+                      return SlideTransition(
+                        position: animation.drive(tween),
+                        child: child,
+                      );
+                    },
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const MyPage(),
+                  ),
+                );
+
                 if (token == null) {
                   if (!mounted) return;
                   Navigator.push(
@@ -514,7 +535,7 @@ class _HomeScreenState extends State<HomeScreen>
                       );
                     },
                     pageBuilder: (context, animation, secondaryAnimation) =>
-                        const EnrollHansic(),
+                        const EnrollAdmin(),
                   ),
                 );
               },
