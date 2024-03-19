@@ -1,16 +1,12 @@
 // ignore_for_file: avoid_print
 
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:kakao_map_plugin_example/src/models/review_write.dart';
 import 'package:kakao_map_plugin_example/src/models/user_data.dart';
+import 'package:kakao_map_plugin_example/src/screen/img_upload.dart';
 import 'package:kakao_map_plugin_example/src/screen/login.dart';
 import 'package:kakao_map_plugin_example/src/service/get_userdata_service.dart';
 import 'package:kakao_map_plugin_example/src/service/review_write_service.dart';
@@ -49,7 +45,7 @@ class _ReviewWriteState extends State<ReviewWrite> {
   ReviewCreate reviewCreate = ReviewCreate(
     id: 0,
     detailReview: '',
-    userRating: 0,
+    userRating: 3,
   );
 
   @override
@@ -87,60 +83,6 @@ class _ReviewWriteState extends State<ReviewWrite> {
         },
       ),
     );
-  }
-
-  Future<String> getUrl() async {
-    try {
-      String? baseUrl = dotenv.env['BASE_URL'];
-
-      Uri uri = Uri.parse("$baseUrl/users/imgUrl");
-
-      final response = await http.get(uri);
-
-      print(response.body);
-
-      Map<String, dynamic> resBody =
-          jsonDecode(utf8.decode(response.bodyBytes));
-
-      String url = resBody['url'];
-
-      //print(url);
-      return url;
-    } catch (err) {
-      print(err);
-      throw Exception();
-    }
-  }
-
-  Future<void> _uploadToSignedURL() async {
-    try {
-      String s3Url = await getUrl();
-      print(s3Url);
-      print(images[0].runtimeType);
-
-      final bytes = File(images[0]!.path).readAsBytesSync(); //image 를 byte로 불러옴
-
-      print(images[0]?.path);
-
-      http.Response response = await http.put(Uri.parse(s3Url),
-          headers: {
-            'Content-Type': 'image/*',
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Credentials': 'true',
-            'Access-Control-Allow-Headers': 'Content-Type',
-            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE'
-          },
-          body: bytes);
-      print('??');
-
-      setState(() {
-        imgUrl = s3Url.split('?')[0];
-      });
-      // print(response);
-      print(response.body);
-    } catch (err) {
-      print(err);
-    }
   }
 
   @override
@@ -236,7 +178,27 @@ class _ReviewWriteState extends State<ReviewWrite> {
               ),
               HomeButton(
                 text: '이미지 추가',
-                move: () {},
+                move: () async {
+                  imgUrl = await Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        var begin = const Offset(0.0, 1.0);
+                        var end = Offset.zero;
+                        var curve = Curves.ease;
+                        var tween = Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: curve));
+                        return SlideTransition(
+                          position: animation.drive(tween),
+                          child: child,
+                        );
+                      },
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          const ImgUpload(),
+                    ),
+                  );
+                },
                 color: Colors.amber,
               ),
               const SizedBox(
@@ -247,11 +209,15 @@ class _ReviewWriteState extends State<ReviewWrite> {
                 move: () async {
                   reviewCreate.id = widget.id;
                   print(reviewCreate.id);
+                  print("등록하기!!!!!!!!!!!");
+                  print(imgUrl);
                   String? token = await storage.read(key: 'token');
 
                   try {
                     int res = await reviewWriteService.writeReview(
                         reviewCreate, token!, imgUrl);
+                    print("???????????????");
+                    print(res);
 
                     if (res == 201) {
                       //등록 완료 팝업 예정

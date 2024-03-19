@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 
 class ImgUpload extends StatefulWidget {
   const ImgUpload({super.key});
@@ -22,9 +23,12 @@ class _ImgUploadState extends State<ImgUpload> {
   List<XFile?> multiImage = []; // 갤러리에서 여러장의 사진을 선택해서 저장할 변수
   List<XFile?> images = []; // 가져온 사진들을 보여주기 위한 변수
   // ignore: prefer_final_fields
+
+  String s3Url = ''; // 이전 페이지에 넘겨주기 위한 url
+
   Future<void> _uploadToSignedURL() async {
     try {
-      String s3Url = await getUrl();
+      s3Url = await getUrl();
       print(s3Url);
       print(image.runtimeType);
       print(images[0].runtimeType);
@@ -76,6 +80,10 @@ class _ImgUploadState extends State<ImgUpload> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(50),
+        child: CustomAppBar(title: 'Image'),
+      ),
       body: Container(
         padding: const EdgeInsets.all(10),
         child: Column(
@@ -197,8 +205,11 @@ class _ImgUploadState extends State<ImgUpload> {
               ),
             ),
             ElevatedButton(
-              onPressed: () {
-                _uploadToSignedURL();
+              onPressed: () async {
+                await _uploadToSignedURL();
+                print("onPressed");
+                print(s3Url.split("?")[0]);
+                Navigator.pop(context, s3Url.split("?")[0]);
               },
               child: const Text("Upload to S3"),
             ),

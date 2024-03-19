@@ -18,7 +18,7 @@ class ReviewWriteService {
 
       String body;
 
-      if (imgUrl != '') {
+      if (imgUrl == '') {
         body = jsonEncode(
           <String, dynamic>{
             'review': reviewWrite.detailReview,
@@ -34,6 +34,8 @@ class ReviewWriteService {
           },
         );
       }
+
+      print(body);
 
       final response = await http.post(
         uri,
