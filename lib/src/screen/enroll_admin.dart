@@ -6,6 +6,7 @@ import 'package:kakao_map_plugin_example/src/models/enroll_list.dart';
 import 'package:kakao_map_plugin_example/src/screen/enroll_detail.dart';
 import 'package:kakao_map_plugin_example/src/screen/login.dart';
 import 'package:kakao_map_plugin_example/src/service/enroll_hansic_service.dart';
+import 'package:kakao_map_plugin_example/src/util/error_status.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 
 class EnrollAdmin extends StatefulWidget {
@@ -18,6 +19,7 @@ class EnrollAdmin extends StatefulWidget {
 class _EnrollAdminState extends State<EnrollAdmin> {
   static EnrollHansicService enrollHansicService = EnrollHansicService();
   static const storage = FlutterSecureStorage();
+  static ErrorStatus errorStatus = ErrorStatus();
 
   List<EnrollListDto> enrollList = [];
 
@@ -62,8 +64,17 @@ class _EnrollAdminState extends State<EnrollAdmin> {
       setState(() {});
     } catch (err) {
       print(err);
+      // ignore: unnecessary_null_comparison
+      if (err.toString().split(': ').isEmpty) {
+        goToLoginPage();
+      } else {
+        print(err);
+        String errCode = err.toString().split(': ')[2];
+        errorStatus.errStatus(errCode, context, mounted);
+      }
+
       //에러 메세지 처리 예정
-      goToLoginPage();
+      //goToLoginPage();
     }
   }
 

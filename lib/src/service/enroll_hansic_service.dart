@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:kakao_map_plugin_example/src/models/enroll_hansic.dart';
@@ -39,6 +40,7 @@ class EnrollHansicService {
   //enroll 리스트 조회
   Future<List<EnrollListDto>> getEnrollList(String token) async {
     try {
+      print('tlqkf');
       String? baseUrl = dotenv.env['BASE_URL'];
       String auth = 'Bearer $token';
       Uri uri = Uri.parse("$baseUrl/admin/enroll");
@@ -52,7 +54,7 @@ class EnrollHansicService {
       );
 
       final int statusCode = response.statusCode;
-
+      print(statusCode);
       if (statusCode < 200 || statusCode > 400) {
         //에러 처리 추가
         throw Exception(statusCode);
@@ -71,8 +73,8 @@ class EnrollHansicService {
 
       return result;
     } catch (err) {
-      print(err);
-      throw Exception('error');
+      print(err.toString().split(': ')[1]);
+      throw HttpException(err.toString());
     }
   }
 }
