@@ -10,6 +10,7 @@ import 'package:kakao_map_plugin_example/src/screen/login.dart';
 import 'package:kakao_map_plugin_example/src/screen/update_myinfo.dart';
 import 'package:kakao_map_plugin_example/src/service/geolocator_service.dart';
 import 'package:kakao_map_plugin_example/src/service/get_userdata_service.dart';
+import 'package:kakao_map_plugin_example/src/util/error_status.dart';
 import 'package:kakao_map_plugin_example/src/widget/dialog_builder.dart';
 import 'package:kakao_map_plugin_example/src/widget/menu_div.dart';
 // ignore: depend_on_referenced_packages
@@ -26,6 +27,8 @@ class _MyPageState extends State<MyPage> {
   static GetUserData getUserData = GetUserData();
   static const storage = FlutterSecureStorage();
   static GeolocatorService geolocatorService = GeolocatorService();
+  static ErrorStatus errorStatus = ErrorStatus();
+
   bool _isLogined = false;
 
   UserData userData = UserData(
@@ -48,8 +51,20 @@ class _MyPageState extends State<MyPage> {
     }
   }
 
+  void goToLoginPage() async {
+    await storage.delete(key: 'token');
+    if (!mounted) return;
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return const LoginScreen();
+        },
+      ),
+    );
+  }
+
   void getUser() async {
-    print("this is getUser");
     String? token = await storage.read(key: 'token');
     print(token);
     try {
@@ -61,27 +76,35 @@ class _MyPageState extends State<MyPage> {
       setState(() {});
     } catch (err) {
       print("this is catch");
-      print(err.toString());
-      await storage.delete(key: 'token');
-      if (!mounted) return;
-      Navigator.push(
-        context,
-        PageRouteBuilder(
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            var begin = const Offset(0.0, 1.0);
-            var end = Offset.zero;
-            var curve = Curves.ease;
-            var tween =
-                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-            return SlideTransition(
-              position: animation.drive(tween),
-              child: child,
-            );
-          },
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              const LoginScreen(),
-        ),
-      );
+      print(err);
+      if (err.toString().split(': ').isEmpty) {
+        goToLoginPage();
+      } else {
+        print(err);
+        String errCode = err.toString().split(': ')[2];
+        errorStatus.errStatus(errCode, context, mounted);
+      }
+      //errorStatus.errStatus(errCode, context, mounted);
+      // await storage.delete(key: 'token');
+      // if (!mounted) return;
+      // Navigator.push(
+      //   context,
+      //   PageRouteBuilder(
+      //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      //       var begin = const Offset(0.0, 1.0);
+      //       var end = Offset.zero;
+      //       var curve = Curves.ease;
+      //       var tween =
+      //           Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+      //       return SlideTransition(
+      //         position: animation.drive(tween),
+      //         child: child,
+      //       );
+      //     },
+      //     pageBuilder: (context, animation, secondaryAnimation) =>
+      //         const LoginScreen(),
+      //   ),
+      // );
     }
   }
 
