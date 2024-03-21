@@ -11,6 +11,7 @@ import 'package:kakao_map_plugin_example/src/screen/hansic_screen.dart';
 import 'package:kakao_map_plugin_example/src/service/geolocator_service.dart';
 import 'package:kakao_map_plugin_example/src/service/get_hansicdata_service.dart';
 import 'package:kakao_map_plugin_example/src/service/update_user_service.dart';
+import 'package:kakao_map_plugin_example/src/widget/dialog_builder.dart';
 import 'package:kakao_map_plugin_example/src/widget/home_button.dart';
 import 'package:kakao_map_plugin_example/src/widget/location_dropdown.dart';
 
@@ -95,7 +96,11 @@ class _IndexScreenState extends State<IndexScreen> {
         setState(() {});
       } else {
         //알람창 띄우기
-        print('알람창 띄우기');
+        DialogBuilder.dialogBuild(
+          context: context,
+          text: "지역을 선택해주세요!!",
+          needOneButton: true,
+        );
       }
     } catch (err) {
       print(err);

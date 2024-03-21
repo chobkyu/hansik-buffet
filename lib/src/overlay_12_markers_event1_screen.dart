@@ -9,6 +9,7 @@ import 'package:kakao_map_plugin_example/src/screen/hansic_screen.dart';
 import 'package:kakao_map_plugin_example/src/service/get_hansicdata_service.dart';
 import 'package:kakao_map_plugin_example/src/service/update_user_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
+import 'package:kakao_map_plugin_example/src/widget/dialog_builder.dart';
 import 'package:kakao_map_plugin_example/src/widget/home_button.dart';
 import 'package:kakao_map_plugin_example/src/widget/location_dropdown.dart';
 
@@ -84,7 +85,7 @@ class _Overlay12MarkersEvent1ScreenState
   }
 
   //지역 별 조회
-  void getHansicsLoc(int id) async {
+  void getHansicsLoc(int? id) async {
     try {
       print('지역 별 조회');
       print(hansics?.length);
@@ -93,25 +94,33 @@ class _Overlay12MarkersEvent1ScreenState
       hansics!.clear();
       setState(() {});
       //print(hansics![0].name);
+      if (id != null) {
+        hansics = await hansicService.getHansicDataFromLoc(id);
+        lat = hansics![0].lat;
+        lng = hansics![0].lng;
 
-      hansics = await hansicService.getHansicDataFromLoc(id);
-      lat = hansics![0].lat;
-      lng = hansics![0].lng;
-
-      if (!mounted) return;
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) {
-            return HansicScreen(
-              lat: lat,
-              lng: lng,
-              locId: id,
-            );
-          },
-        ),
-      );
-      setState(() {});
+        if (!mounted) return;
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return HansicScreen(
+                lat: lat,
+                lng: lng,
+                locId: id,
+              );
+            },
+          ),
+        );
+        setState(() {});
+      } else {
+        //알람창 띄우기
+        DialogBuilder.dialogBuild(
+          context: context,
+          text: "지역을 선택해주세요!!",
+          needOneButton: true,
+        );
+      }
     } catch (err) {
       print(err);
     }
@@ -171,7 +180,7 @@ class _Overlay12MarkersEvent1ScreenState
                   text: '검색',
                   move: () {
                     //print(MediaQuery.of(context).size.width);
-                    getHansicsLoc(searchLocationDto!.id);
+                    getHansicsLoc(searchLocationDto?.id);
                   },
                   color: Colors.amber,
                 ),
