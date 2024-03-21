@@ -58,7 +58,7 @@ class _IndexScreenState extends State<IndexScreen> {
   }
 
   //지역 별 조회
-  void getHansicsLoc(int id) async {
+  void getHansicsLoc(int? id) async {
     try {
       print('지역 별 조회');
       print(hansics?.length);
@@ -67,32 +67,36 @@ class _IndexScreenState extends State<IndexScreen> {
       //hansics!.clear();
       setState(() {});
       //print(hansics![0].name);
+      if (id != null) {
+        hansics = await hansicService.getHansicDataFromLoc(id);
+        lat = hansics![0].lat;
+        lng = hansics![0].lng;
 
-      hansics = await hansicService.getHansicDataFromLoc(id);
-      lat = hansics![0].lat;
-      lng = hansics![0].lng;
-
-      if (!mounted) return;
-      Navigator.push(
-        context,
-        PageRouteBuilder(
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            var begin = const Offset(0.0, 1.0);
-            var end = Offset.zero;
-            var curve = Curves.ease;
-            var tween =
-                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-            return SlideTransition(
-              position: animation.drive(tween),
-              child: child,
-            );
-          },
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              HansicScreen(lat: lat, lng: lng, locId: id),
-        ),
-      );
-
-      setState(() {});
+        if (!mounted) return;
+        Navigator.push(
+          context,
+          PageRouteBuilder(
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              var begin = const Offset(0.0, 1.0);
+              var end = Offset.zero;
+              var curve = Curves.ease;
+              var tween =
+                  Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+              return SlideTransition(
+                position: animation.drive(tween),
+                child: child,
+              );
+            },
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                HansicScreen(lat: lat, lng: lng, locId: id),
+          ),
+        );
+        setState(() {});
+      } else {
+        //알람창 띄우기
+        print('알람창 띄우기');
+      }
     } catch (err) {
       print(err);
     }
@@ -383,7 +387,7 @@ class _IndexScreenState extends State<IndexScreen> {
                               text: '검색',
                               move: () {
                                 //print(MediaQuery.of(context).size.width);
-                                getHansicsLoc(searchLocationDto!.id);
+                                getHansicsLoc(searchLocationDto?.id);
                               },
                               color: Colors.amber,
                             ),
@@ -417,7 +421,7 @@ class _IndexScreenState extends State<IndexScreen> {
                         spreadRadius: 0,
                         blurRadius: 10,
                         offset:
-                            const Offset(3, 5), // changes position of shadow
+                            const Offset(0, 0), // changes position of shadow
                       ),
                     ],
                   ),
@@ -469,7 +473,7 @@ class _IndexScreenState extends State<IndexScreen> {
                         spreadRadius: 0,
                         blurRadius: 10,
                         offset:
-                            const Offset(3, 5), // changes position of shadow
+                            const Offset(0, 0), // changes position of shadow
                       ),
                     ],
                   ),
@@ -521,7 +525,7 @@ class _IndexScreenState extends State<IndexScreen> {
                         spreadRadius: 0,
                         blurRadius: 10,
                         offset:
-                            const Offset(3, 5), // changes position of shadow
+                            const Offset(0, 0), // changes position of shadow
                       ),
                     ],
                   ),
@@ -596,7 +600,7 @@ class _IndexScreenState extends State<IndexScreen> {
                           spreadRadius: 0,
                           blurRadius: 10,
                           offset:
-                              const Offset(3, 5), // changes position of shadow
+                              const Offset(1, 0), // changes position of shadow
                         ),
                       ],
                     ),

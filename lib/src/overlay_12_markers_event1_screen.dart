@@ -6,11 +6,9 @@ import 'package:kakao_map_plugin_example/src/models/hansic_list.dart';
 import 'package:kakao_map_plugin_example/src/models/location.dart';
 import 'package:kakao_map_plugin_example/src/screen/hansic_detail.dart';
 import 'package:kakao_map_plugin_example/src/screen/hansic_screen.dart';
-import 'package:kakao_map_plugin_example/src/service/geolocator_service.dart';
 import 'package:kakao_map_plugin_example/src/service/get_hansicdata_service.dart';
 import 'package:kakao_map_plugin_example/src/service/update_user_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:kakao_map_plugin_example/src/widget/home_button.dart';
 import 'package:kakao_map_plugin_example/src/widget/location_dropdown.dart';
 
@@ -34,7 +32,6 @@ class _Overlay12MarkersEvent1ScreenState
     extends State<Overlay12MarkersEvent1Screen> {
   late KakaoMapController mapController;
   static GetHansicService hansicService = GetHansicService();
-  static GeolocatorService geolocatorService = GeolocatorService();
   static UpdateUserService updateUserService = UpdateUserService();
 
   //지역 별 조회
@@ -139,7 +136,7 @@ class _Overlay12MarkersEvent1ScreenState
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
+                SizedBox(
                   width: MediaQuery.of(context).size.width * 0.55,
                   child: DecoratedBox(
                     decoration: BoxDecoration(

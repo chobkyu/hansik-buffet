@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_print
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_map_plugin_example/src/overlay_12_markers_event1_screen.dart';
 import 'package:kakao_map_plugin_example/src/screen/enroll_admin.dart';

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -5,10 +7,8 @@ import 'package:kakao_map_plugin_example/src/models/review_list.dart';
 import 'package:kakao_map_plugin_example/src/models/user_data.dart';
 import 'package:kakao_map_plugin_example/src/screen/home_screen.dart';
 import 'package:kakao_map_plugin_example/src/screen/login.dart';
-import 'package:kakao_map_plugin_example/src/screen/review_list.dart';
 import 'package:kakao_map_plugin_example/src/screen/review_update.dart';
 import 'package:kakao_map_plugin_example/src/service/get_userdata_service.dart';
-import 'package:kakao_map_plugin_example/src/service/review_delete_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 import 'package:kakao_map_plugin_example/src/widget/dialog_builder.dart';
 import 'package:kakao_map_plugin_example/src/widget/small_button.dart';
@@ -45,7 +45,6 @@ class _ReviewDetailState extends State<ReviewDetail> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     try {
       getUser();
@@ -178,8 +177,6 @@ class ForRightUser extends StatefulWidget {
 }
 
 class _ForRightUserState extends State<ForRightUser> {
-  static ReviewDeleteService reviewDeleteService = ReviewDeleteService();
-
   @override
   Widget build(BuildContext context) {
     return Row(
