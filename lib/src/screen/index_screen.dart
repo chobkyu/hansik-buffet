@@ -260,6 +260,7 @@ class _IndexScreenState extends State<IndexScreen> {
                 children: [
                   InkWell(
                     onTap: () async {
+                      //???
                       Position position = await geolocatorService.getLocation();
                       double lat = position.latitude;
                       double lng = position.longitude;
