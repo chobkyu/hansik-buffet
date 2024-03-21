@@ -15,7 +15,7 @@ class _TestHomeState extends State<TestHome> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 25),
+            const SizedBox(height: 25),
             // 첫 번째 요소를 GestureDetector로 변경하여 탭 이벤트 처리 가능하도록 함
             GestureDetector(
               onTap: () {
@@ -35,7 +35,7 @@ class _TestHomeState extends State<TestHome> {
                     ),
                   ],
                 ),
-                child: Column(
+                child: const Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(
@@ -74,7 +74,7 @@ class _TestHomeState extends State<TestHome> {
                     ),
                   ],
                 ),
-                child: Column(
+                child: const Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(

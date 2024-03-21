@@ -65,6 +65,7 @@ class _EnrollAdminState extends State<EnrollAdmin> {
     } catch (err) {
       print('--------------------');
       print(err.toString());
+      // ignore: unnecessary_null_comparison
       if (err.toString() != null) {
         print('err 처리');
         String errCode = err.toString().split(': ')[2];

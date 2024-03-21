@@ -34,6 +34,8 @@ class _FavoriteMyListState extends State<FavoriteMyList> {
     }
   }
 
+  bool isLoading = false;
+
   void getFavoriteList() async {
     try {
       String? token = await storage.read(key: 'token');
@@ -68,6 +70,7 @@ class _FavoriteMyListState extends State<FavoriteMyList> {
       print(favoriteListDto.favorites[0].hansics.name);
       print(favoriteListDto.favorites.runtimeType);
       favorites = favoriteListDto.favorites;
+      if (favorites.isNotEmpty) isLoading = true;
       // for (int i = 0; i < data.length; i++) {
       //   print(favoriteListDto.favorites[i]['id']);
 
@@ -122,106 +125,124 @@ class _FavoriteMyListState extends State<FavoriteMyList> {
       appBar: const PreferredSize(
           preferredSize: Size.fromHeight(50),
           child: CustomAppBar(title: '즐겨 찾는 한식 뷔페')),
-      body: ListView.builder(
-          padding: const EdgeInsets.all(8),
-          itemCount: favorites.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Column(
-              children: [
-                Container(
-                  height: 100,
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: const Color.fromARGB(255, 189, 189, 189),
-                    ),
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
-                  ),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          child: ClipRRect(
-                            child: Image.network(
-                              'https://puda.s3.ap-northeast-2.amazonaws.com/client/2840159_2891102_2258.png',
-                            ),
-                          ),
+      body: isLoading
+          ? ListView.builder(
+              padding: const EdgeInsets.all(8),
+              itemCount: favorites.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Column(
+                  children: [
+                    Container(
+                      height: 100,
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: const Color.fromARGB(255, 189, 189, 189),
                         ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white,
+                      ),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Row(
                           children: [
-                            InkWell(
-                              onTap: () {
-                                LatLng latLng = LatLng(
-                                    favorites[index].hansics.lat,
-                                    favorites[index].hansics.lng);
-                                Navigator.push(
-                                  context,
-                                  PageRouteBuilder(
-                                    transitionsBuilder: (context, animation,
-                                        secondaryAnimation, child) {
-                                      var begin = const Offset(0.0, 1.0);
-                                      var end = Offset.zero;
-                                      var curve = Curves.ease;
-                                      var tween = Tween(begin: begin, end: end)
-                                          .chain(CurveTween(curve: curve));
-                                      return SlideTransition(
-                                        position: animation.drive(tween),
-                                        child: child,
-                                      );
-                                    },
-                                    pageBuilder: (context, animation,
-                                            secondaryAnimation) =>
-                                        HansicDetail(
-                                      latLng: latLng,
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: Text(
-                                favorites[index].hansics.name,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
+                            SizedBox(
+                              child: ClipRRect(
+                                child: Image.network(
+                                  'https://puda.s3.ap-northeast-2.amazonaws.com/client/2840159_2891102_2258.png',
                                 ),
                               ),
                             ),
-                            Text(
-                              favorites[index].hansics.googleStar,
+                            const SizedBox(
+                              width: 10,
                             ),
-                            RatingBar.builder(
-                              initialRating: getUserStar(
-                                  favorites[index].hansics.userStar),
-                              itemSize: 18,
-                              ignoreGestures: true,
-                              minRating: 0,
-                              direction: Axis.horizontal,
-                              allowHalfRating: true,
-                              itemCount: 5,
-                              itemPadding:
-                                  const EdgeInsets.symmetric(horizontal: 0.5),
-                              itemBuilder: (context, _) => const Icon(
-                                Icons.star,
-                                color: Colors.amber,
-                              ),
-                              onRatingUpdate: (rating) {
-                                print(rating);
-                              },
-                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    LatLng latLng = LatLng(
+                                        favorites[index].hansics.lat,
+                                        favorites[index].hansics.lng);
+                                    Navigator.push(
+                                      context,
+                                      PageRouteBuilder(
+                                        transitionsBuilder: (context, animation,
+                                            secondaryAnimation, child) {
+                                          var begin = const Offset(0.0, 1.0);
+                                          var end = Offset.zero;
+                                          var curve = Curves.ease;
+                                          var tween = Tween(
+                                                  begin: begin, end: end)
+                                              .chain(CurveTween(curve: curve));
+                                          return SlideTransition(
+                                            position: animation.drive(tween),
+                                            child: child,
+                                          );
+                                        },
+                                        pageBuilder: (context, animation,
+                                                secondaryAnimation) =>
+                                            HansicDetail(
+                                          latLng: latLng,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    favorites[index].hansics.name,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  favorites[index].hansics.googleStar,
+                                ),
+                                RatingBar.builder(
+                                  initialRating: getUserStar(
+                                      favorites[index].hansics.userStar),
+                                  itemSize: 18,
+                                  ignoreGestures: true,
+                                  minRating: 0,
+                                  direction: Axis.horizontal,
+                                  allowHalfRating: true,
+                                  itemCount: 5,
+                                  itemPadding: const EdgeInsets.symmetric(
+                                      horizontal: 0.5),
+                                  itemBuilder: (context, _) => const Icon(
+                                    Icons.star,
+                                    color: Colors.amber,
+                                  ),
+                                  onRatingUpdate: (rating) {
+                                    print(rating);
+                                  },
+                                ),
+                              ],
+                            )
                           ],
-                        )
-                      ],
+                        ),
+                      ),
                     ),
+                  ],
+                );
+              },
+            )
+          : const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '즐겨찾는 한식뷔페가 없어요..',
+                    style: TextStyle(fontSize: 25),
                   ),
-                ),
-              ],
-            );
-          }),
+                  Text(
+                    '좋아하는 한식뷔페를 즐겨찾기로 추가하세요!',
+                    style: TextStyle(fontSize: 25),
+                  ),
+                ],
+              ),
+            ),
     );
   }
 }

@@ -53,7 +53,6 @@ class _EnrollHansicState extends State<EnrollHansic> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     try {
       getUser();
