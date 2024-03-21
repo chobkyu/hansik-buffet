@@ -36,7 +36,7 @@ class _EnrollAdminState extends State<EnrollAdmin> {
   void getEnrollList() async {
     try {
       String? token = await storage.read(key: 'token');
-
+      print('token : $token');
       if (token == null) {
         if (!mounted) return;
         Navigator.push(
@@ -58,19 +58,21 @@ class _EnrollAdminState extends State<EnrollAdmin> {
                 const LoginScreen(),
           ),
         );
-      }
-
-      enrollList = await enrollHansicService.getEnrollList(token!);
-      setState(() {});
-    } catch (err) {
-      print(err);
-      // ignore: unnecessary_null_comparison
-      if (err.toString().split(': ').isEmpty) {
-        goToLoginPage();
       } else {
-        print(err);
+        enrollList = await enrollHansicService.getEnrollList(token);
+        setState(() {});
+      }
+    } catch (err) {
+      print('--------------------');
+      print(err.toString());
+      if (err.toString() != null) {
+        print('err 처리');
         String errCode = err.toString().split(': ')[2];
+        // ignore: use_build_context_synchronously
         errorStatus.errStatus(errCode, context, mounted);
+      } else {
+        //에러 메세지 처리 예정
+        goToLoginPage();
       }
 
       //에러 메세지 처리 예정
