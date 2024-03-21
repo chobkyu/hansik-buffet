@@ -127,7 +127,7 @@ class _IndexScreenState extends State<IndexScreen> {
                         spreadRadius: 0,
                         blurRadius: 10,
                         offset:
-                            const Offset(3, 5), // changes position of shadow
+                            const Offset(0, 0), // changes position of shadow
                       ),
                     ],
                   ),
@@ -138,7 +138,7 @@ class _IndexScreenState extends State<IndexScreen> {
                       ),
                       Icon(
                         Icons.soup_kitchen_outlined,
-                        size: 70,
+                        size: 75,
                       ),
                       SizedBox(
                         height: 15,
@@ -146,7 +146,7 @@ class _IndexScreenState extends State<IndexScreen> {
                       Text(
                         '한식 뷔페 찾기',
                         style: TextStyle(
-                          fontSize: 22,
+                          fontSize: 27,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -195,7 +195,7 @@ class _IndexScreenState extends State<IndexScreen> {
                           spreadRadius: 0,
                           blurRadius: 10,
                           offset:
-                              const Offset(0, 5), // changes position of shadow
+                              const Offset(0, 0), // changes position of shadow
                         ),
                       ],
                     ),
@@ -206,7 +206,7 @@ class _IndexScreenState extends State<IndexScreen> {
                         ),
                         Icon(
                           Icons.kitchen_outlined,
-                          size: 70,
+                          size: 75,
                         ),
                         SizedBox(
                           height: 15,
@@ -214,7 +214,7 @@ class _IndexScreenState extends State<IndexScreen> {
                         Text(
                           '즐겨찾는 한식 뷔페',
                           style: TextStyle(
-                            fontSize: 22,
+                            fontSize: 27,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -242,7 +242,7 @@ class _IndexScreenState extends State<IndexScreen> {
                     color: Colors.grey.withOpacity(0.5),
                     spreadRadius: 0,
                     blurRadius: 10,
-                    offset: const Offset(0, 5), // changes position of shadow
+                    offset: const Offset(0, 0), // changes position of shadow
                   ),
                 ],
               ),
@@ -315,7 +315,7 @@ class _IndexScreenState extends State<IndexScreen> {
                     color: Colors.grey.withOpacity(0.5),
                     spreadRadius: 0,
                     blurRadius: 10,
-                    offset: const Offset(0, 5), // changes position of shadow
+                    offset: const Offset(0, 0), // changes position of shadow
                   ),
                 ],
               ),
