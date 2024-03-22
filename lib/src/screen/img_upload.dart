@@ -23,11 +23,9 @@ class _ImgUploadState extends State<ImgUpload> {
   List<XFile?> images = []; // 가져온 사진들을 보여주기 위한 변수
   // ignore: prefer_final_fields
 
-  String s3Url = ''; // 이전 페이지에 넘겨주기 위한 url
-
   Future<void> _uploadToSignedURL() async {
     try {
-      s3Url = await getUrl();
+      String s3Url = await getUrl();
       print(s3Url);
       print(image.runtimeType);
       print(images[0].runtimeType);
@@ -205,10 +203,7 @@ class _ImgUploadState extends State<ImgUpload> {
             ),
             ElevatedButton(
               onPressed: () async {
-                await _uploadToSignedURL();
-                print("onPressed");
-                print(s3Url.split("?")[0]);
-                Navigator.pop(context, s3Url.split("?")[0]);
+                _uploadToSignedURL();
               },
               child: const Text("Upload to S3"),
             ),
