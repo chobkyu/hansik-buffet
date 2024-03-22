@@ -50,7 +50,6 @@ class _ReviewWriteState extends State<ReviewWrite> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     try {
       getUser();

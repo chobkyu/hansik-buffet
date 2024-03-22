@@ -8,9 +8,11 @@ import 'package:kakao_map_plugin_example/src/overlay_12_markers_event1_screen.da
 import 'package:kakao_map_plugin_example/src/screen/favorite_mylist.dart';
 import 'package:kakao_map_plugin_example/src/screen/hansic_enroll.dart';
 import 'package:kakao_map_plugin_example/src/screen/hansic_screen.dart';
+import 'package:kakao_map_plugin_example/src/screen/review_user_list.dart';
 import 'package:kakao_map_plugin_example/src/service/geolocator_service.dart';
 import 'package:kakao_map_plugin_example/src/service/get_hansicdata_service.dart';
 import 'package:kakao_map_plugin_example/src/service/update_user_service.dart';
+import 'package:kakao_map_plugin_example/src/widget/dialog_builder.dart';
 import 'package:kakao_map_plugin_example/src/widget/home_button.dart';
 import 'package:kakao_map_plugin_example/src/widget/location_dropdown.dart';
 
@@ -58,7 +60,7 @@ class _IndexScreenState extends State<IndexScreen> {
   }
 
   //지역 별 조회
-  void getHansicsLoc(int id) async {
+  void getHansicsLoc(int? id) async {
     try {
       print('지역 별 조회');
       print(hansics?.length);
@@ -67,32 +69,40 @@ class _IndexScreenState extends State<IndexScreen> {
       //hansics!.clear();
       setState(() {});
       //print(hansics![0].name);
+      if (id != null) {
+        hansics = await hansicService.getHansicDataFromLoc(id);
+        lat = hansics![0].lat;
+        lng = hansics![0].lng;
 
-      hansics = await hansicService.getHansicDataFromLoc(id);
-      lat = hansics![0].lat;
-      lng = hansics![0].lng;
-
-      if (!mounted) return;
-      Navigator.push(
-        context,
-        PageRouteBuilder(
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            var begin = const Offset(0.0, 1.0);
-            var end = Offset.zero;
-            var curve = Curves.ease;
-            var tween =
-                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-            return SlideTransition(
-              position: animation.drive(tween),
-              child: child,
-            );
-          },
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              HansicScreen(lat: lat, lng: lng, locId: id),
-        ),
-      );
-
-      setState(() {});
+        if (!mounted) return;
+        Navigator.push(
+          context,
+          PageRouteBuilder(
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              var begin = const Offset(0.0, 1.0);
+              var end = Offset.zero;
+              var curve = Curves.ease;
+              var tween =
+                  Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+              return SlideTransition(
+                position: animation.drive(tween),
+                child: child,
+              );
+            },
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                HansicScreen(lat: lat, lng: lng, locId: id),
+          ),
+        );
+        setState(() {});
+      } else {
+        //알람창 띄우기
+        DialogBuilder.dialogBuild(
+          context: context,
+          text: "지역을 선택해주세요!!",
+          needOneButton: true,
+        );
+      }
     } catch (err) {
       print(err);
     }
@@ -127,7 +137,7 @@ class _IndexScreenState extends State<IndexScreen> {
                         spreadRadius: 0,
                         blurRadius: 10,
                         offset:
-                            const Offset(3, 5), // changes position of shadow
+                            const Offset(0, 0), // changes position of shadow
                       ),
                     ],
                   ),
@@ -138,7 +148,7 @@ class _IndexScreenState extends State<IndexScreen> {
                       ),
                       Icon(
                         Icons.soup_kitchen_outlined,
-                        size: 70,
+                        size: 75,
                       ),
                       SizedBox(
                         height: 15,
@@ -146,8 +156,7 @@ class _IndexScreenState extends State<IndexScreen> {
                       Text(
                         '한식 뷔페 찾기',
                         style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 27,
                         ),
                       ),
                     ],
@@ -195,7 +204,7 @@ class _IndexScreenState extends State<IndexScreen> {
                           spreadRadius: 0,
                           blurRadius: 10,
                           offset:
-                              const Offset(0, 5), // changes position of shadow
+                              const Offset(0, 0), // changes position of shadow
                         ),
                       ],
                     ),
@@ -206,7 +215,7 @@ class _IndexScreenState extends State<IndexScreen> {
                         ),
                         Icon(
                           Icons.kitchen_outlined,
-                          size: 70,
+                          size: 75,
                         ),
                         SizedBox(
                           height: 15,
@@ -214,8 +223,7 @@ class _IndexScreenState extends State<IndexScreen> {
                         Text(
                           '즐겨찾는 한식 뷔페',
                           style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 27,
                           ),
                         ),
                       ],
@@ -242,7 +250,7 @@ class _IndexScreenState extends State<IndexScreen> {
                     color: Colors.grey.withOpacity(0.5),
                     spreadRadius: 0,
                     blurRadius: 10,
-                    offset: const Offset(0, 5), // changes position of shadow
+                    offset: const Offset(0, 0), // changes position of shadow
                   ),
                 ],
               ),
@@ -285,8 +293,7 @@ class _IndexScreenState extends State<IndexScreen> {
                       child: const Text(
                         '내 주변 한식 뷔페 찾기',
                         style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w600,
+                          fontSize: 25,
                         ),
                       ),
                     ),
@@ -316,7 +323,7 @@ class _IndexScreenState extends State<IndexScreen> {
                     color: Colors.grey.withOpacity(0.5),
                     spreadRadius: 0,
                     blurRadius: 10,
-                    offset: const Offset(0, 5), // changes position of shadow
+                    offset: const Offset(0, 0), // changes position of shadow
                   ),
                 ],
               ),
@@ -335,8 +342,7 @@ class _IndexScreenState extends State<IndexScreen> {
                             Text(
                               '지역 별 한식 뷔페 찾기',
                               style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.w600,
+                                fontSize: 25,
                               ),
                             ),
                             Icon(Icons.location_on),
@@ -384,7 +390,7 @@ class _IndexScreenState extends State<IndexScreen> {
                               text: '검색',
                               move: () {
                                 //print(MediaQuery.of(context).size.width);
-                                getHansicsLoc(searchLocationDto!.id);
+                                getHansicsLoc(searchLocationDto?.id);
                               },
                               color: Colors.amber,
                             ),
@@ -402,53 +408,54 @@ class _IndexScreenState extends State<IndexScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.23,
-                  height: MediaQuery.of(context).size.height * 0.13,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                      color: Colors.grey,
-                      style: BorderStyle.none,
+                InkWell(
+                  onTap: () {},
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.23,
+                    height: MediaQuery.of(context).size.height * 0.13,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                        color: Colors.grey,
+                        style: BorderStyle.none,
+                      ),
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 0,
+                          blurRadius: 10,
+                          offset:
+                              const Offset(0, 0), // changes position of shadow
+                        ),
+                      ],
                     ),
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 0,
-                        blurRadius: 10,
-                        offset:
-                            const Offset(3, 5), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  child: const Column(
-                    children: [
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Icon(
-                        Icons.reviews_outlined,
-                        size: 40,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        '리뷰 많은',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
+                    child: const Column(
+                      children: [
+                        SizedBox(
+                          height: 10,
                         ),
-                      ),
-                      Text(
-                        '한식 뷔페',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
+                        Icon(
+                          Icons.reviews_outlined,
+                          size: 40,
                         ),
-                      ),
-                    ],
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          '리뷰 많은',
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                        Text(
+                          '한식 뷔페',
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 const Divider(
@@ -470,7 +477,7 @@ class _IndexScreenState extends State<IndexScreen> {
                         spreadRadius: 0,
                         blurRadius: 10,
                         offset:
-                            const Offset(3, 5), // changes position of shadow
+                            const Offset(0, 0), // changes position of shadow
                       ),
                     ],
                   ),
@@ -489,15 +496,13 @@ class _IndexScreenState extends State<IndexScreen> {
                       Text(
                         '별점 높은',
                         style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
                         ),
                       ),
                       Text(
                         '한식 뷔페',
                         style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
                         ),
                       ),
                     ],
@@ -506,53 +511,75 @@ class _IndexScreenState extends State<IndexScreen> {
                 const Divider(
                   thickness: 1.2,
                 ),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.23,
-                  height: MediaQuery.of(context).size.height * 0.13,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                      color: Colors.grey,
-                      style: BorderStyle.none,
+                InkWell(
+                  onTap: () {
+                    if (!mounted) return;
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          var begin = const Offset(0.0, 1.0);
+                          var end = Offset.zero;
+                          var curve = Curves.ease;
+                          var tween = Tween(begin: begin, end: end)
+                              .chain(CurveTween(curve: curve));
+                          return SlideTransition(
+                            position: animation.drive(tween),
+                            child: child,
+                          );
+                        },
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            const ReviewUserList(),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.23,
+                    height: MediaQuery.of(context).size.height * 0.13,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                        color: Colors.grey,
+                        style: BorderStyle.none,
+                      ),
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 0,
+                          blurRadius: 10,
+                          offset:
+                              const Offset(0, 0), // changes position of shadow
+                        ),
+                      ],
                     ),
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 0,
-                        blurRadius: 10,
-                        offset:
-                            const Offset(3, 5), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  child: const Column(
-                    children: [
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Icon(
-                        Icons.note_alt_outlined,
-                        size: 40,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        '리뷰 쓴',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
+                    child: const Column(
+                      children: [
+                        SizedBox(
+                          height: 10,
                         ),
-                      ),
-                      Text(
-                        '한식 뷔페',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
+                        Icon(
+                          Icons.note_alt_outlined,
+                          size: 40,
                         ),
-                      ),
-                    ],
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          '리뷰 쓴',
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                        Text(
+                          '한식 뷔페',
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 const Divider(
@@ -597,7 +624,7 @@ class _IndexScreenState extends State<IndexScreen> {
                           spreadRadius: 0,
                           blurRadius: 10,
                           offset:
-                              const Offset(3, 5), // changes position of shadow
+                              const Offset(1, 0), // changes position of shadow
                         ),
                       ],
                     ),
@@ -616,15 +643,13 @@ class _IndexScreenState extends State<IndexScreen> {
                         Text(
                           '한식 뷔페',
                           style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
                           ),
                         ),
                         Text(
                           '등록하기',
                           style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
                           ),
                         ),
                       ],

@@ -1,3 +1,4 @@
+import 'package:kakao_map_plugin_example/src/models/image_data.dart';
 import 'package:kakao_map_plugin_example/src/models/review_user.dart';
 
 class ReviewDto {
@@ -6,7 +7,7 @@ class ReviewDto {
   late double star;
   late ReviewUserDto user;
   late List<dynamic> reviewComments;
-  late List<dynamic> reviewImg;
+  late List<ImgDataDto> reviewImg;
 
   ReviewDto({
     required this.id,
@@ -24,7 +25,10 @@ class ReviewDto {
       star: json["star"].toDouble(),
       user: ReviewUserDto.fromMap(json["user"]),
       reviewComments: json["reviewComments"],
-      reviewImg: json["reviewImgs"],
+      reviewImg: (json["reviewImgs"]
+              .map<ImgDataDto>((i) => ImgDataDto.fromMap(i))
+              .toList() ??
+          []),
     );
   }
   // ReviewDto.fromMap(Map<String, dynamic> map) {

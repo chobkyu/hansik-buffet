@@ -51,7 +51,6 @@ class _ReviewUpdateState extends State<ReviewUpdate> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     try {
       getUser();
@@ -200,6 +199,7 @@ class _ReviewUpdateState extends State<ReviewUpdate> {
                         print(res);
                         if (res == 200) {
                           //여기도 일단 홈으로 가게
+                          // ignore: use_build_context_synchronously
                           DialogBuilder.dialogBuild(
                               context: context,
                               text: '수정되었습니다.',

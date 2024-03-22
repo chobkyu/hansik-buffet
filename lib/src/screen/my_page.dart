@@ -65,15 +65,19 @@ class _MyPageState extends State<MyPage> {
   }
 
   void getUser() async {
-    String? token = await storage.read(key: 'token');
-    print(token);
     try {
-      print("this is try");
-      userData = await getUserData.getUserData(token!);
-      print("I want userData");
-      print(userData);
-      _isLogined = true;
-      setState(() {});
+      String? token = await storage.read(key: 'token');
+      print(token);
+      if (token == null) {
+        goToLoginPage();
+      } else {
+        print("this is try");
+        userData = await getUserData.getUserData(token);
+        print("I want userData");
+        print(userData);
+        _isLogined = true;
+        setState(() {});
+      }
     } catch (err) {
       print("this is catch");
       print(err);
@@ -82,29 +86,9 @@ class _MyPageState extends State<MyPage> {
       } else {
         print(err);
         String errCode = err.toString().split(': ')[2];
+        // ignore: use_build_context_synchronously
         errorStatus.errStatus(errCode, context, mounted);
       }
-      //errorStatus.errStatus(errCode, context, mounted);
-      // await storage.delete(key: 'token');
-      // if (!mounted) return;
-      // Navigator.push(
-      //   context,
-      //   PageRouteBuilder(
-      //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      //       var begin = const Offset(0.0, 1.0);
-      //       var end = Offset.zero;
-      //       var curve = Curves.ease;
-      //       var tween =
-      //           Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-      //       return SlideTransition(
-      //         position: animation.drive(tween),
-      //         child: child,
-      //       );
-      //     },
-      //     pageBuilder: (context, animation, secondaryAnimation) =>
-      //         const LoginScreen(),
-      //   ),
-      // );
     }
   }
 
