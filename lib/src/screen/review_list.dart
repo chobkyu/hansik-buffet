@@ -125,13 +125,25 @@ class _ReviewListState extends State<ReviewList> {
                                 ),
                               );
                             },
-                            child: Text(
-                              reviewList![index].review,
-                              //'카리나는 이쁘다 ${entries[index]}',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  widget.hansicName,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 24,
+                                  ),
+                                ),
+                                Text(
+                                  reviewList![index].review,
+                                  //'카리나는 이쁘다 ${entries[index]}',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                           RatingBar.builder(

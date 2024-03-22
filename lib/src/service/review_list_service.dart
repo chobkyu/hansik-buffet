@@ -73,7 +73,7 @@ class ReviewListService {
       print(jsonDecode(utf8.decode(response.bodyBytes)));
 
       for (int i = 0; i < data.length; i++) {
-        //print(data[i]);
+        print(data[i]);
         ReviewUserListDto reviewUserDto = ReviewUserListDto.fromMap(data[i]);
 
         result.add(reviewUserDto);
