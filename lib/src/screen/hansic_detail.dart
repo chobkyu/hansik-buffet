@@ -115,8 +115,15 @@ class _HansicDetailState extends State<HansicDetail> {
     }
   }
 
-  String getAvgStar(double star) {
-    return star.toStringAsFixed(2);
+  String getAvgStar(String star) {
+    print(star);
+    if (star == '사용자 별점') {
+      //???
+      return '0';
+    } else {
+      double starDouble = double.parse(star);
+      return starDouble.toStringAsFixed(2);
+    }
   }
 
   @override
@@ -231,7 +238,7 @@ class _HansicDetailState extends State<HansicDetail> {
                           width: 10,
                         ),
                         Text(
-                          getAvgStar(double.parse(hansicData.userStar)),
+                          getAvgStar(hansicData.userStar.toString()),
                           style: const TextStyle(fontSize: 18),
                         ),
                       ],
