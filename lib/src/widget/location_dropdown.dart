@@ -58,10 +58,11 @@ class _LocationDropDownState extends State<LocationDropDown> {
           child: Icon(Icons.arrow_circle_down_sharp)),
       iconEnabledColor: Colors.grey, //Icon color
       style: const TextStyle(
-          //te
-          color: Colors.black, //Font color
-          fontSize: 17 //font size on dropdown button
-          ),
+        //te
+        color: Colors.black, //Font color
+        fontSize: 20, //font size on dropdown button
+        fontFamily: 'hangul',
+      ),
 
       dropdownColor: Colors.white, //dropdown background color
       underline: Container(), //remove underline
