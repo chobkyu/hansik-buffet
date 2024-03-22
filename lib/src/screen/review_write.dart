@@ -217,16 +217,11 @@ class _ReviewWriteState extends State<ReviewWrite> {
                 text: '등록하기',
                 move: () async {
                   reviewCreate.id = widget.id;
-                  print(reviewCreate.id);
-                  print("등록하기!!!!!!!!!!!");
-                  print(imgUrls);
                   String? token = await storage.read(key: 'token');
 
                   try {
                     int res = await reviewWriteService.writeReview(
                         reviewCreate, token!, imgUrls);
-                    print("???????????????");
-                    print(res);
 
                     if (res == 201) {
                       //등록 완료 팝업 예정

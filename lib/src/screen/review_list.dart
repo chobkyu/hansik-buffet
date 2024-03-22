@@ -1,7 +1,5 @@
 // ignore_for_file: avoid_print
 
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:kakao_map_plugin_example/src/models/review_list.dart';
@@ -41,8 +39,6 @@ class _ReviewListState extends State<ReviewList> {
   void getReviewData() async {
     try {
       reviewList = await reviewListService.getReviewList(widget.id);
-      print(reviewList?[8].review);
-      print(reviewList?[8].reviewImg[0].imgUrl.runtimeType);
       setState(() {});
     } catch (err) {
       print(err);
