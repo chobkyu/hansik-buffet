@@ -6,11 +6,12 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kakao_map_plugin_example/src/models/review_write.dart';
 import 'package:kakao_map_plugin_example/src/models/user_data.dart';
-import 'package:kakao_map_plugin_example/src/screen/img_upload.dart';
+import 'package:kakao_map_plugin_example/src/screen/imgs_upload.dart';
 import 'package:kakao_map_plugin_example/src/screen/login.dart';
 import 'package:kakao_map_plugin_example/src/service/get_userdata_service.dart';
 import 'package:kakao_map_plugin_example/src/service/review_write_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
+import 'package:kakao_map_plugin_example/src/widget/dialog_builder.dart';
 import 'package:kakao_map_plugin_example/src/widget/home_button.dart';
 
 class ReviewWrite extends StatefulWidget {
@@ -32,7 +33,7 @@ class _ReviewWriteState extends State<ReviewWrite> {
   XFile? image; // 카메라로 촬영한 이미지를 저장할 변수
   List<XFile?> multiImage = []; // 갤러리에서 여러장의 사진을 선택해서 저장할 변수
 
-  String imgUrl = '';
+  List<String> imgUrls = [];
 
   UserData userData = UserData(
     id: 0,
@@ -178,25 +179,34 @@ class _ReviewWriteState extends State<ReviewWrite> {
               HomeButton(
                 text: '이미지 추가',
                 move: () async {
-                  imgUrl = await Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      transitionsBuilder:
-                          (context, animation, secondaryAnimation, child) {
-                        var begin = const Offset(0.0, 1.0);
-                        var end = Offset.zero;
-                        var curve = Curves.ease;
-                        var tween = Tween(begin: begin, end: end)
-                            .chain(CurveTween(curve: curve));
-                        return SlideTransition(
-                          position: animation.drive(tween),
-                          child: child,
-                        );
-                      },
-                      pageBuilder: (context, animation, secondaryAnimation) =>
-                          const ImgUpload(),
-                    ),
-                  );
+                  if (imgUrls.isNotEmpty) {
+                    DialogBuilder.dialogBuild(
+                        context: context,
+                        text: "이미지가 이미 등록되었습니다.",
+                        needOneButton: true);
+                  } else {
+                    imgUrls = await Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          var begin = const Offset(0.0, 1.0);
+                          var end = Offset.zero;
+                          var curve = Curves.ease;
+                          var tween = Tween(begin: begin, end: end)
+                              .chain(CurveTween(curve: curve));
+                          return SlideTransition(
+                            position: animation.drive(tween),
+                            child: child,
+                          );
+                        },
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            const ImgsUpload(
+                          limit: 4,
+                        ),
+                      ),
+                    );
+                  }
                 },
                 color: Colors.amber,
               ),
@@ -209,12 +219,12 @@ class _ReviewWriteState extends State<ReviewWrite> {
                   reviewCreate.id = widget.id;
                   print(reviewCreate.id);
                   print("등록하기!!!!!!!!!!!");
-                  print(imgUrl);
+                  print(imgUrls);
                   String? token = await storage.read(key: 'token');
 
                   try {
                     int res = await reviewWriteService.writeReview(
-                        reviewCreate, token!, imgUrl);
+                        reviewCreate, token!, imgUrls);
                     print("???????????????");
                     print(res);
 

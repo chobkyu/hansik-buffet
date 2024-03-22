@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:kakao_map_plugin_example/src/models/review_list.dart';
@@ -39,7 +41,8 @@ class _ReviewListState extends State<ReviewList> {
   void getReviewData() async {
     try {
       reviewList = await reviewListService.getReviewList(widget.id);
-      print(reviewList?[0].review);
+      print(reviewList?[8].review);
+      print(reviewList?[8].reviewImg[0].imgUrl.runtimeType);
       setState(() {});
     } catch (err) {
       print(err);
@@ -48,9 +51,7 @@ class _ReviewListState extends State<ReviewList> {
 
   dynamic getImg(List<dynamic> reviewImgs) {
     if (reviewImgs.isNotEmpty) {
-      return Image.network(
-          // 값이 {imgUrl: https://asdfasdfasdf...} 이렇게 넘어옴
-          reviewImgs[0].toString().split(" ")[1].split("}")[0]);
+      return Image.network(reviewImgs[0].imgUrl);
     } else {
       return Image.asset('assets/images/defaultReviewImg.png');
     }
@@ -85,8 +86,8 @@ class _ReviewListState extends State<ReviewList> {
                   child: Row(
                     children: [
                       SizedBox(
-                        width: 80,
-                        height: 80,
+                        width: 70,
+                        height: 70,
                         child: ClipRRect(
                           //borderRadius: BorderRadius.circular(100),
                           child: getImg(reviewList![index].reviewImg),
@@ -132,7 +133,7 @@ class _ReviewListState extends State<ReviewList> {
                                   widget.hansicName,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 24,
+                                    fontSize: 23,
                                   ),
                                 ),
                                 Text(
@@ -148,7 +149,7 @@ class _ReviewListState extends State<ReviewList> {
                           ),
                           RatingBar.builder(
                             initialRating: reviewList![index].star,
-                            itemSize: 18,
+                            itemSize: 16,
                             ignoreGestures: true,
                             minRating: 0,
                             direction: Axis.horizontal,

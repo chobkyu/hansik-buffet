@@ -9,7 +9,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ReviewWriteService {
   Future<int> writeReview(
-      ReviewCreate reviewWrite, String token, String imgUrl) async {
+      ReviewCreate reviewWrite, String token, List<String> imgUrls) async {
     try {
       String? baseUrl = dotenv.env['BASE_URL'];
       int id = reviewWrite.id;
@@ -18,7 +18,7 @@ class ReviewWriteService {
 
       String body;
 
-      if (imgUrl == '') {
+      if (imgUrls.isEmpty) {
         body = jsonEncode(
           <String, dynamic>{
             'review': reviewWrite.detailReview,
@@ -30,7 +30,7 @@ class ReviewWriteService {
           <String, dynamic>{
             'review': reviewWrite.detailReview,
             'star': reviewWrite.userRating,
-            'img': imgUrl,
+            'img': imgUrls,
           },
         );
       }
