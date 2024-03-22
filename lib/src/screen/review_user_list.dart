@@ -22,6 +22,8 @@ class _ReviewUserListState extends State<ReviewUserList> {
 
   List<ReviewUserListDto> reviewList = [];
 
+  bool isLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -39,6 +41,7 @@ class _ReviewUserListState extends State<ReviewUserList> {
         //go to login page
       }
       reviewList = await reviewListService.getUserReviewList(token!);
+      if (reviewList.isNotEmpty) isLoading = true;
       print(reviewList[0].reviewImgs);
       setState(() {});
     } catch (err) {
@@ -96,99 +99,116 @@ class _ReviewUserListState extends State<ReviewUserList> {
         preferredSize: Size.fromHeight(50),
         child: CustomAppBar(title: '마이 리뷰'),
       ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(8),
-        itemCount: reviewList.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Column(
-            children: [
-              Container(
-                height: 100,
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: const Color.fromARGB(255, 189, 189, 189),
-                  ),
-                  color: Colors.white,
-                ),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: 80,
-                        height: 80,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(100),
-                          child: getImg(reviewList[index].reviewImgs),
+      body: isLoading
+          ? ListView.builder(
+              padding: const EdgeInsets.all(8),
+              itemCount: reviewList.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Column(
+                  children: [
+                    Container(
+                      height: 100,
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: const Color.fromARGB(255, 189, 189, 189),
                         ),
+                        color: Colors.white,
                       ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              goToDetail(reviewList[index]);
-                            },
-                            child: Column(
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 80,
+                              height: 80,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(100),
+                                child: getImg(reviewList[index].reviewImgs),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  reviewList[index].hansics.name,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 24,
+                                InkWell(
+                                  onTap: () {
+                                    goToDetail(reviewList[index]);
+                                  },
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        reviewList[index].hansics.name,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 24,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 100,
+                                        child: Text(
+                                          reviewList[index].review,
+                                          overflow: TextOverflow.fade,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                SizedBox(
-                                  width: 100,
-                                  child: Text(
-                                    reviewList[index].review,
-                                    overflow: TextOverflow.fade,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                    ),
+                                RatingBar.builder(
+                                  initialRating: reviewList[index].star,
+                                  itemSize: 18,
+                                  ignoreGestures: true,
+                                  minRating: 0,
+                                  direction: Axis.horizontal,
+                                  allowHalfRating: true,
+                                  itemCount: 5,
+                                  itemPadding: const EdgeInsets.symmetric(
+                                      horizontal: 0.5),
+                                  itemBuilder: (context, _) => const Icon(
+                                    Icons.star,
+                                    color: Colors.amber,
                                   ),
+                                  onRatingUpdate: (rating) {
+                                    print(rating);
+                                  },
                                 ),
                               ],
                             ),
-                          ),
-                          RatingBar.builder(
-                            initialRating: reviewList[index].star,
-                            itemSize: 18,
-                            ignoreGestures: true,
-                            minRating: 0,
-                            direction: Axis.horizontal,
-                            allowHalfRating: true,
-                            itemCount: 5,
-                            itemPadding:
-                                const EdgeInsets.symmetric(horizontal: 0.5),
-                            itemBuilder: (context, _) => const Icon(
-                              Icons.star,
-                              color: Colors.amber,
-                            ),
-                            onRatingUpdate: (rating) {
-                              print(rating);
-                            },
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    )
+                  ],
+                );
+              },
+            )
+          : const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '작성하신 리뷰가 없어요..',
+                    style: TextStyle(fontSize: 25),
                   ),
-                ),
+                  Text(
+                    '좋아하는 한식뷔페의 리뷰를 작성해주세요!',
+                    style: TextStyle(fontSize: 25),
+                  ),
+                ],
               ),
-              const SizedBox(
-                height: 10,
-              )
-            ],
-          );
-        },
-      ),
+            ),
     );
   }
 }

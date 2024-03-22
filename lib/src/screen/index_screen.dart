@@ -157,7 +157,6 @@ class _IndexScreenState extends State<IndexScreen> {
                         '한식 뷔페 찾기',
                         style: TextStyle(
                           fontSize: 27,
-                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ],
@@ -225,7 +224,6 @@ class _IndexScreenState extends State<IndexScreen> {
                           '즐겨찾는 한식 뷔페',
                           style: TextStyle(
                             fontSize: 27,
-                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ],
@@ -295,8 +293,7 @@ class _IndexScreenState extends State<IndexScreen> {
                       child: const Text(
                         '내 주변 한식 뷔페 찾기',
                         style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w600,
+                          fontSize: 25,
                         ),
                       ),
                     ),
@@ -345,8 +342,7 @@ class _IndexScreenState extends State<IndexScreen> {
                             Text(
                               '지역 별 한식 뷔페 찾기',
                               style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.w600,
+                                fontSize: 25,
                               ),
                             ),
                             Icon(Icons.location_on),
@@ -449,15 +445,13 @@ class _IndexScreenState extends State<IndexScreen> {
                         Text(
                           '리뷰 많은',
                           style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
                           ),
                         ),
                         Text(
                           '한식 뷔페',
                           style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
                           ),
                         ),
                       ],
@@ -502,15 +496,13 @@ class _IndexScreenState extends State<IndexScreen> {
                       Text(
                         '별점 높은',
                         style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
                         ),
                       ),
                       Text(
                         '한식 뷔페',
                         style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
                         ),
                       ),
                     ],
@@ -577,15 +569,13 @@ class _IndexScreenState extends State<IndexScreen> {
                         Text(
                           '리뷰 쓴',
                           style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
                           ),
                         ),
                         Text(
                           '한식 뷔페',
                           style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
                           ),
                         ),
                       ],
@@ -653,15 +643,13 @@ class _IndexScreenState extends State<IndexScreen> {
                         Text(
                           '한식 뷔페',
                           style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
                           ),
                         ),
                         Text(
                           '등록하기',
                           style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
                           ),
                         ),
                       ],
