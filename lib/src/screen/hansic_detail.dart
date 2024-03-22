@@ -115,6 +115,10 @@ class _HansicDetailState extends State<HansicDetail> {
     }
   }
 
+  String getAvgStar(double star) {
+    return star.toStringAsFixed(2);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -144,7 +148,7 @@ class _HansicDetailState extends State<HansicDetail> {
               Text(
                 hansicData.name,
                 style: const TextStyle(
-                  fontSize: 30,
+                  fontSize: 35,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -156,11 +160,11 @@ class _HansicDetailState extends State<HansicDetail> {
                 children: [
                   Text(
                     '후기 ${hansicData.count}',
-                    style: const TextStyle(fontSize: 16),
+                    style: const TextStyle(fontSize: 20),
                   ),
                   Text(
                     hansicData.googleStar,
-                    style: const TextStyle(fontSize: 16),
+                    style: const TextStyle(fontSize: 20),
                   ),
                   if (hansicData.favorite)
                     IconButton(
@@ -207,7 +211,7 @@ class _HansicDetailState extends State<HansicDetail> {
                         Flexible(
                           child: Text(
                             hansicData.addr,
-                            style: const TextStyle(fontSize: 15),
+                            style: const TextStyle(fontSize: 18),
                             maxLines: 3,
                           ),
                         ),
@@ -227,8 +231,8 @@ class _HansicDetailState extends State<HansicDetail> {
                           width: 10,
                         ),
                         Text(
-                          hansicData.userStar,
-                          style: const TextStyle(fontSize: 15),
+                          getAvgStar(double.parse(hansicData.userStar)),
+                          style: const TextStyle(fontSize: 18),
                         ),
                       ],
                     ),
@@ -275,7 +279,7 @@ class _HansicDetailState extends State<HansicDetail> {
                             },
                             child: const Text(
                               '리뷰 보기 (참여자 25)',
-                              style: TextStyle(fontSize: 15),
+                              style: TextStyle(fontSize: 18),
                             ),
                           ),
                         ),
@@ -296,7 +300,7 @@ class _HansicDetailState extends State<HansicDetail> {
                         ),
                         const Text(
                           '메뉴',
-                          style: TextStyle(fontSize: 15),
+                          style: TextStyle(fontSize: 18),
                         ),
                       ],
                     )
