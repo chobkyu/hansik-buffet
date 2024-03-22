@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:kakao_map_plugin_example/src/models/review_user.dart';
+import 'package:kakao_map_plugin_example/src/models/review_user_list.dart';
 import 'package:kakao_map_plugin_example/src/service/review_list_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 
@@ -17,7 +17,7 @@ class _ReviewUserListState extends State<ReviewUserList> {
   static ReviewListService reviewListService = ReviewListService();
   static const storage = FlutterSecureStorage();
 
-  List<ReviewUserDto> reviewList = [];
+  List<ReviewUserListDto> reviewList = [];
 
   @override
   void initState() {
