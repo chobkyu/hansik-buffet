@@ -38,7 +38,7 @@ class _HansicDetailState extends State<HansicDetail> {
     lat: 0,
     lng: 0,
     location: '한식 뷔페 지역',
-    imgUrl: '대표 이미지 url',
+    imgUrl: '',
     count: 0,
     favorite: false,
   );
@@ -127,6 +127,15 @@ class _HansicDetailState extends State<HansicDetail> {
     }
   }
 
+  dynamic getImg(String imgUrl) {
+    print(imgUrl);
+    if (imgUrl != '') {
+      return Image.network(imgUrl);
+    } else {
+      return Image.asset('assets/images/defaultReviewImg.png');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -146,8 +155,7 @@ class _HansicDetailState extends State<HansicDetail> {
                 height: 380,
                 width: 320,
                 child: ClipRRect(
-                  child: Image.network(
-                      'https://puda.s3.ap-northeast-2.amazonaws.com/client/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7+2024-02-07+151707.png'),
+                  child: getImg(hansicData.imgUrl),
                 ),
               ),
               const SizedBox(

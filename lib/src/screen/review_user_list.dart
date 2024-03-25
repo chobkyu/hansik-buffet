@@ -5,6 +5,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_map_plugin_example/src/models/review_list.dart';
 import 'package:kakao_map_plugin_example/src/models/review_user_list.dart';
+import 'package:kakao_map_plugin_example/src/screen/login.dart';
 import 'package:kakao_map_plugin_example/src/screen/review_detail.dart';
 import 'package:kakao_map_plugin_example/src/service/review_list_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
@@ -38,7 +39,26 @@ class _ReviewUserListState extends State<ReviewUserList> {
     try {
       String? token = await storage.read(key: 'token');
       if (token == null) {
-        //go to login page
+        if (!mounted) return;
+        Navigator.push(
+          context,
+          PageRouteBuilder(
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              var begin = const Offset(0.0, 1.0);
+              var end = Offset.zero;
+              var curve = Curves.ease;
+              var tween =
+                  Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+              return SlideTransition(
+                position: animation.drive(tween),
+                child: child,
+              );
+            },
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                const LoginScreen(),
+          ),
+        );
       }
       reviewList = await reviewListService.getUserReviewList(token!);
       if (reviewList.isNotEmpty) isLoading = true;
