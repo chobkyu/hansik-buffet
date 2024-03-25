@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:kakao_map_plugin_example/src/models/review_list.dart';
 import 'package:kakao_map_plugin_example/src/screen/review_detail.dart';
-import 'package:kakao_map_plugin_example/src/screen/test_review_detail.dart';
 import 'package:kakao_map_plugin_example/src/service/review_list_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 
@@ -40,18 +39,17 @@ class _ReviewListState extends State<ReviewList> {
   void getReviewData() async {
     try {
       reviewList = await reviewListService.getReviewList(widget.id);
-      print(reviewList?[0].review);
       setState(() {});
     } catch (err) {
       print(err);
     }
   }
 
-  String getImgUrl(List<dynamic> reviewImgs) {
+  dynamic getImg(List<dynamic> reviewImgs) {
     if (reviewImgs.isNotEmpty) {
-      return reviewImgs[0];
+      return Image.network(reviewImgs[0].imgUrl);
     } else {
-      return 'https://puda.s3.ap-northeast-2.amazonaws.com/client/2840159_2891102_2258.png';
+      return Image.asset('assets/images/defaultReviewImg.png');
     }
   }
 
@@ -84,13 +82,11 @@ class _ReviewListState extends State<ReviewList> {
                   child: Row(
                     children: [
                       SizedBox(
-                        width: 80,
-                        height: 80,
+                        width: 70,
+                        height: 70,
                         child: ClipRRect(
                           //borderRadius: BorderRadius.circular(100),
-                          child: Image.network(
-                            getImgUrl(reviewList![index].reviewImg),
-                          ),
+                          child: getImg(reviewList![index].reviewImg),
                         ),
                       ),
                       const SizedBox(
@@ -118,7 +114,7 @@ class _ReviewListState extends State<ReviewList> {
                                   },
                                   pageBuilder: (context, animation,
                                           secondaryAnimation) =>
-                                      TestReviewDetail(
+                                      ReviewDetail(
                                     reviewId: index,
                                     reviewDto: reviewList![index],
                                     hansicName: widget.hansicName,
@@ -126,18 +122,30 @@ class _ReviewListState extends State<ReviewList> {
                                 ),
                               );
                             },
-                            child: Text(
-                              reviewList![index].review,
-                              //'카리나는 이쁘다 ${entries[index]}',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  widget.hansicName,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 23,
+                                  ),
+                                ),
+                                Text(
+                                  reviewList![index].review,
+                                  //'카리나는 이쁘다 ${entries[index]}',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                           RatingBar.builder(
                             initialRating: reviewList![index].star,
-                            itemSize: 18,
+                            itemSize: 16,
                             ignoreGestures: true,
                             minRating: 0,
                             direction: Axis.horizontal,

@@ -29,6 +29,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  late DateTime _lastPressedAt;
+
   @override
   void initState() {
     super.initState();
@@ -36,13 +38,31 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusManager.instance.primaryFocus?.unfocus(); // 키보드 닫기 이벤트
+    return WillPopScope(
+      //여기는 조금 더 봐야됨
+      onWillPop: () async {
+        final now = DateTime.now();
+        if (now.difference(_lastPressedAt) > const Duration(seconds: 2)) {
+          _lastPressedAt = now;
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('한번 더 뒤로가기를 누를 시 종료됩니다'),
+              duration: Duration(seconds: 2),
+            ),
+          );
+          return false;
+        }
+        return true;
       },
-      child: const MaterialApp(
-        home: Scaffold(
-          body: HomeScreen(),
+      child: GestureDetector(
+        onTap: () {
+          FocusManager.instance.primaryFocus?.unfocus(); // 키보드 닫기 이벤트
+        },
+        child: MaterialApp(
+          theme: ThemeData(fontFamily: 'hangul'),
+          home: const Scaffold(
+            body: HomeScreen(),
+          ),
         ),
       ),
     );
@@ -52,21 +72,15 @@ class _MyAppState extends State<MyApp> {
 
 /*todo
 -공통
-사진 업로드
 에러 처리
+하단바 정리 (한식뷔페 찾기, 즐겨찾는 뷔페, 홈, 리뷰 쓴 한식 뷔페, 마이페이지)
 
--user
-프로필 사진 변경
-즐겨찾기 한뷔 페이지
-오늘 먹은 메뉴 등록하기
+-index
+리뷰 많은 한식 뷔페
+별점 높은 한식 뷔페
 
-
--hansic
-별점 주기
-location list 가져오기
 
 -review
-리뷰 리스트 페이지 ui
 리뷰 상세 보기 페이지 ui 및 이미지 업로드
 댓글 기능
 
@@ -75,4 +89,6 @@ location list 가져오기
 메뉴 업로드 하기 페이지
 사업자 메뉴 페이지
 
+
+-포인트 제도
 */

@@ -2,8 +2,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_map_plugin_example/src/models/review_list.dart';
+import 'package:kakao_map_plugin_example/src/models/user_data.dart';
+import 'package:kakao_map_plugin_example/src/screen/home_screen.dart';
+import 'package:kakao_map_plugin_example/src/screen/login.dart';
+import 'package:kakao_map_plugin_example/src/screen/review_update.dart';
+import 'package:kakao_map_plugin_example/src/service/get_userdata_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
+import 'package:kakao_map_plugin_example/src/widget/dialog_builder.dart';
+import 'package:kakao_map_plugin_example/src/widget/small_button.dart';
 import 'package:kakao_map_plugin_example/src/widget/text_inContainer.dart';
 
 class ReviewDetail extends StatefulWidget {
@@ -22,6 +30,58 @@ class ReviewDetail extends StatefulWidget {
 }
 
 class _ReviewDetailState extends State<ReviewDetail> {
+  static GetUserData getUserData = GetUserData();
+  static const storage = FlutterSecureStorage();
+
+  var isRightUser = false;
+
+  UserData userData = UserData(
+    id: 0,
+    userName: 'tq',
+    userNickName: '',
+    userId: '',
+    userImgs: [],
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    try {
+      getUser();
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  void getUser() async {
+    String? token = await storage.read(key: 'token');
+    print(token);
+    try {
+      userData = await getUserData.getUserData(token!);
+      if (userData.id == widget.reviewDto.user.id) {
+        isRightUser = true;
+      }
+      print(isRightUser);
+      setState(() {});
+    } catch (err) {
+      print(err.toString());
+      goToLoginPage();
+    }
+  }
+
+  void goToLoginPage() async {
+    await storage.delete(key: 'token');
+    if (!mounted) return;
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return const LoginScreen();
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,9 +146,160 @@ class _ReviewDetailState extends State<ReviewDetail> {
                 const SizedBox(
                   height: 15,
                 ),
+                isRightUser
+                    ? ForRightUser(
+                        storage: storage,
+                        reviewDto: widget.reviewDto,
+                        userData: userData,
+                      )
+                    : const SizedBox(),
               ],
             ),
           ),
         ));
+  }
+}
+
+class ForRightUser extends StatefulWidget {
+  const ForRightUser({
+    super.key,
+    required this.storage,
+    required this.reviewDto,
+    required this.userData,
+  });
+
+  final FlutterSecureStorage storage;
+  final ReviewDto reviewDto;
+  final UserData userData;
+
+  @override
+  State<ForRightUser> createState() => _ForRightUserState();
+}
+
+class _ForRightUserState extends State<ForRightUser> {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SmallButton(
+            text: '수정하기',
+            move: () async {
+              String? token = await widget.storage.read(key: 'token');
+              print(token);
+              if (token == null) {
+                if (!mounted) return;
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      var begin = const Offset(0.0, 1.0);
+                      var end = Offset.zero;
+                      var curve = Curves.ease;
+                      var tween = Tween(begin: begin, end: end)
+                          .chain(CurveTween(curve: curve));
+                      return SlideTransition(
+                        position: animation.drive(tween),
+                        child: child,
+                      );
+                    },
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const LoginScreen(),
+                  ),
+                );
+              } else {
+                if (!mounted) return;
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      var begin = const Offset(0.0, 1.0);
+                      var end = Offset.zero;
+                      var curve = Curves.ease;
+                      var tween = Tween(begin: begin, end: end)
+                          .chain(CurveTween(curve: curve));
+                      return SlideTransition(
+                        position: animation.drive(tween),
+                        child: child,
+                      );
+                    },
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        ReviewUpdate(
+                            id: 1804,
+                            hansicName: "",
+                            reviewDto: widget.reviewDto),
+                  ),
+                );
+              }
+            },
+            color: Colors.amber,
+            icon: Icons.edit),
+        const SizedBox(
+          width: 15,
+        ),
+        SmallButton(
+            text: '삭제하기',
+            move: () async {
+              String? token = await widget.storage.read(key: 'token');
+              print(token);
+              print(widget.userData.id);
+              print(widget.reviewDto.id);
+
+              if (token == null) {
+                if (!mounted) return;
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      var begin = const Offset(0.0, 1.0);
+                      var end = Offset.zero;
+                      var curve = Curves.ease;
+                      var tween = Tween(begin: begin, end: end)
+                          .chain(CurveTween(curve: curve));
+                      return SlideTransition(
+                        position: animation.drive(tween),
+                        child: child,
+                      );
+                    },
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const LoginScreen(),
+                  ),
+                );
+              } else {
+                if (!mounted) return;
+                DialogBuilder.dialogBuild(
+                    context: context,
+                    text: '삭제하시겠습니까?',
+                    needOneButton: false,
+                    move: () async {
+                      // int res = await reviewDeleteService.deleteReview(
+                      //     token, widget.reviewDto.id, widget.userData);
+                      // print(res);
+                      //일단 홈으로 가게. 나중에 페이지 구조화 되면 그때 적용
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                            builder: (context) => const HomeScreen(),
+                          ),
+                          (route) => false);
+                    });
+                // print(res);
+                // if (res == 204) {
+                //   //수정 완료 팝업 예정
+                //   if (!mounted) return;
+                //   Navigator.pop(context);
+                // } else if (res == 401) {
+                //   //로그인 페이지로
+                // } else {
+                //   //에러 처리 예정
+                // }
+              }
+            },
+            color: const Color.fromARGB(255, 238, 227, 212),
+            icon: Icons.delete),
+      ],
+    );
   }
 }

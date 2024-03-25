@@ -3,12 +3,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:kakao_map_plugin_example/src/models/review_write.dart';
 import 'package:kakao_map_plugin_example/src/models/user_data.dart';
+import 'package:kakao_map_plugin_example/src/screen/imgs_upload.dart';
 import 'package:kakao_map_plugin_example/src/screen/login.dart';
 import 'package:kakao_map_plugin_example/src/service/get_userdata_service.dart';
 import 'package:kakao_map_plugin_example/src/service/review_write_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
+import 'package:kakao_map_plugin_example/src/widget/dialog_builder.dart';
 import 'package:kakao_map_plugin_example/src/widget/home_button.dart';
 
 class ReviewWrite extends StatefulWidget {
@@ -25,6 +28,12 @@ class _ReviewWriteState extends State<ReviewWrite> {
   static GetUserData getUserData = GetUserData();
   static const storage = FlutterSecureStorage();
   static ReviewWriteService reviewWriteService = ReviewWriteService();
+  final ImagePicker picker = ImagePicker();
+  List<XFile?> images = []; // 가져온 사진들을 보여주기 위한 변수
+  XFile? image; // 카메라로 촬영한 이미지를 저장할 변수
+  List<XFile?> multiImage = []; // 갤러리에서 여러장의 사진을 선택해서 저장할 변수
+
+  List<String> imgUrls = [];
 
   UserData userData = UserData(
     id: 0,
@@ -37,12 +46,11 @@ class _ReviewWriteState extends State<ReviewWrite> {
   ReviewCreate reviewCreate = ReviewCreate(
     id: 0,
     detailReview: '',
-    userRating: 0,
+    userRating: 3,
   );
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     try {
       getUser();
@@ -169,15 +177,51 @@ class _ReviewWriteState extends State<ReviewWrite> {
                 height: 15,
               ),
               HomeButton(
+                text: '이미지 추가',
+                move: () async {
+                  if (imgUrls.isNotEmpty) {
+                    DialogBuilder.dialogBuild(
+                        context: context,
+                        text: "이미지가 이미 등록되었습니다.",
+                        needOneButton: true);
+                  } else {
+                    imgUrls = await Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          var begin = const Offset(0.0, 1.0);
+                          var end = Offset.zero;
+                          var curve = Curves.ease;
+                          var tween = Tween(begin: begin, end: end)
+                              .chain(CurveTween(curve: curve));
+                          return SlideTransition(
+                            position: animation.drive(tween),
+                            child: child,
+                          );
+                        },
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            const ImgsUpload(
+                          limit: 4,
+                        ),
+                      ),
+                    );
+                  }
+                },
+                color: Colors.amber,
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              HomeButton(
                 text: '등록하기',
                 move: () async {
                   reviewCreate.id = widget.id;
-                  print(reviewCreate.id);
                   String? token = await storage.read(key: 'token');
 
                   try {
                     int res = await reviewWriteService.writeReview(
-                        reviewCreate, token!);
+                        reviewCreate, token!, imgUrls);
 
                     if (res == 201) {
                       //등록 완료 팝업 예정

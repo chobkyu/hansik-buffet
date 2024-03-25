@@ -13,10 +13,11 @@ class FavoriteListDto {
 
   factory FavoriteListDto.fromMap(Map<String, dynamic> json) {
     return FavoriteListDto(
-        userId: json["userId"],
-        userNickName: json["userNickName"],
-        favorites: (json["favorites"] ?? [])
-            .map<FavoritesDataDto>((i) => FavoritesDataDto.fromMap(i))
-            .toList());
+      userId: json["userId"],
+      userNickName: json["userNickName"],
+      favorites: (json["favorites"] ?? [])
+          .map<FavoritesDataDto>((i) => FavoritesDataDto.fromMap(i))
+          .toList(),
+    );
   }
 }

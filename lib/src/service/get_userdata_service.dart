@@ -3,7 +3,6 @@
 import 'dart:convert';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:kakao_map_plugin_example/src/models/image_data.dart';
 import 'package:kakao_map_plugin_example/src/models/user_data.dart';
 import 'package:http/http.dart' as http;
 
@@ -28,6 +27,7 @@ class GetUserData {
 
       if (statusCode < 200 || statusCode > 400) {
         //에러 처리 추가
+        print(statusCode);
         throw Exception(statusCode);
       }
       //print(response.body);
@@ -41,7 +41,7 @@ class GetUserData {
       return userData;
     } catch (err) {
       print(err);
-      throw Exception('error');
+      throw Exception(err.toString());
     }
   }
 }

@@ -1,20 +1,22 @@
 // ignore_for_file: avoid_print
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_map_plugin_example/src/overlay_12_markers_event1_screen.dart';
+import 'package:kakao_map_plugin_example/src/screen/enroll_admin.dart';
+import 'package:kakao_map_plugin_example/src/screen/hansic_enroll.dart';
 import 'package:kakao_map_plugin_example/src/screen/img_upload.dart';
 import 'package:kakao_map_plugin_example/src/screen/index_screen.dart';
 import 'package:kakao_map_plugin_example/src/screen/login.dart';
 import 'package:kakao_map_plugin_example/src/screen/my_page.dart';
 import 'package:kakao_map_plugin_example/src/screen/review_list.dart';
 import 'package:kakao_map_plugin_example/src/screen/review_write.dart';
-import 'package:kakao_map_plugin_example/src/screen/test_mypage.dart';
+import 'package:kakao_map_plugin_example/src/screen/test_home.dart';
 import 'package:kakao_map_plugin_example/src/service/geolocator_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 import 'package:kakao_map_plugin_example/src/widget/home_button.dart';
 // ignore: depend_on_referenced_packages
 import 'package:geolocator/geolocator.dart';
+import 'package:kakao_map_plugin_example/src/widget/dialog_builder.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -54,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen>
         preferredSize: const Size.fromHeight(50),
         child: CustomAppBar(
           title: _selectedIndex == 0
-              ? 'Hansajang'
+              ? '한사장'
               : _selectedIndex == 1
                   ? "Search"
                   : _selectedIndex == 2
@@ -64,11 +66,11 @@ class _HomeScreenState extends State<HomeScreen>
       ),
       //body 바꿀거임 ㅇㅇ
       body: _selectedIndex == 0
-          ? homeContainer()
+          ? const IndexScreen()
           : _selectedIndex == 1
               ? testContainer()
               : _selectedIndex == 2
-                  ? const TestMyPage()
+                  ? const MyPage()
                   : testHome(),
       bottomNavigationBar: SizedBox(
         height: 90,
@@ -107,76 +109,6 @@ class _HomeScreenState extends State<HomeScreen>
     return Container(
       child: const Center(child: Text("hi")),
     );
-  }
-
-  Widget homeContainer() {
-    return Center(
-      child: Stack(
-        children: [
-          Center(
-            child: Ink(
-              width: 300,
-              height: 480,
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.7),
-                    spreadRadius: 5,
-                    blurRadius: 5.0,
-                    offset: const Offset(0, 0),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    testButton("1"),
-                    testButton("2"),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    testButton("3"),
-                    testButton("4"),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    testButton("5"),
-                    testButton("6"),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget testButton(text) {
-    return Center(
-        child: Ink(
-      color: Colors.white,
-      child: InkWell(
-        onTap: () {
-          print(text);
-        },
-        child: Ink(
-          width: 150,
-          height: 160,
-          child: Text(text),
-        ),
-      ),
-    ));
   }
 
   // 기존에 있던 홈
@@ -221,6 +153,27 @@ class _HomeScreenState extends State<HomeScreen>
               move: () async {
                 String? token = await storage.read(key: 'token');
                 print(token);
+                if (!mounted) return;
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      var begin = const Offset(0.0, 1.0);
+                      var end = Offset.zero;
+                      var curve = Curves.ease;
+                      var tween = Tween(begin: begin, end: end)
+                          .chain(CurveTween(curve: curve));
+                      return SlideTransition(
+                        position: animation.drive(tween),
+                        child: child,
+                      );
+                    },
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const MyPage(),
+                  ),
+                );
+
                 if (token == null) {
                   if (!mounted) return;
                   Navigator.push(
@@ -515,6 +468,128 @@ class _HomeScreenState extends State<HomeScreen>
                 }
               },
               color: Colors.amber,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            HomeButton(
+              text: '내가 아는 한뷔 등록',
+              move: () async {
+                Position position = await geolocatorService.getLocation();
+                double lat = position.latitude;
+                double lng = position.longitude;
+
+                print(lat);
+                print(lng);
+
+                if (!mounted) return;
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      var begin = const Offset(0.0, 1.0);
+                      var end = Offset.zero;
+                      var curve = Curves.ease;
+                      var tween = Tween(begin: begin, end: end)
+                          .chain(CurveTween(curve: curve));
+                      return SlideTransition(
+                        position: animation.drive(tween),
+                        child: child,
+                      );
+                    },
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const EnrollHansic(),
+                  ),
+                );
+              },
+              color: Colors.amber,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            HomeButton(
+              text: '한뷔 등록 관리자 페이지',
+              move: () async {
+                Position position = await geolocatorService.getLocation();
+                double lat = position.latitude;
+                double lng = position.longitude;
+
+                print(lat);
+                print(lng);
+
+                if (!mounted) return;
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      var begin = const Offset(0.0, 1.0);
+                      var end = Offset.zero;
+                      var curve = Curves.ease;
+                      var tween = Tween(begin: begin, end: end)
+                          .chain(CurveTween(curve: curve));
+                      return SlideTransition(
+                        position: animation.drive(tween),
+                        child: child,
+                      );
+                    },
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const EnrollAdmin(),
+                  ),
+                );
+              },
+              color: Colors.amber,
+            ),
+            OutlinedButton(
+              onPressed: () => {
+                DialogBuilder.dialogBuild(
+                  context: context,
+                  text: "confirm?",
+                  needOneButton: false,
+                ),
+              },
+              child: const Text("two button"),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            OutlinedButton(
+              onPressed: () => {
+                DialogBuilder.dialogBuild(
+                  context: context,
+                  text: "error!",
+                  needOneButton: true,
+                ),
+              },
+              child: const Text("one button"),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            OutlinedButton(
+              onPressed: () => {
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      var begin = const Offset(0.0, 1.0);
+                      var end = Offset.zero;
+                      var curve = Curves.ease;
+                      var tween = Tween(begin: begin, end: end)
+                          .chain(CurveTween(curve: curve));
+                      return SlideTransition(
+                        position: animation.drive(tween),
+                        child: child,
+                      );
+                    },
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const TestHome(),
+                  ),
+                )
+              },
+              child: const Text("one button"),
             ),
           ],
         ),

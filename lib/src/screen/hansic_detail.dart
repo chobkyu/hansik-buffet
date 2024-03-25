@@ -12,6 +12,7 @@ import 'package:kakao_map_plugin_example/src/screen/review_write.dart';
 import 'package:kakao_map_plugin_example/src/service/favorites_service.dart';
 import 'package:kakao_map_plugin_example/src/service/get_hansicdata_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
+import 'package:kakao_map_plugin_example/src/widget/dialog_builder.dart';
 
 class HansicDetail extends StatefulWidget {
   const HansicDetail({super.key, required this.latLng});
@@ -37,7 +38,7 @@ class _HansicDetailState extends State<HansicDetail> {
     lat: 0,
     lng: 0,
     location: '한식 뷔페 지역',
-    imgUrl: '대표 이미지 url',
+    imgUrl: '',
     count: 0,
     favorite: false,
   );
@@ -115,6 +116,26 @@ class _HansicDetailState extends State<HansicDetail> {
     }
   }
 
+  String getAvgStar(String star) {
+    print(star);
+    if (star == '사용자 별점') {
+      //???
+      return '0';
+    } else {
+      double starDouble = double.parse(star);
+      return starDouble.toStringAsFixed(2);
+    }
+  }
+
+  dynamic getImg(String imgUrl) {
+    print(imgUrl);
+    if (imgUrl != '') {
+      return Image.network(imgUrl);
+    } else {
+      return Image.asset('assets/images/defaultReviewImg.png');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -134,8 +155,7 @@ class _HansicDetailState extends State<HansicDetail> {
                 height: 380,
                 width: 320,
                 child: ClipRRect(
-                  child: Image.network(
-                      'https://puda.s3.ap-northeast-2.amazonaws.com/client/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7+2024-02-07+151707.png'),
+                  child: getImg(hansicData.imgUrl),
                 ),
               ),
               const SizedBox(
@@ -144,7 +164,7 @@ class _HansicDetailState extends State<HansicDetail> {
               Text(
                 hansicData.name,
                 style: const TextStyle(
-                  fontSize: 30,
+                  fontSize: 35,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -156,11 +176,11 @@ class _HansicDetailState extends State<HansicDetail> {
                 children: [
                   Text(
                     '후기 ${hansicData.count}',
-                    style: const TextStyle(fontSize: 16),
+                    style: const TextStyle(fontSize: 20),
                   ),
                   Text(
-                    hansicData.googleStar,
-                    style: const TextStyle(fontSize: 16),
+                    '${hansicData.googleStar} (구글)',
+                    style: const TextStyle(fontSize: 20),
                   ),
                   if (hansicData.favorite)
                     IconButton(
@@ -207,7 +227,7 @@ class _HansicDetailState extends State<HansicDetail> {
                         Flexible(
                           child: Text(
                             hansicData.addr,
-                            style: const TextStyle(fontSize: 15),
+                            style: const TextStyle(fontSize: 18),
                             maxLines: 3,
                           ),
                         ),
@@ -227,8 +247,8 @@ class _HansicDetailState extends State<HansicDetail> {
                           width: 10,
                         ),
                         Text(
-                          hansicData.userStar,
-                          style: const TextStyle(fontSize: 15),
+                          getAvgStar(hansicData.userStar.toString()),
+                          style: const TextStyle(fontSize: 18),
                         ),
                       ],
                     ),
@@ -273,9 +293,9 @@ class _HansicDetailState extends State<HansicDetail> {
                                 ),
                               );
                             },
-                            child: const Text(
-                              '리뷰 보기 (참여자 25)',
-                              style: TextStyle(fontSize: 15),
+                            child: Text(
+                              '리뷰 보기 (참여자 ${hansicData.count})',
+                              style: const TextStyle(fontSize: 18),
                             ),
                           ),
                         ),
@@ -294,9 +314,18 @@ class _HansicDetailState extends State<HansicDetail> {
                         const SizedBox(
                           width: 10,
                         ),
-                        const Text(
-                          '메뉴',
-                          style: TextStyle(fontSize: 15),
+                        InkWell(
+                          onTap: () {
+                            DialogBuilder.dialogBuild(
+                              context: context,
+                              text: "아직 등록된 메뉴가 없습니다!",
+                              needOneButton: true,
+                            );
+                          },
+                          child: const Text(
+                            '메뉴',
+                            style: TextStyle(fontSize: 18),
+                          ),
                         ),
                       ],
                     )

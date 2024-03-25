@@ -1,18 +1,18 @@
 // ignore_for_file: avoid_print
 
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:kakao_map_plugin_example/src/models/image_data.dart';
 import 'package:kakao_map_plugin_example/src/models/user_data.dart';
 import 'package:kakao_map_plugin_example/src/overlay_12_markers_event1_screen.dart';
 import 'package:kakao_map_plugin_example/src/screen/favorite_mylist.dart';
+import 'package:kakao_map_plugin_example/src/screen/hansic_enroll.dart';
+import 'package:kakao_map_plugin_example/src/screen/home_screen.dart';
 import 'package:kakao_map_plugin_example/src/screen/login.dart';
 import 'package:kakao_map_plugin_example/src/screen/update_myinfo.dart';
 import 'package:kakao_map_plugin_example/src/service/geolocator_service.dart';
 import 'package:kakao_map_plugin_example/src/service/get_userdata_service.dart';
-import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
+import 'package:kakao_map_plugin_example/src/util/error_status.dart';
+import 'package:kakao_map_plugin_example/src/widget/dialog_builder.dart';
 import 'package:kakao_map_plugin_example/src/widget/menu_div.dart';
 // ignore: depend_on_referenced_packages
 import 'package:geolocator/geolocator.dart';
@@ -28,6 +28,9 @@ class _MyPageState extends State<MyPage> {
   static GetUserData getUserData = GetUserData();
   static const storage = FlutterSecureStorage();
   static GeolocatorService geolocatorService = GeolocatorService();
+  static ErrorStatus errorStatus = ErrorStatus();
+
+  bool _isLogined = false;
 
   UserData userData = UserData(
     id: 0,
@@ -42,51 +45,60 @@ class _MyPageState extends State<MyPage> {
     super.initState();
     try {
       getUser();
+      print("this is initState");
+      print(userData);
     } catch (err) {
       print(err);
     }
   }
 
+  void goToLoginPage() async {
+    await storage.delete(key: 'token');
+    if (!mounted) return;
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return const LoginScreen();
+        },
+      ),
+    );
+  }
+
   void getUser() async {
-    String? token = await storage.read(key: 'token');
-    print(token);
     try {
-      userData = await getUserData.getUserData(token!);
-      print(userData);
-      setState(() {});
+      String? token = await storage.read(key: 'token');
+      print(token);
+      if (token == null) {
+        goToLoginPage();
+      } else {
+        print("this is try");
+        userData = await getUserData.getUserData(token);
+        print("I want userData");
+        print(userData);
+        _isLogined = true;
+        setState(() {});
+      }
     } catch (err) {
-      print(err.toString());
-      await storage.delete(key: 'token');
-      if (!mounted) return;
-      Navigator.push(
-        context,
-        PageRouteBuilder(
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            var begin = const Offset(0.0, 1.0);
-            var end = Offset.zero;
-            var curve = Curves.ease;
-            var tween =
-                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-            return SlideTransition(
-              position: animation.drive(tween),
-              child: child,
-            );
-          },
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              const LoginScreen(),
-        ),
-      );
+      print("this is catch");
+      print(err);
+      if (err.toString().split(': ').isEmpty) {
+        goToLoginPage();
+      } else {
+        print(err);
+        String errCode = err.toString().split(': ')[2];
+        // ignore: use_build_context_synchronously
+        errorStatus.errStatus(errCode, context, mounted);
+      }
     }
   }
 
   //imgurl get
-  String getImgUrl(List<dynamic> img) {
+  dynamic getImg(List<dynamic> img) {
     if (img.isNotEmpty) {
-      //print(img[0]['imgUrl']);
-
-      return img[0]['imgUrl'];
+      return Image.network(img[0].toString().split(" ")[1].split("}")[0]);
     } else {
-      return 'https://hansicbuffet.s3.ap-northeast-2.amazonaws.com/b0f790a446bb8255116e088aa8ae7abe';
+      return Image.asset('assets/images/defaultProfileImg.png');
     }
   }
 
@@ -94,12 +106,32 @@ class _MyPageState extends State<MyPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(50),
-        child: CustomAppBar(title: 'My Page'),
+      body: _isLogined ? logined() : notLogined(),
+    );
+  }
+
+  Widget notLogined() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.amber[800],
+              foregroundColor: Colors.white,
+            ),
+            onPressed: getUser,
+            child: const Text("Login"),
+          ),
+          const Text("Please Login.."),
+        ],
       ),
-      body: SingleChildScrollView(
-          child: Column(
+    );
+  }
+
+  Widget logined() {
+    return SingleChildScrollView(
+      child: Column(
         children: [
           const SizedBox(
             height: 20,
@@ -119,7 +151,7 @@ class _MyPageState extends State<MyPage> {
                   height: 200,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(100),
-                    child: Image.network(getImgUrl(userData.userImgs)),
+                    child: getImg(userData.userImgs),
                   ),
                 ),
                 const SizedBox(
@@ -127,7 +159,7 @@ class _MyPageState extends State<MyPage> {
                 ),
                 Text(
                   userData.userNickName,
-                  style: const TextStyle(fontSize: 25),
+                  style: const TextStyle(fontSize: 30),
                 ),
                 const SizedBox(
                   height: 50,
@@ -174,7 +206,7 @@ class _MyPageState extends State<MyPage> {
                           },
                           child: const Text(
                             '한식 뷔페 찾기',
-                            style: TextStyle(fontSize: 16),
+                            style: TextStyle(fontSize: 20),
                           ),
                         ),
                       ],
@@ -208,7 +240,7 @@ class _MyPageState extends State<MyPage> {
                           },
                           child: const Text(
                             '내 정보 수정하기',
-                            style: TextStyle(fontSize: 16),
+                            style: TextStyle(fontSize: 20),
                           ),
                         ),
                       ],
@@ -226,7 +258,7 @@ class _MyPageState extends State<MyPage> {
               const Divider(thickness: 1.2),
               MenuDiv(
                 text: '한식 뷔페 찾기',
-                fontSize: 18,
+                fontSize: 20,
                 move: () async {
                   Position position = await geolocatorService.getLocation();
                   double lat = position.latitude;
@@ -261,7 +293,7 @@ class _MyPageState extends State<MyPage> {
               ),
               MenuDiv(
                 text: '즐겨 찾는 한식 뷔페',
-                fontSize: 18,
+                fontSize: 20,
                 move: () {
                   if (!mounted) return;
                   Navigator.push(
@@ -286,15 +318,34 @@ class _MyPageState extends State<MyPage> {
                 },
               ),
               MenuDiv(
-                text: '내가 쓴 리뷰 조회',
-                fontSize: 18,
+                text: '아는 한식 뷔페 등록',
+                fontSize: 20,
                 move: () {
-                  print('object');
+                  if (!mounted) return;
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        var begin = const Offset(0.0, 1.0);
+                        var end = Offset.zero;
+                        var curve = Curves.ease;
+                        var tween = Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: curve));
+                        return SlideTransition(
+                          position: animation.drive(tween),
+                          child: child,
+                        );
+                      },
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          const EnrollHansic(),
+                    ),
+                  );
                 },
               ),
               MenuDiv(
                 text: '내 정보 수정하기',
-                fontSize: 18,
+                fontSize: 20,
                 move: () {
                   if (!mounted) return;
                   Navigator.push(
@@ -318,10 +369,31 @@ class _MyPageState extends State<MyPage> {
                   );
                 },
               ),
+              MenuDiv(
+                text: '로그아웃 하기',
+                fontSize: 20,
+                move: () {
+                  DialogBuilder.dialogBuild(
+                      context: context,
+                      text: '로그아웃 하시겠습니까?',
+                      needOneButton: false,
+                      move: () {
+                        const storage = FlutterSecureStorage();
+                        storage.delete(key: 'token');
+                        _isLogined = false;
+                        setState(() {});
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                              builder: (context) => const HomeScreen(),
+                            ),
+                            (route) => false);
+                      });
+                },
+              ),
             ],
           )
         ],
-      )),
+      ),
     );
   }
 }
