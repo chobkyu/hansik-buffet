@@ -73,7 +73,7 @@ class _MyAppState extends State<MyApp> {
 /*todo
 -공통
 에러 처리
-하단바 정리
+하단바 정리 (한식뷔페 찾기, 즐겨찾는 뷔페, 홈, 리뷰 쓴 한식 뷔페, 마이페이지)
 
 -user
 
