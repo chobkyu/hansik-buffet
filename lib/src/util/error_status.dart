@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_map_plugin_example/src/screen/login.dart';
+import 'package:kakao_map_plugin_example/src/widget/dialog_builder.dart';
 
 class ErrorStatus {
   static const storage = FlutterSecureStorage();
@@ -32,11 +33,39 @@ class ErrorStatus {
         break;
       case "403":
         if (!mounted) return;
-        Navigator.pop(context);
+        await DialogBuilder.dialogBuild(
+          context: context,
+          text: "권한이 없습니다.",
+          needOneButton: true,
+        );
+        if (context.mounted) Navigator.pop(context);
         break;
       case "400":
+        if (!mounted) return;
+        await DialogBuilder.dialogBuild(
+          context: context,
+          text: "잘못된 요청입니다.",
+          needOneButton: true,
+        );
+        if (context.mounted) Navigator.pop(context);
+        break;
+      case "404":
+        if (!mounted) return;
+        await DialogBuilder.dialogBuild(
+          context: context,
+          text: "페이지를 찾을 수 없습니다.",
+          needOneButton: true,
+        );
+        if (context.mounted) Navigator.pop(context);
         break;
       case "500":
+        if (!mounted) return;
+        await DialogBuilder.dialogBuild(
+          context: context,
+          text: "내부 서버 오류!",
+          needOneButton: true,
+        );
+        if (context.mounted) Navigator.pop(context);
         break;
     }
   }
