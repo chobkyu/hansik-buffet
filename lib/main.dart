@@ -75,14 +75,12 @@ class _MyAppState extends State<MyApp> {
 에러 처리
 하단바 정리 (한식뷔페 찾기, 즐겨찾는 뷔페, 홈, 리뷰 쓴 한식 뷔페, 마이페이지)
 
--user
-
-
-
+-index
+리뷰 많은 한식 뷔페
+별점 높은 한식 뷔페
 
 
 -review
-리뷰 리스트 페이지 ui
 리뷰 상세 보기 페이지 ui 및 이미지 업로드
 댓글 기능
 
@@ -91,4 +89,6 @@ class _MyAppState extends State<MyApp> {
 메뉴 업로드 하기 페이지
 사업자 메뉴 페이지
 
+
+-포인트 제도
 */
