@@ -158,7 +158,7 @@ class _MyPageState extends State<MyPage> {
                 ),
                 Text(
                   userData.userNickName,
-                  style: const TextStyle(fontSize: 25),
+                  style: const TextStyle(fontSize: 30),
                 ),
                 const SizedBox(
                   height: 50,
@@ -203,7 +203,10 @@ class _MyPageState extends State<MyPage> {
                               ),
                             );
                           },
-                          child: const Text('한식 뷔페 찾기'),
+                          child: const Text(
+                            '한식 뷔페 찾기',
+                            style: TextStyle(fontSize: 20),
+                          ),
                         ),
                       ],
                     ),
@@ -234,7 +237,10 @@ class _MyPageState extends State<MyPage> {
                               ),
                             );
                           },
-                          child: const Text('내 정보 수정하기'),
+                          child: const Text(
+                            '내 정보 수정하기',
+                            style: TextStyle(fontSize: 20),
+                          ),
                         ),
                       ],
                     )
@@ -251,7 +257,7 @@ class _MyPageState extends State<MyPage> {
               const Divider(thickness: 1.2),
               MenuDiv(
                 text: '한식 뷔페 찾기',
-                fontSize: 18,
+                fontSize: 20,
                 move: () async {
                   Position position = await geolocatorService.getLocation();
                   double lat = position.latitude;
@@ -286,7 +292,7 @@ class _MyPageState extends State<MyPage> {
               ),
               MenuDiv(
                 text: '즐겨 찾는 한식 뷔페',
-                fontSize: 18,
+                fontSize: 20,
                 move: () {
                   if (!mounted) return;
                   Navigator.push(
@@ -312,14 +318,14 @@ class _MyPageState extends State<MyPage> {
               ),
               MenuDiv(
                 text: '메뉴 등록 하기',
-                fontSize: 18,
+                fontSize: 20,
                 move: () {
                   print('object');
                 },
               ),
               MenuDiv(
                 text: '내 정보 수정하기',
-                fontSize: 18,
+                fontSize: 20,
                 move: () {
                   if (!mounted) return;
                   Navigator.push(
@@ -345,7 +351,7 @@ class _MyPageState extends State<MyPage> {
               ),
               MenuDiv(
                 text: '로그아웃 하기',
-                fontSize: 18,
+                fontSize: 20,
                 move: () {
                   DialogBuilder.dialogBuild(
                       context: context,

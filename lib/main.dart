@@ -72,18 +72,14 @@ class _MyAppState extends State<MyApp> {
 
 /*todo
 -공통
-사진 업로드
 에러 처리
+하단바 정리
 
 -user
-프로필 사진 변경
-즐겨찾기 한뷔 페이지
-오늘 먹은 메뉴 등록하기
 
 
--hansic
-별점 주기
-location list 가져오기
+
+
 
 -review
 리뷰 리스트 페이지 ui
