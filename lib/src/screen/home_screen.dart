@@ -2,13 +2,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_map_plugin_example/src/overlay_12_markers_event1_screen.dart';
+import 'package:kakao_map_plugin_example/src/screen/choice_screen.dart';
 import 'package:kakao_map_plugin_example/src/screen/enroll_admin.dart';
+import 'package:kakao_map_plugin_example/src/screen/favorite_mylist.dart';
 import 'package:kakao_map_plugin_example/src/screen/hansic_enroll.dart';
 import 'package:kakao_map_plugin_example/src/screen/img_upload.dart';
 import 'package:kakao_map_plugin_example/src/screen/index_screen.dart';
 import 'package:kakao_map_plugin_example/src/screen/login.dart';
 import 'package:kakao_map_plugin_example/src/screen/my_page.dart';
 import 'package:kakao_map_plugin_example/src/screen/review_list.dart';
+import 'package:kakao_map_plugin_example/src/screen/review_user_list.dart';
 import 'package:kakao_map_plugin_example/src/screen/review_write.dart';
 import 'package:kakao_map_plugin_example/src/screen/test_home.dart';
 import 'package:kakao_map_plugin_example/src/service/geolocator_service.dart';
@@ -32,12 +35,12 @@ class _HomeScreenState extends State<HomeScreen>
   static const storage = FlutterSecureStorage();
   static GeolocatorService geolocatorService = GeolocatorService();
   late TabController _tabController;
-  int _selectedIndex = 0;
+  int _selectedIndex = 2;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 5, vsync: this);
     _tabController.addListener(
         () => setState(() => _selectedIndex = _tabController.index));
   }
@@ -56,22 +59,26 @@ class _HomeScreenState extends State<HomeScreen>
         preferredSize: const Size.fromHeight(50),
         child: CustomAppBar(
           title: _selectedIndex == 0
-              ? '한사장'
+              ? '한식 뷔페 찾기'
               : _selectedIndex == 1
-                  ? "Search"
+                  ? "즐겨찾는 한식 뷔페"
                   : _selectedIndex == 2
-                      ? "MyPage"
-                      : "TestHome",
+                      ? "한사장"
+                      : _selectedIndex == 3
+                          ? "My Review"
+                          : "My Page",
         ),
       ),
       //body 바꿀거임 ㅇㅇ
       body: _selectedIndex == 0
-          ? const IndexScreen()
+          ? const ChoiceScreen()
           : _selectedIndex == 1
-              ? testContainer()
+              ? const FavoriteMyList()
               : _selectedIndex == 2
-                  ? const MyPage()
-                  : testHome(),
+                  ? const IndexScreen()
+                  : _selectedIndex == 3
+                      ? const ReviewUserList()
+                      : const MyPage(),
       bottomNavigationBar: SizedBox(
         height: 90,
         child: TabBar(
@@ -79,25 +86,29 @@ class _HomeScreenState extends State<HomeScreen>
           labelColor: Colors.black,
           controller: _tabController,
           tabs: [
-            Tab(
-              icon:
-                  Icon(_selectedIndex == 0 ? Icons.home : Icons.home_outlined),
-              text: "Home",
-            ),
             const Tab(
               icon: Icon(Icons.search),
-              text: "Search",
+              text: "뷔페 찾기",
+            ),
+            const Tab(
+              icon: Icon(Icons.list_rounded),
+              text: "즐겨 찾기",
             ),
             Tab(
-              icon: Icon(
-                  _selectedIndex == 2 ? Icons.person : Icons.person_outline),
-              text: "MyPage",
+              icon:
+                  Icon(_selectedIndex == 2 ? Icons.home : Icons.home_outlined),
+              text: "Home",
             ),
             Tab(
               icon: Icon(_selectedIndex == 3
-                  ? Icons.directions_run
-                  : Icons.directions_walk_outlined),
-              text: "TestHome",
+                  ? Icons.note_alt
+                  : Icons.note_alt_outlined),
+              text: "내 리뷰",
+            ),
+            Tab(
+              icon: Icon(
+                  _selectedIndex == 4 ? Icons.person : Icons.person_outline),
+              text: "MyPage",
             ),
           ],
         ),

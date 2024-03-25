@@ -122,9 +122,6 @@ class _FavoriteMyListState extends State<FavoriteMyList> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const PreferredSize(
-          preferredSize: Size.fromHeight(50),
-          child: CustomAppBar(title: '즐겨 찾는 한식 뷔페')),
       body: isLoading
           ? ListView.builder(
               padding: const EdgeInsets.all(8),
