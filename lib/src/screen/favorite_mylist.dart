@@ -118,13 +118,18 @@ class _FavoriteMyListState extends State<FavoriteMyList> {
     }
   }
 
+  dynamic getImg(List<dynamic> reviewImgs) {
+    if (reviewImgs.isNotEmpty) {
+      return Image.network(reviewImgs[0].imgUrl);
+    } else {
+      return Image.asset('assets/images/defaultReviewImg.png');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const PreferredSize(
-          preferredSize: Size.fromHeight(50),
-          child: CustomAppBar(title: '즐겨 찾는 한식 뷔페')),
       body: isLoading
           ? ListView.builder(
               padding: const EdgeInsets.all(8),
@@ -148,8 +153,8 @@ class _FavoriteMyListState extends State<FavoriteMyList> {
                           children: [
                             SizedBox(
                               child: ClipRRect(
-                                child: Image.network(
-                                  'https://puda.s3.ap-northeast-2.amazonaws.com/client/2840159_2891102_2258.png',
+                                child: getImg(
+                                  favorites[index].hansics.sicdangImgs,
                                 ),
                               ),
                             ),
