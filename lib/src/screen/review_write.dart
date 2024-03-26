@@ -33,7 +33,7 @@ class _ReviewWriteState extends State<ReviewWrite> {
   XFile? image; // 카메라로 촬영한 이미지를 저장할 변수
   List<XFile?> multiImage = []; // 갤러리에서 여러장의 사진을 선택해서 저장할 변수
 
-  List<String> imgUrls = [];
+  dynamic imgUrls = [];
 
   UserData userData = UserData(
     id: 0,
@@ -179,7 +179,7 @@ class _ReviewWriteState extends State<ReviewWrite> {
               HomeButton(
                 text: '이미지 추가',
                 move: () async {
-                  if (imgUrls.isNotEmpty) {
+                  if (imgUrls != null && imgUrls.isNotEmpty) {
                     DialogBuilder.dialogBuild(
                         context: context,
                         text: "이미지가 이미 등록되었습니다.",
