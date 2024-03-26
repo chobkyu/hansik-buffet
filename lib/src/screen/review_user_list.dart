@@ -71,9 +71,7 @@ class _ReviewUserListState extends State<ReviewUserList> {
 
   dynamic getImg(List<dynamic> reviewImgs) {
     if (reviewImgs.isNotEmpty) {
-      return Image.network(
-          // 값이 {imgUrl: https://asdfasdfasdf...} 이렇게 넘어옴
-          reviewImgs[0].toString().split(" ")[1].split("}")[0]);
+      return Image.network(reviewImgs[0].imgUrl);
     } else {
       return Image.asset('assets/images/defaultReviewImg.png');
     }
@@ -169,7 +167,7 @@ class _ReviewUserListState extends State<ReviewUserList> {
                                         width: 100,
                                         child: Text(
                                           reviewList[index].review,
-                                          overflow: TextOverflow.fade,
+                                          overflow: TextOverflow.ellipsis,
                                           style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 20,
@@ -181,7 +179,7 @@ class _ReviewUserListState extends State<ReviewUserList> {
                                 ),
                                 RatingBar.builder(
                                   initialRating: reviewList[index].star,
-                                  itemSize: 18,
+                                  itemSize: 15,
                                   ignoreGestures: true,
                                   minRating: 0,
                                   direction: Axis.horizontal,
