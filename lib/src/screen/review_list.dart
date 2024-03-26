@@ -86,7 +86,9 @@ class _ReviewListState extends State<ReviewList> {
                         height: 70,
                         child: ClipRRect(
                           //borderRadius: BorderRadius.circular(100),
-                          child: getImg(reviewList![index].reviewImg),
+                          child: getImg(
+                            reviewList![index].reviewImg,
+                          ),
                         ),
                       ),
                       const SizedBox(
