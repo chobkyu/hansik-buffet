@@ -57,11 +57,12 @@ class _ReviewDetailState extends State<ReviewDetail> {
     String? token = await storage.read(key: 'token');
     print(token);
     try {
-      userData = await getUserData.getUserData(token!);
-      if (userData.id == widget.reviewDto.user.id) {
-        isRightUser = true;
+      if (token != null) {
+        userData = await getUserData.getUserData(token);
+        if (userData.id == widget.reviewDto.user.id) {
+          isRightUser = true;
+        }
       }
-      print(isRightUser);
       setState(() {});
     } catch (err) {
       print(err.toString());
