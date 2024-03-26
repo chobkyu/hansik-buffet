@@ -115,10 +115,6 @@ class _ReviewUserListState extends State<ReviewUserList> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(50),
-        child: CustomAppBar(title: '마이 리뷰'),
-      ),
       body: isLoading
           ? ListView.builder(
               padding: const EdgeInsets.all(8),
