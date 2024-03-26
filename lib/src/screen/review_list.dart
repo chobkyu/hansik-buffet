@@ -133,6 +133,7 @@ class _ReviewListState extends State<ReviewList> {
                                       fontWeight: FontWeight.bold,
                                       fontSize: 23,
                                     ),
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                   Text(
                                     reviewList![index].review,
