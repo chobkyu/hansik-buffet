@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'package:kakao_map_plugin_example/src/screen/home_screen.dart';
 //import 'package:kakao_map_plugin_example/src/home_screen.dart';
@@ -9,6 +10,11 @@ import 'package:kakao_map_plugin_example/src/screen/home_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  MobileAds.instance.initialize();
+  Future<InitializationStatus> _initGoogleMobileAds() {
+    print('ads init');
+    return MobileAds.instance.initialize();
+  }
   //await dotenv.load(fileName: 'assets/env/.env');
 
   /// 라이브러리 메모리에 appKey 등록

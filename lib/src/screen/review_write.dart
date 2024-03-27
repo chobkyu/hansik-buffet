@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kakao_map_plugin_example/src/models/review_write.dart';
 import 'package:kakao_map_plugin_example/src/models/user_data.dart';
@@ -10,6 +11,7 @@ import 'package:kakao_map_plugin_example/src/screen/imgs_upload.dart';
 import 'package:kakao_map_plugin_example/src/screen/login.dart';
 import 'package:kakao_map_plugin_example/src/service/get_userdata_service.dart';
 import 'package:kakao_map_plugin_example/src/service/review_write_service.dart';
+import 'package:kakao_map_plugin_example/src/util/ad_helper.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 import 'package:kakao_map_plugin_example/src/widget/dialog_builder.dart';
 import 'package:kakao_map_plugin_example/src/widget/home_button.dart';
@@ -49,14 +51,53 @@ class _ReviewWriteState extends State<ReviewWrite> {
     userRating: 3,
   );
 
+  // TODO: Add _rewardedAd
+  RewardedAd? _rewardedAd;
+
+  // TODO: Implement _loadRewardedAd()
+  void _loadRewardedAd() {
+    RewardedAd.load(
+      adUnitId: AdHelper.rewardedAdUnitId,
+      request: const AdRequest(),
+      rewardedAdLoadCallback: RewardedAdLoadCallback(
+        onAdLoaded: (ad) {
+          ad.fullScreenContentCallback = FullScreenContentCallback(
+            onAdDismissedFullScreenContent: (ad) {
+              setState(() {
+                ad.dispose();
+                _rewardedAd = null;
+              });
+              _loadRewardedAd();
+            },
+          );
+
+          setState(() {
+            _rewardedAd = ad;
+          });
+        },
+        onAdFailedToLoad: (err) {
+          print('Failed to load a rewarded ad: ${err.message}');
+        },
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
+    _loadRewardedAd();
     try {
       getUser();
     } catch (err) {
       print(err);
     }
+  }
+
+  @override
+  void dispose() {
+    // TODO: Dispose a RewardedAd object
+    _rewardedAd?.dispose();
+    super.dispose();
   }
 
   void getUser() async {
@@ -82,6 +123,38 @@ class _ReviewWriteState extends State<ReviewWrite> {
           return const LoginScreen();
         },
       ),
+    );
+  }
+
+  void ads() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('등록이 완료 되었습니다!'),
+          content: const Text('이어지는 광고를 시청하시면 포인트를 드려요!!'),
+          actions: [
+            TextButton(
+              child: Text('cancel'.toUpperCase()),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            TextButton(
+              child: Text('광고보고 포인트 받기'.toUpperCase()),
+              onPressed: () {
+                Navigator.pop(context);
+                _rewardedAd?.show(
+                  onUserEarnedReward: (_, reward) {
+                    //QuizManager.instance.useHint();
+                  },
+                );
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -225,8 +298,9 @@ class _ReviewWriteState extends State<ReviewWrite> {
 
                     if (res == 201) {
                       //등록 완료 팝업 예정
-                      if (!mounted) return;
-                      Navigator.pop(context);
+                      ads();
+                      // if (!mounted) return;
+                      // Navigator.pop(context);
                     } else if (res == 401) {
                       goToLoginPage();
                     } else {

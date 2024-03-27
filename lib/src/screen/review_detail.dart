@@ -3,12 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:kakao_map_plugin_example/src/models/review_list.dart';
 import 'package:kakao_map_plugin_example/src/models/user_data.dart';
 import 'package:kakao_map_plugin_example/src/screen/home_screen.dart';
 import 'package:kakao_map_plugin_example/src/screen/login.dart';
 import 'package:kakao_map_plugin_example/src/screen/review_update.dart';
 import 'package:kakao_map_plugin_example/src/service/get_userdata_service.dart';
+import 'package:kakao_map_plugin_example/src/util/ad_helper.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
 import 'package:kakao_map_plugin_example/src/widget/dialog_builder.dart';
 import 'package:kakao_map_plugin_example/src/widget/small_button.dart';
@@ -32,8 +34,9 @@ class ReviewDetail extends StatefulWidget {
 class _ReviewDetailState extends State<ReviewDetail> {
   static GetUserData getUserData = GetUserData();
   static const storage = FlutterSecureStorage();
-
   var isRightUser = false;
+
+  BannerAd? _bannerAd;
 
   UserData userData = UserData(
     id: 0,
@@ -46,11 +49,34 @@ class _ReviewDetailState extends State<ReviewDetail> {
   @override
   void initState() {
     super.initState();
+    BannerAd(
+      adUnitId: AdHelper.bannerAdUnitId,
+      request: const AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            _bannerAd = ad as BannerAd;
+          });
+        },
+        onAdFailedToLoad: (ad, err) {
+          print('Failed to load a banner ad: ${err.message}');
+          ad.dispose();
+        },
+      ),
+    ).load();
     try {
       getUser();
     } catch (err) {
       print(err);
     }
+  }
+
+  @override
+  void dispose() {
+    // TODO: Dispose a BannerAd object
+    _bannerAd?.dispose();
+    super.dispose();
   }
 
   void getUser() async {
@@ -153,6 +179,18 @@ class _ReviewDetailState extends State<ReviewDetail> {
                         userData: userData,
                       )
                     : const SizedBox(),
+                const SizedBox(
+                  height: 50,
+                ),
+                if (_bannerAd != null)
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Container(
+                      width: _bannerAd!.size.width.toDouble(),
+                      height: _bannerAd!.size.height.toDouble(),
+                      child: AdWidget(ad: _bannerAd!),
+                    ),
+                  ),
               ],
             ),
           ),
