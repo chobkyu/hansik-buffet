@@ -1,12 +1,14 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'package:kakao_map_plugin_example/src/models/hansic_list.dart';
 import 'package:kakao_map_plugin_example/src/models/location.dart';
 import 'package:kakao_map_plugin_example/src/screen/hansic_detail.dart';
 import 'package:kakao_map_plugin_example/src/screen/hansic_screen.dart';
 import 'package:kakao_map_plugin_example/src/screen/loading.dart';
+import 'package:kakao_map_plugin_example/src/service/geolocator_service.dart';
 import 'package:kakao_map_plugin_example/src/service/get_hansicdata_service.dart';
 import 'package:kakao_map_plugin_example/src/service/update_user_service.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
@@ -35,6 +37,7 @@ class _Overlay12MarkersEvent1ScreenState
   late KakaoMapController mapController;
   static GetHansicService hansicService = GetHansicService();
   static UpdateUserService updateUserService = UpdateUserService();
+  static GeolocatorService geolocatorService = GeolocatorService();
 
   //지역 별 조회
   late List<LocationDto> locationList = [];
@@ -45,8 +48,8 @@ class _Overlay12MarkersEvent1ScreenState
 
   List<HansicList>? hansics;
 
-  late double lat = 37.4916927972275;
-  late double lng = 126.899358119287;
+  late double lat;
+  late double lng;
 
   bool isLoading = false;
 
@@ -55,17 +58,30 @@ class _Overlay12MarkersEvent1ScreenState
     super.initState();
     try {
       getHansics();
+      getPosition();
     } catch (err) {
       print(err);
     }
   }
 
+  void getPosition() async {
+    Position position = await geolocatorService.getLocation();
+    lat = position.latitude;
+    lng = position.longitude;
+    print("//////////////////");
+    print(lat);
+    print(lng);
+    setState(() {
+      isLoading = false;
+    });
+  }
+
   LatLng getGeo() {
-    if (widget.lng < 0) {
+    if (lng < 0) {
       LatLng latLng = LatLng(lat, lng);
       return latLng;
     } else {
-      LatLng latLng = LatLng(widget.lat, widget.lng);
+      LatLng latLng = LatLng(lat, lng);
       return latLng;
     }
   }
@@ -83,10 +99,6 @@ class _Overlay12MarkersEvent1ScreenState
       //지역 리스트 조회
       locationList = await updateUserService.getLocation();
       locationDto = locationList[0];
-
-      setState(() {
-        isLoading = false;
-      });
     } catch (err) {
       print(err);
     }

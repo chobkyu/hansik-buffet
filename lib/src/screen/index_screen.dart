@@ -259,11 +259,6 @@ class _IndexScreenState extends State<IndexScreen> {
                 children: [
                   InkWell(
                     onTap: () async {
-                      //???
-                      Position position = await geolocatorService.getLocation();
-                      double lat = position.latitude;
-                      double lng = position.longitude;
-
                       if (!mounted) return;
                       Navigator.push(
                         context,
@@ -638,7 +633,7 @@ class _IndexScreenState extends State<IndexScreen> {
                           size: 40,
                         ),
                         SizedBox(
-                          height: 15,
+                          height: 10,
                         ),
                         Text(
                           '한식 뷔페',
