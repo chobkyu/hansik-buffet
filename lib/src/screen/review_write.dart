@@ -49,6 +49,7 @@ class _ReviewWriteState extends State<ReviewWrite> {
     userNickName: '',
     userId: '',
     point: 0,
+    accountNo: '',
     userImgs: [],
   );
 

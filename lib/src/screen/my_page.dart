@@ -38,6 +38,7 @@ class _MyPageState extends State<MyPage> {
     userNickName: '',
     userId: '',
     point: 0,
+    accountNo: '',
     userImgs: [],
   );
 

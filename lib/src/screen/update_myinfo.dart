@@ -50,6 +50,7 @@ class _UpdateMyInfoState extends State<UpdateMyInfo> {
     userNickName: '',
     userId: '',
     point: 0,
+    accountNo: '',
     userImgs: [],
   );
 

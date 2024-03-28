@@ -44,6 +44,7 @@ class _ReviewDetailState extends State<ReviewDetail> {
     userNickName: '',
     userId: '',
     point: 0,
+    accountNo: '',
     userImgs: [],
   );
 

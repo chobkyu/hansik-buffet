@@ -41,6 +41,7 @@ class _ReviewUpdateState extends State<ReviewUpdate> {
     userNickName: '',
     userId: '',
     point: 0,
+    accountNo: '',
     userImgs: [],
   );
 
