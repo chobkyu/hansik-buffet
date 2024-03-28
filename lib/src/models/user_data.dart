@@ -5,6 +5,7 @@ class UserData {
   late String userName;
   late String userNickName;
   late String userId;
+  late int point;
   late List<dynamic> userImgs;
 
   UserData({
@@ -12,6 +13,7 @@ class UserData {
     required this.userName,
     required this.userNickName,
     required this.userId,
+    required this.point,
     required this.userImgs,
   });
 
@@ -21,6 +23,7 @@ class UserData {
       userName: json["userName"],
       userNickName: json["userNickName"],
       userId: json["userId"],
+      point: json["point"],
       userImgs: json["userImgs"],
     );
   }

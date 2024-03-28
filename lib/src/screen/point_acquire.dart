@@ -90,11 +90,11 @@ class _PointAcquireState extends State<PointAcquire> {
               ),
               Text(
                 '${widget.randNum} 포인트 획득',
-                style: TextStyle(fontSize: 40),
+                style: const TextStyle(fontSize: 40),
               ),
               Text(
                 '총 ${originPoint.toString()} 포인트',
-                style: TextStyle(fontSize: 60),
+                style: const TextStyle(fontSize: 60),
               )
             ]),
       ),

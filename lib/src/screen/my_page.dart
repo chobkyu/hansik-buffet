@@ -37,6 +37,7 @@ class _MyPageState extends State<MyPage> {
     userName: 'tq',
     userNickName: '',
     userId: '',
+    point: 0,
     userImgs: [],
   );
 
@@ -213,38 +214,41 @@ class _MyPageState extends State<MyPage> {
                     ),
                     Row(
                       children: [
-                        const Icon(Icons.soup_kitchen),
+                        const Icon(
+                          Icons.attach_money_rounded,
+                          weight: 1000,
+                        ),
                         InkWell(
                           onTap: () {
-                            if (!mounted) return;
-                            Navigator.push(
-                              context,
-                              PageRouteBuilder(
-                                transitionsBuilder: (context, animation,
-                                    secondaryAnimation, child) {
-                                  var begin = const Offset(0.0, 1.0);
-                                  var end = Offset.zero;
-                                  var curve = Curves.ease;
-                                  var tween = Tween(begin: begin, end: end)
-                                      .chain(CurveTween(curve: curve));
-                                  return SlideTransition(
-                                    position: animation.drive(tween),
-                                    child: child,
-                                  );
-                                },
-                                pageBuilder:
-                                    (context, animation, secondaryAnimation) =>
-                                        const UpdateMyInfo(),
-                              ),
-                            );
+                            // if (!mounted) return;
+                            // Navigator.push(
+                            //   context,
+                            //   PageRouteBuilder(
+                            //     transitionsBuilder: (context, animation,
+                            //         secondaryAnimation, child) {
+                            //       var begin = const Offset(0.0, 1.0);
+                            //       var end = Offset.zero;
+                            //       var curve = Curves.ease;
+                            //       var tween = Tween(begin: begin, end: end)
+                            //           .chain(CurveTween(curve: curve));
+                            //       return SlideTransition(
+                            //         position: animation.drive(tween),
+                            //         child: child,
+                            //       );
+                            //     },
+                            //     pageBuilder:
+                            //         (context, animation, secondaryAnimation) =>
+                            //             const UpdateMyInfo(),
+                            //   ),
+                            // );
                           },
-                          child: const Text(
-                            '내 정보 수정하기',
-                            style: TextStyle(fontSize: 20),
+                          child: Text(
+                            '${userData.point.toString()} 포인트',
+                            style: const TextStyle(fontSize: 20),
                           ),
                         ),
                       ],
-                    )
+                    ),
                   ],
                 ),
                 const SizedBox(

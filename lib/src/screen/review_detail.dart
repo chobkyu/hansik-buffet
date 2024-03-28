@@ -43,6 +43,7 @@ class _ReviewDetailState extends State<ReviewDetail> {
     userName: 'tq',
     userNickName: '',
     userId: '',
+    point: 0,
     userImgs: [],
   );
 
