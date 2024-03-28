@@ -48,6 +48,8 @@ class _EnrollHansicState extends State<EnrollHansic> {
     userName: 'tq',
     userNickName: '',
     userId: '',
+    point: 0,
+    accountNo: '',
     userImgs: [],
   );
 
