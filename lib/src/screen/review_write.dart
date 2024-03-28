@@ -5,11 +5,14 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:kakao_map_plugin_example/src/models/get_point.dart';
 import 'package:kakao_map_plugin_example/src/models/review_write.dart';
 import 'package:kakao_map_plugin_example/src/models/user_data.dart';
 import 'package:kakao_map_plugin_example/src/screen/imgs_upload.dart';
 import 'package:kakao_map_plugin_example/src/screen/login.dart';
+import 'package:kakao_map_plugin_example/src/screen/point_acquire.dart';
 import 'package:kakao_map_plugin_example/src/service/get_userdata_service.dart';
+import 'package:kakao_map_plugin_example/src/service/point_service.dart';
 import 'package:kakao_map_plugin_example/src/service/review_write_service.dart';
 import 'package:kakao_map_plugin_example/src/util/ad_helper.dart';
 import 'package:kakao_map_plugin_example/src/widget/app_bar.dart';
@@ -30,12 +33,15 @@ class _ReviewWriteState extends State<ReviewWrite> {
   static GetUserData getUserData = GetUserData();
   static const storage = FlutterSecureStorage();
   static ReviewWriteService reviewWriteService = ReviewWriteService();
+  static PointService pointService = PointService();
   final ImagePicker picker = ImagePicker();
   List<XFile?> images = []; // 가져온 사진들을 보여주기 위한 변수
   XFile? image; // 카메라로 촬영한 이미지를 저장할 변수
   List<XFile?> multiImage = []; // 갤러리에서 여러장의 사진을 선택해서 저장할 변수
 
   dynamic imgUrls = [];
+
+  String? userToken = '';
 
   UserData userData = UserData(
     id: 0,
@@ -105,6 +111,7 @@ class _ReviewWriteState extends State<ReviewWrite> {
     print(token);
     try {
       userData = await getUserData.getUserData(token!);
+      userToken = token;
       print(userData);
       setState(() {});
     } catch (err) {
@@ -126,35 +133,85 @@ class _ReviewWriteState extends State<ReviewWrite> {
     );
   }
 
+  Future<GetPointDto> getPoint(String token) async {
+    try {
+      GetPointDto getPointDto = await pointService.getPoint(token);
+      return getPointDto;
+    } catch (err) {
+      print(err);
+      throw Exception();
+    }
+  }
+
   void ads() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('등록이 완료 되었습니다!'),
-          content: const Text('이어지는 광고를 시청하시면 포인트를 드려요!!'),
-          actions: [
-            TextButton(
-              child: Text('cancel'.toUpperCase()),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            TextButton(
-              child: Text('광고보고 포인트 받기'.toUpperCase()),
-              onPressed: () {
-                Navigator.pop(context);
-                _rewardedAd?.show(
-                  onUserEarnedReward: (_, reward) {
-                    //QuizManager.instance.useHint();
-                  },
-                );
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
+    if (_rewardedAd == null) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('등록 완료!'),
+            content: const Text('완료되었습니다'),
+            actions: [
+              TextButton(
+                child: Text('ok'.toUpperCase()),
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('등록이 완료 되었습니다!'),
+            content: const Text('이어지는 광고를 시청하시면 포인트를 드려요!!'),
+            actions: [
+              TextButton(
+                child: Text('cancel'.toUpperCase()),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              TextButton(
+                child: Text('광고보고 포인트 받기'.toUpperCase()),
+                onPressed: () async {
+                  Navigator.pop(context);
+                  _rewardedAd?.show(
+                    onUserEarnedReward: (_, reward) {
+                      //QuizManager.instance.useHint();
+                    },
+                  );
+                  GetPointDto getPointDto = await getPoint(userToken!);
+                  print(getPointDto.point);
+                  goToPoint(getPointDto);
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  void goToPoint(GetPointDto getPointDto) {
+    print(getPointDto.point);
+    print(getPointDto.randNum);
+    if (!mounted) return;
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return PointAcquire(
+            point: getPointDto.point,
+            randNum: getPointDto.randNum,
+          );
+        },
+      ),
     );
   }
 
