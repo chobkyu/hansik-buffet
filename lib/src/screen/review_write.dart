@@ -127,35 +127,55 @@ class _ReviewWriteState extends State<ReviewWrite> {
   }
 
   void ads() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('등록이 완료 되었습니다!'),
-          content: const Text('이어지는 광고를 시청하시면 포인트를 드려요!!'),
-          actions: [
-            TextButton(
-              child: Text('cancel'.toUpperCase()),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            TextButton(
-              child: Text('광고보고 포인트 받기'.toUpperCase()),
-              onPressed: () {
-                Navigator.pop(context);
-                _rewardedAd?.show(
-                  onUserEarnedReward: (_, reward) {
-                    //QuizManager.instance.useHint();
-                  },
-                );
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
+    if (_rewardedAd == null) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('등록 완료!'),
+            content: const Text('완료되었습니다'),
+            actions: [
+              TextButton(
+                child: Text('ok'.toUpperCase()),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('등록이 완료 되었습니다!'),
+            content: const Text('이어지는 광고를 시청하시면 포인트를 드려요!!'),
+            actions: [
+              TextButton(
+                child: Text('cancel'.toUpperCase()),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              TextButton(
+                child: Text('광고보고 포인트 받기'.toUpperCase()),
+                onPressed: () {
+                  Navigator.pop(context);
+                  _rewardedAd?.show(
+                    onUserEarnedReward: (_, reward) {
+                      //QuizManager.instance.useHint();
+                    },
+                  );
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 
   @override
